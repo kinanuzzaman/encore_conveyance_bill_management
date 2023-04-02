@@ -103,13 +103,14 @@
 
     <q-page-container>
       <q-page>
+        <!--    class="bg-[url('../../assets/images/home/bg2.jpg')] bg-no-repeat bg-cover" -->
         <router-view />
         <!-- backdrop-opacity-10 backdrop-invert bg-white/10 -->
         <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
           <img
-            src="../assets/images/home/bg1.png"
+            src="../assets/images/home/bg2.jpg"
             alt=""
-            class="w-[800px] fixed bottom-0 right-0"
+            class="fixed bottom-0 right-0"
           />
         </div>
       </q-page>
