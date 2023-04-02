@@ -23,8 +23,8 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'configuration', component: () => import('src/pages/conveyance/ConfigurationPage.vue') },
-      { path: 'cash', component: () => import('src/pages/conveyance/CashIn.vue') },
+      { path: 'user', component: () => import('src/pages/conveyance/UserManagement.vue') },
+      { path: 'cash', component: () => import('src/pages/conveyance/CashRequest.vue') },
       { path: 'expense', component: () => import('src/pages/conveyance/ExpensePage.vue') },
       { path: 'analytics', component: () => import('src/pages/conveyance/AnalyticsPage.vue') }
     ]

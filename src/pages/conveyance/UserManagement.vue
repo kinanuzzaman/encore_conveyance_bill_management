@@ -1,5 +1,6 @@
 <template>
-  <main class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover">
+  <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
+  <main>
     <!-- Section Name -->
     <section class="mx-4 py-6 flex justify-between">
       <div
@@ -196,15 +197,7 @@
         </q-card>
       </section>
     </div>
-    <div
-      class="-z-10 absolute bottom-0 right-0 backdrop-opacity-10 backdrop-invert bg-white/10 w-full h-full"
-    >
-      <img
-        src="../../assets/images/home/bg.png"
-        alt=""
-        class="w-[800px] fixed bottom-0 right-0"
-      />
-    </div>
+
     <q-dialog v-model="confirm">
       <q-card class="my-card w-96">
         <div class="flex justify-center py-10">

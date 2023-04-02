@@ -48,7 +48,7 @@
           <q-btn
             color="green full-width"
             label="login"
-            @click="onClick"
+            to="/user"
             size="md"
             no-caps
           />

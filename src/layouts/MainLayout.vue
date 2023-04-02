@@ -45,7 +45,7 @@
         <q-list>
           <q-item>
             <q-item-section class="pt-3">
-              <q-btn flat @click="drawer = !drawer" v-if="drawer">
+              <q-btn flat @click="drawer = !drawer">
                 <img
                   src="../assets/images/home/encore_white.png"
                   class="h-[26px] w-[169px]"
@@ -53,7 +53,7 @@
               </q-btn>
             </q-item-section>
           </q-item>
-          <template v-for="(menuItem, index) in menuList" :key="index">
+          <!-- <template v-for="(menuItem, index) in menuList" :key="index">
             <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
               <q-item-section avatar class="text-white">
                 <q-icon :name="menuItem.icon" />
@@ -63,6 +63,39 @@
               </q-item-section>
             </q-item>
             <q-separator :key="'sep' + index" v-if="menuItem.separator" />
+          </template> -->
+          <template v-for="(menu, index) in menuList" :key="index">
+            <!-- v-for="menu in menuList" :key="menu" -->
+
+            <q-expansion-item
+              :label="menu.label"
+              :icon="menu.icon"
+              :hide-expand-icon="menu.submenus ? false : true"
+            >
+              <q-item
+                v-for="submenu in menu.submenus"
+                :key="submenu"
+                :href="submenu.link"
+              >
+                <q-item-section avatar>
+                  <q-avatar
+                    color="dark"
+                    text-color="white"
+                    :icon="submenu.icon"
+                  />
+                </q-item-section>
+                <q-item-section>{{ submenu.label }}</q-item-section>
+              </q-item>
+            </q-expansion-item>
+
+            <!-- <div v-else>
+                  <q-expansion-item
+                    :label="menu.label"
+                    :icon="menu.icon"
+                    :hide-expand-icon="true"
+                    :href="'#/' + menu.link"
+                  />
+                </div> -->
           </template>
         </q-list>
       </q-scroll-area>
@@ -71,11 +104,10 @@
     <q-page-container>
       <q-page>
         <router-view />
-        <div
-          class="-z-10 absolute bottom-0 right-0 backdrop-opacity-10 backdrop-invert bg-white/10 w-full h-full"
-        >
+        <!-- backdrop-opacity-10 backdrop-invert bg-white/10 -->
+        <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
           <img
-            src="../assets/images/home/bg.png"
+            src="../assets/images/home/bg1.png"
             alt=""
             class="w-[800px] fixed bottom-0 right-0"
           />
@@ -129,18 +161,42 @@ import { ref } from "vue";
 const menuList = [
   {
     icon: "inbox",
-    label: "Inbox",
+    label: "Dashboard",
     separator: true,
   },
   {
-    icon: "send",
-    label: "Outbox",
+    icon: "supervised_user_circle",
+    label: "Configuration",
     separator: false,
+    submenus: [
+      {
+        icon: "account_circle",
+        label: "User Management",
+        link: "/user",
+      },
+      {
+        icon: "manage_accounts",
+        label: "User Role",
+        link: "",
+      },
+    ],
   },
   {
-    icon: "delete",
-    label: "Trash",
+    icon: "description",
+    label: "Recognition",
     separator: false,
+    submenus: [
+      {
+        icon: "request_quote",
+        label: "Cash Request",
+        link: "/cash",
+      },
+      {
+        icon: "payments",
+        label: "Expense",
+        link: "/expense",
+      },
+    ],
   },
   {
     icon: "error",
