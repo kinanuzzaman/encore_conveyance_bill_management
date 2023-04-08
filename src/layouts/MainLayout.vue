@@ -1,11 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lff" class="shadow-2 rounded-borders">
+  <q-layout view="lHh Lpr lff" class="">
     <!--  elevated -->
-    <q-header
-      flat
-      class="bg-white p-2"
-      style="font-family: 'Roboto Slab', serif"
-    >
+    <q-header flat class="bg-white p-2">
       <q-toolbar>
         <!-- <q-btn
           flat
@@ -32,14 +28,13 @@
         />
       </q-toolbar>
     </q-header>
-
+    <!--  overlay -->
     <q-drawer
       v-model="drawer"
       show-if-above
       :width="230"
       :breakpoint="500"
-      bordered
-      class="bg-green rounded-tr-xl"
+      class="bg-green rounded-r-xl"
     >
       <q-scroll-area class="fit">
         <q-list>
@@ -66,25 +61,27 @@
           </template> -->
           <template v-for="(menu, index) in menuList" :key="index">
             <!-- v-for="menu in menuList" :key="menu" -->
-
+            <!--  :class="expanded ? 'bg-white text-green' : 'bg-green text-white'" -->
             <q-expansion-item
+              class="text-white"
               :label="menu.label"
               :icon="menu.icon"
               :hide-expand-icon="menu.submenus ? false : true"
+              group="somegroup"
+              expand-icon-class="text-white"
             >
               <q-item
+                clickable
+                v-ripple
                 v-for="submenu in menu.submenus"
                 :key="submenu"
-                :href="submenu.link"
+                :to="submenu.link"
+                class="bg-white text-green"
               >
                 <q-item-section avatar>
-                  <q-avatar
-                    color="dark"
-                    text-color="white"
-                    :icon="submenu.icon"
-                  />
+                  <q-avatar text-color="green" :icon="submenu.icon" />
                 </q-item-section>
-                <q-item-section>{{ submenu.label }}</q-item-section>
+                <q-item-section class="">{{ submenu.label }}</q-item-section>
               </q-item>
             </q-expansion-item>
 
@@ -108,7 +105,7 @@
         <!-- backdrop-opacity-10 backdrop-invert bg-white/10 -->
         <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
           <img
-            src="../assets/images/home/bg2.jpg"
+            src="../assets/images/home/bg1.png"
             alt=""
             class="fixed bottom-0 right-0"
           />
@@ -184,7 +181,7 @@ const menuList = [
   },
   {
     icon: "description",
-    label: "Recognition",
+    label: "Requisition",
     separator: false,
     submenus: [
       {
@@ -225,6 +222,7 @@ const menuList = [
 export default {
   setup() {
     return {
+      expanded: ref(false),
       tab: ref("configuration"),
       drawer: ref(false),
       menuList,
@@ -233,4 +231,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.q-header {
+  font-family: "Roboto Slab", "serif";
+}
+</style>

@@ -15,7 +15,7 @@
             dense
             filled
             bottom-slots
-            v-model="text"
+            v-model="loginPayload.email"
             placeholder="Username or Email"
           >
             <template v-slot:prepend>
@@ -26,7 +26,7 @@
             dense
             filled
             bottom-slots
-            v-model="text"
+            v-model="loginPayload.password"
             placeholder="Password"
           >
             <template v-slot:prepend>
@@ -48,7 +48,7 @@
           <q-btn
             color="green full-width"
             label="login"
-            to="/user"
+            @click="loginUser"
             size="md"
             no-caps
           />
@@ -62,9 +62,22 @@
 </template>
 
 <script>
+import { reactive } from "vue";
+import { useUserStore } from "../../stores/user-store";
 export default {
   setup() {
-    return {};
+    const userStore = useUserStore();
+    const loginPayload = reactive({
+      email: "",
+      password: "",
+    });
+    const loginUser = async () => {
+      await userStore.userLogin(loginPayload);
+    };
+    return {
+      loginUser,
+      loginPayload,
+    };
   },
 };
 </script>

@@ -2,7 +2,7 @@
   "name": "admin-panel-kuuka",
   "version": "0.0.1",
   "description": "A ecommerce app with backoffice management",
-  "productName": "Kuuka app",
+  "productName": "Encore app",
   "author": "kinan <kinan2392@gmail.com>",
   "private": true,
   "scripts": {

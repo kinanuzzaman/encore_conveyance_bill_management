@@ -1,14 +1,9 @@
 <template>
   <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
   <main>
-    <!-- Section Name -->
+    <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
     <section class="mx-4 py-6 flex justify-between">
-      <div
-        class="text-2xl font-semibold"
-        style="font-family: 'Roboto Slab', serif"
-      >
-        User Management
-      </div>
+      <div class="text-2xl font-semibold">User Management</div>
 
       <div>
         <q-btn
@@ -22,18 +17,20 @@
       </div>
     </section>
     <!-- Table -->
-    <div class="grid md:grid-cols-3 grid-cols-1">
-      <section class="col-span-2">
+    <!-- grid md:grid-cols-3 grid-cols-1 -->
+    <div class="">
+      <section class="">
         <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table
             flat
-            class="h-[85vh] bg-transparent"
+            class="h-[85vh]"
             :rows="rows"
             :columns="columns"
+            style="background: rgba(244, 244, 244, 0.8)"
           >
             <template v-slot:body="props">
-              <q-tr class="bg-transparent" :props="props">
+              <q-tr class="" :props="props">
                 <q-td
                   key="role"
                   :props="props"
@@ -47,9 +44,24 @@
                       </div>
                       <div>
                         <div class="text-xs">{{ props.row.name }}</div>
-                        <div class="text-xs">{{ props.row.email }}</div>
+                        <div class="text-xs">{{ props.row.designation }}</div>
                       </div>
                     </div>
+                  </div>
+                </q-td>
+                <q-td key="role" :props="props" class="">
+                  <div>
+                    <div class="text-xs">{{ props.row.email }}</div>
+                  </div>
+                </q-td>
+                <q-td key="role" :props="props" class="">
+                  <div>
+                    <div class="text-xs">{{ props.row.phone }}</div>
+                  </div>
+                </q-td>
+                <q-td key="role" :props="props" class="">
+                  <div>
+                    <div class="text-xs">{{ props.row.created }}</div>
                   </div>
                 </q-td>
                 <q-td
@@ -96,7 +108,7 @@
                           Edit
                         </q-tooltip>
                       </q-fab-action>
-                      <q-fab-action
+                      <!-- <q-fab-action
                         flat
                         @click="onClick"
                         icon="block"
@@ -125,7 +137,7 @@
                         >
                           Delete
                         </q-tooltip>
-                      </q-fab-action>
+                      </q-fab-action> -->
                       <q-fab-action
                         flat
                         @click="onClick"
@@ -149,7 +161,7 @@
           </q-table>
         </div>
       </section>
-      <section class="q-px-md">
+      <!-- <section class="q-px-md">
         <q-card flat class="h-[85vh] bg-transparent">
           <div class="flex justify-center py-10">
             <q-avatar
@@ -196,11 +208,11 @@
             <q-btn label="Decline" color="negative" class="col" />
           </q-card-actions>
         </q-card>
-      </section>
+      </section> -->
     </div>
 
-    <q-dialog v-model="confirm">
-      <q-card class="my-card w-96">
+    <q-dialog v-model="confirm" class="">
+      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
         <div class="flex justify-center py-10">
           <q-avatar
             size="100px"
@@ -210,46 +222,77 @@
             icon="account_circle"
           />
         </div>
-        <q-card-section>
+        <q-card-section class="grid grid-cols-2 gap-5">
           <q-input
             outlined
-            v-model="name"
-            placeholder="Name"
+            v-model="userRegister.first_name"
+            placeholder="First Name"
             bg-color="white"
             :dense="true"
           />
-        </q-card-section>
-        <q-card-section>
           <q-input
             outlined
-            v-model="designation"
+            v-model="userRegister.last_name"
+            placeholder="Last Name"
+            bg-color="white"
+            :dense="true"
+          />
+          <q-input
+            outlined
+            v-model="userRegister.email"
+            placeholder="Email"
+            :dense="true"
+          >
+            <template v-slot:prepend>
+              <q-icon name="mail" />
+            </template>
+          </q-input>
+          <q-input
+            outlined
+            v-model="userRegister.phone_number"
+            placeholder="Phone Number"
+            :dense="true"
+          >
+            <template v-slot:prepend>
+              <q-icon name="phone" />
+            </template>
+          </q-input>
+          <q-input
+            outlined
+            v-model="userRegister.designation"
             placeholder="Designation"
             bg-color="white"
             :dense="true"
           />
-        </q-card-section>
-        <q-card-section>
           <q-select
             class="bg-white"
             outlined
-            v-model="model"
+            v-model="userRegister.role"
             :options="options"
             :dense="true"
             label="Select role"
           />
+          <q-input
+            outlined
+            v-model="userRegister.salry"
+            placeholder="Salary"
+            bg-color="white"
+            :dense="true"
+          />
+          <q-btn label="Save" color="green" class="col" @click="registerUser" />
         </q-card-section>
-        <q-card-actions align="center" class="row mx-2 py-5">
+        <!-- <q-card-actions align="center" class="row mx-2 py-5">
           <q-btn label="Create" color="green" class="col" />
           <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions>
+        </q-card-actions> -->
       </q-card>
     </q-dialog>
   </main>
 </template>
 
 <script>
-import { ref } from "vue";
-
+import { ref, reactive } from "vue";
+import { useUserStore } from "../../stores/user-store";
 const columns = [
   {
     name: "user",
@@ -258,6 +301,27 @@ const columns = [
     align: "left",
     field: (row) => row.name,
     format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "email",
+    align: "left",
+    label: "Email",
+    field: "email",
+    sortable: true,
+  },
+  {
+    name: "phone",
+    align: "left",
+    label: "Phone",
+    field: "phone",
+    sortable: true,
+  },
+  {
+    name: "created",
+    align: "left",
+    label: "Created On",
+    field: "created",
     sortable: true,
   },
   {
@@ -283,51 +347,55 @@ const columns = [
 const rows = [
   {
     name: "Frozen Yogurt",
+    designation: "Manager",
     email: "demo@email.com",
-    status: "Active",
+    phone: "1234567890",
+    created: "12 March 2023",
     role: "Manager Author Connect",
+    status: "Active",
   },
   {
     name: "Frozen Yogurt",
+    designation: "Manager",
     email: "demo@email.com",
-    status: "Active",
+    phone: "1234567890",
+    created: "12 March 2023",
     role: "Manager Author Connect",
+    status: "Active",
   },
   {
     name: "Frozen Yogurt",
+    designation: "Manager",
     email: "demo@email.com",
-    status: "Active",
+    phone: "1234567890",
+    created: "12 March 2023",
     role: "Manager Author Connect",
-  },
-  {
-    name: "Frozen Yogurt",
-    email: "demo@email.com",
     status: "Active",
-    role: "Manager Author Connect",
-  },
-  {
-    name: "Frozen Yogurt",
-    email: "demo@email.com",
-    status: "Active",
-    role: "Manager Author Connect",
-  },
-  {
-    name: "Frozen Yogurt",
-    email: "demo@email.com",
-    status: "Active",
-    role: "Manager Author Connect",
-  },
-  {
-    name: "Frozen Yogurt",
-    email: "demo@email.com",
-    status: "Active",
-    role: "Manager Author Connect",
   },
 ];
 export default {
   setup() {
+    const userStore = useUserStore();
     let confirm = ref(false);
+    const userRegister = reactive({
+      first_name: "",
+      last_name: "",
+      email: "",
+      dob: "",
+      profile_img: "",
+      designetion: "",
+      password: "",
+    });
+    const registerUser = async () => {
+      try {
+        await userStore.userRegister(userRegister);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     return {
+      registerUser,
+      userRegister,
       rows,
       columns,
       confirm,
