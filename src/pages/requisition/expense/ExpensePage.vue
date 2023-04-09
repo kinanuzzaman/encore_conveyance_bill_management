@@ -49,39 +49,35 @@
             :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td key="role" row-key="name" :props="props" @click="openDialog = true" class="">
-
-                  <div>
-                    <q-checkbox left-label v-model="props.row" />
-                  </div>
-
+                <q-td>
+                  <q-checkbox left-label v-model="props.selected" />
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
 
                   <div>
                     <div class="text-xs">{{ props.row.name }}</div>
                   </div>
 
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.email }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.phone }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.created }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
                   {{ props.row.status }}
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
                   <div class="bg-blue-200 inline p-2 text-blue-800">
                     {{ props.row.role }}
                   </div>
@@ -177,7 +173,7 @@ const rows = [
     status: "Active",
   },
   {
-    name: "Frozen Yogurt",
+    name: "Frozen",
     designation: "Manager",
     email: "demo@email.com",
     phone: "1234567890",
@@ -186,7 +182,7 @@ const rows = [
     status: "Active",
   },
   {
-    name: "Frozen Yogurt",
+    name: "Yogurt",
     designation: "Manager",
     email: "demo@email.com",
     phone: "1234567890",

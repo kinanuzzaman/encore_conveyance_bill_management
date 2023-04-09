@@ -2,11 +2,41 @@
   <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
-    <section class="mx-4 py-6 flex justify-between">
+    <section class="mx-4 my-6 flex justify-between">
       <div class="text-2xl font-semibold">Cash Request</div>
 
-      <div>
-        <q-btn color="orange" @click="confirm = true" class="rounded-lg" unelevated icon="add" label="Add User" />
+      <div class="flex md:gap-x-5 gap-1 justify-items-end">
+        <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
+            <q-list>
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Photos</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Videos</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Articles</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown></div>
+        <div class="md:w-[200px]">
+          <q-select rounded outlined dense v-model="model" :options="options" label="Select">
+            <template v-slot:prepend>
+              <q-icon name="filter_alt_off" />
+            </template>
+          </q-select>
+        </div>
+        <div> <q-btn outline rounded to="/expense/add-expense" label="Add request" no-caps />
+
+        </div>
       </div>
     </section>
     <!-- Table -->
@@ -16,42 +46,39 @@
         <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="role">
+            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td key="role" row-key="name" :props="props" @click="openDialog = true" class="">
+                <q-td>
 
-                  <div>
-                    <q-checkbox v-model="props.row" />
-                  </div>
-
+                  <q-checkbox v-model="props.selected" />
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
 
                   <div>
                     <div class="text-xs">{{ props.row.name }}</div>
                   </div>
 
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.email }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.phone }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" class="">
+                <q-td>
                   <div>
                     <div class="text-xs">{{ props.row.created }}</div>
                   </div>
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
                   {{ props.row.status }}
                 </q-td>
-                <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <q-td>
                   <div class="bg-blue-200 inline p-2 text-blue-800">
                     {{ props.row.role }}
                   </div>
@@ -197,9 +224,10 @@ const rows = [
 ];
 export default {
   setup() {
-    const selected = ref([]);
+    let selected = ref([]);
     let confirm = ref(false);
     return {
+      selectedItems: ref([]),
       selected,
       columns,
       rows,

@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lff" class="">
     <!--  elevated -->
     <q-header flat class="bg-white p-2">
-      <q-toolbar>
+      <q-toolbar class="grid grid-cols-1 md:grid-cols-2">
         <!-- <q-btn
           flat
           color="green"
@@ -16,7 +16,14 @@
             <img src="../assets/images/login/encore1.png" class="h-[26px] w-[169px]" />
           </q-btn>
         </q-toolbar-title>
-        <q-btn round color="green" icon="account_circle" @click="onClick" class="text-white" />
+        <!-- class="q-gutter-xs"  class="text-white" fingerprint-->
+        <div class="flex justify-self-end">
+          <q-btn flat color="green" icon="fingerprint" @click="onClick" class="" />
+          <q-btn flat color="green" icon="notifications" @click="onClick" class="" />
+          <q-input v-if="searchField" rounded outlined v-model="text" label="Search" dense color="green" />
+          <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" />
+          <q-btn flat color="green" icon="account_circle" @click="onClick" />
+        </div>
       </q-toolbar>
     </q-header>
     <!--  overlay -->
@@ -237,6 +244,7 @@ const menuList = [
 export default {
   setup() {
     return {
+      searchField: ref(false),
       expanded: ref(false),
       tab: ref("configuration"),
       drawer: ref(false),
