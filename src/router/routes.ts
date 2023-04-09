@@ -25,29 +25,29 @@ const routes = [
     children: [
       {
         path: 'user',
-        component: () => import('src/pages/conveyance/UserManagement.vue'),
+        component: () => import('src/pages/requisition/UserManagement.vue'),
       },
       {
         path: 'cash',
-        component: () => import('src/pages/conveyance/CashRequest.vue'),
+        component: () => import('src/pages/requisition/cash/CashRequest.vue'),
       },
       {
         path: 'expense',
-        component: () => import('src/pages/conveyance/ExpensePage.vue'),
+        component: () =>
+          import('src/pages/requisition/expense/ExpensePage.vue'),
+      },
+      {
+        path: 'expense/add-expense',
+        component: () => import('src/pages/requisition/expense/AddExpense.vue'),
+      },
+      {
+        path: 'vendor',
+        component: () =>
+          import('src/pages/requisition/vendor/VendorPayments.vue'),
       },
       {
         path: 'analytics',
-        component: () => import('src/pages/conveyance/AnalyticsPage.vue'),
-      },
-    ],
-  },
-  {
-    path: '/expense',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: 'add-expense',
-        component: () => import('src/pages/expense/AddExpense.vue'),
+        component: () => import('src/pages/requisition/AnalyticsPage.vue'),
       },
     ],
   },

@@ -16,13 +16,13 @@
         <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
+            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="role">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
                 <q-td key="role" row-key="name" :props="props" @click="openDialog = true" class="">
 
                   <div>
-                    <q-checkbox left-label v-model="props.row" />
+                    <q-checkbox v-model="props.row" />
                   </div>
 
                 </q-td>
@@ -177,7 +177,7 @@ const rows = [
     status: "Active",
   },
   {
-    name: "Frozen Yogurt",
+    name: "Frozen ",
     designation: "Manager",
     email: "demo@email.com",
     phone: "1234567890",
@@ -186,7 +186,7 @@ const rows = [
     status: "Active",
   },
   {
-    name: "Frozen Yogurt",
+    name: "Yogurt",
     designation: "Manager",
     email: "demo@email.com",
     phone: "1234567890",
@@ -197,7 +197,7 @@ const rows = [
 ];
 export default {
   setup() {
-    const selected = ref([])
+    const selected = ref([]);
     let confirm = ref(false);
     return {
       selected,
