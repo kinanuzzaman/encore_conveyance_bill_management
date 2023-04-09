@@ -1,30 +1,75 @@
-import { route } from 'quasar/wrappers'
-import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
-import routes from './routes'
-
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation;
- *
- * The function below can be async too; either use
- * async/await or return a Promise which resolves
- * with the Router instance.
- */
+import { route } from 'quasar/wrappers';
+import JwtDecode from 'jwt-decode';
+import {
+  createRouter,
+  createMemoryHistory,
+  createWebHistory,
+  createWebHashHistory,
+} from 'vue-router';
+import routes from './routes';
 
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory)
+    : process.env.VUE_ROUTER_MODE === 'history'
+    ? createWebHistory
+    : createWebHashHistory;
 
   const Router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
-    routes,
+    routes: [
+      ...routes,
+      {
+        path: '/:catchAll(.*)*',
+        component: () => import('pages/ErrorNotFound.vue'),
+      },
+    ],
+    history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
 
-    // Leave this as is and make changes in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
-    history: createHistory(process.env.VUE_ROUTER_BASE)
-  })
+  Router.beforeEach((to, from, next) => {
+    if (to.path === '/login') {
+      console.log('🚀 ~ file: index.ts:35 ~ Router.beforeEach ~ from:', from);
+      const token = localStorage.getItem('token');
+      if (token) {
+        console.log(
+          '🚀 ~ file: index.ts:38 ~ Router.beforeEach ~ token:',
+          token
+        );
+        const decoded: any = JwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+        } else {
+          next(from.path);
+        }
+      }
+    }
+    if (to.meta.requiresAuth) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decoded: any = JwtDecode(token);
+        console.log(
+          '🚀 decoded.exp * 1000 < Date.now()',
+          decoded.exp * 1000 < Date.now()
+        );
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          next('/login');
+        } else {
+          next();
+        }
+      } else {
+        if (to.path === '/login') {
+          next();
+        } else {
+          next('/login');
+        }
+      }
+    } else {
+      next();
+    }
+  });
 
-  return Router
-})
+  return Router;
+});

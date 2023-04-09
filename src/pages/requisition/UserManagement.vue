@@ -15,7 +15,8 @@
       <section class="">
         <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" -->
-          <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)">
+          <q-table flat class="h-[85vh]" :rows="rows" ref="tableRef" v-model:pagination="pagination" :loading="loading"
+            @request="onRequest" :filter="filter" :columns="columns" style="background: rgba(244, 244, 244, 0.8)">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
@@ -191,8 +192,8 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
-//import { useUserStore } from "../../stores/user-store";
+import { ref, reactive, onMounted } from "vue";
+import { useUserStore } from "../../stores/user.store";
 const columns = [
   {
     name: "user",
@@ -244,38 +245,10 @@ const columns = [
   },
 ];
 
-const rows = [
-  {
-    name: "Frozen Yogurt",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-  {
-    name: "Frozen Yogurt",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-  {
-    name: "Frozen Yogurt",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-];
+
 export default {
   setup() {
-    //const userStore = useUserStore();
+    const userStore = useUserStore();
     let confirm = ref(false);
     const userRegister = reactive({
       first_name: "",
@@ -286,13 +259,39 @@ export default {
       designetion: "",
       password: "",
     });
-    // const registerUser = async () => {
-    //   try {
-    //     await userStore.userRegister(userRegister);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
+
+    const tableRef = ref()
+    const rows = ref([])
+    const loading = ref(false)
+    const pagination = ref({
+      page: 1,
+      rowsPerPage: 10,
+      rowsNumber: 10
+    })
+
+    async function onRequest(props) {
+      const { page, rowsPerPage } = props.pagination
+
+      loading.value = true
+
+      await userStore.fetchAllUsers({
+        page: page,
+        limit: rowsPerPage,
+      })
+      // clear out existing data and add new
+      rows.value.splice(0, rows.value.length, ...userStore.getAllUsers)
+
+      pagination.value.rowsNumber = userStore.getTotalUsersCount
+      pagination.value.page = page
+      pagination.value.rowsPerPage = rowsPerPage
+
+      loading.value = false
+    }
+
+    onMounted(() => {
+      tableRef.value.requestServerInteraction()
+    })
+
     return {
       //registerUser,
       userRegister,
@@ -302,8 +301,13 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
+      tableRef,
+      pagination,
+      loading,
+      onClick: () => false,
+      onRequest,
     };
   },
 };

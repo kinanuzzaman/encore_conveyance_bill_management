@@ -41,16 +41,34 @@
 
 <script>
 import { reactive } from "vue";
-//import { useUserStore } from "../../stores/user-store";
+import { useAuthStore } from "../../stores/auth.store";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 export default {
   setup() {
-    //const userStore = useUserStore();
+    const $q = useQuasar();
+    const router = useRouter();
+    const authStore = useAuthStore();
     const loginPayload = reactive({
       email: "",
       password: "",
     });
     const loginUser = async () => {
-      //  await userStore.userLogin(loginPayload);
+      try {
+        await authStore.UserLogin(loginPayload);
+        $q.notify({
+          message: "Login Success",
+          color: "positive",
+          position: "top",
+        });
+        router.push("/user");
+      } catch (error) {
+        $q.notify({
+          message: error.response ? error.response.data.message : error.message,
+          color: "negative",
+          position: "top",
+        });
+      }
     };
     return {
       loginUser,

@@ -9,7 +9,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/BlankLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/login/LoginPage.vue') },
+      { path: 'login', component: () => import('pages/login/LoginPage.vue') },
       {
         path: 'forgotpass',
         component: () => import('pages/login/ForgotPass.vue'),
@@ -25,29 +25,19 @@ const routes = [
     children: [
       {
         path: 'user',
-        component: () => import('src/pages/requisition/UserManagement.vue'),
+        component: () => import('src/pages/conveyance/UserManagement.vue'),
       },
       {
         path: 'cash',
-        component: () => import('src/pages/requisition/cash/CashRequest.vue'),
+        component: () => import('src/pages/conveyance/CashRequest.vue'),
       },
       {
         path: 'expense',
-        component: () =>
-          import('src/pages/requisition/expense/ExpensePage.vue'),
-      },
-      {
-        path: 'expense/add-expense',
-        component: () => import('src/pages/requisition/expense/AddExpense.vue'),
-      },
-      {
-        path: 'vendor',
-        component: () =>
-          import('src/pages/requisition/vendor/VendorPayments.vue'),
+        component: () => import('src/pages/conveyance/ExpensePage.vue'),
       },
       {
         path: 'analytics',
-        component: () => import('src/pages/requisition/AnalyticsPage.vue'),
+        component: () => import('src/pages/conveyance/AnalyticsPage.vue'),
       },
     ],
   },
