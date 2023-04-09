@@ -28,7 +28,7 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
+    if (to.path === '/') {
       console.log('🚀 ~ file: index.ts:35 ~ Router.beforeEach ~ from:', from);
       const token = localStorage.getItem('token');
       if (token) {
@@ -55,15 +55,15 @@ export default route(function (/* { store, ssrContext } */) {
         if (decoded.exp * 1000 < Date.now()) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-          next('/login');
+          next('/');
         } else {
           next();
         }
       } else {
-        if (to.path === '/login') {
+        if (to.path === '/') {
           next();
         } else {
-          next('/login');
+          next('/');
         }
       }
     } else {
