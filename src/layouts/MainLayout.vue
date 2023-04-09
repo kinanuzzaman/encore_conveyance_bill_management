@@ -69,13 +69,13 @@
     </q-drawer>
 
     <q-page-container>
-      <q-page>
+      <q-page class="bg-img">
         <!--    class="bg-[url('../../assets/images/home/bg2.jpg')] bg-no-repeat bg-cover" -->
         <router-view />
         <!-- backdrop-opacity-10 backdrop-invert bg-white/10 -->
-        <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
+        <!-- <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
           <img src="../assets/images/home/bg1.png" alt="" class="fixed bottom-0 right-0" />
-        </div>
+        </div> -->
       </q-page>
     </q-page-container>
     <!-- <q-footer
@@ -168,6 +168,50 @@ const menuList = [
     ],
   },
   {
+    icon: "description",
+    label: "Projects",
+    separator: false,
+    submenus: [
+      {
+        icon: "request_quote",
+        label: "All Project",
+        link: "/",
+      },
+      {
+        icon: "payments",
+        label: "Project Type",
+        link: "/",
+      },
+    ],
+  },
+  {
+    icon: "description",
+    label: "Analytics",
+    separator: false,
+    submenus: [
+      {
+        icon: "request_quote",
+        label: "Project Analytics",
+        link: "/",
+      },
+      {
+        icon: "payments",
+        label: "Store Analytics",
+        link: "/",
+      },
+      {
+        icon: "payments",
+        label: "User Analytics",
+        link: "/",
+      },
+      {
+        icon: "payments",
+        label: "Attendance",
+        link: "/",
+      },
+    ],
+  },
+  {
     icon: "error",
     label: "Spam",
     separator: true,
@@ -205,5 +249,11 @@ export default {
 <style lang="scss" scoped>
 .q-header {
   font-family: "Roboto Slab", "serif";
+}
+
+.bg-img {
+  background-image: url("../assets/images/home/bg1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

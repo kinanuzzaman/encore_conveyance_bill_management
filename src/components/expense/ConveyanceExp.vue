@@ -41,7 +41,7 @@
 import { defineComponent, reactive, ref } from 'vue';
 
 export default defineComponent({
-    name: 'OtherBill',
+    name: 'ConveyanceExp',
     setup() {
 
         const userRegister = reactive({

@@ -2,11 +2,41 @@
   <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
-    <section class="mx-4 py-6 flex justify-between">
+    <section class="mx-4 my-6 flex justify-between">
       <div class="text-2xl font-semibold">Expense</div>
 
-      <div>
-        <q-btn outline rounded to="/expense/add-expense" class="rounded-lg" label="Add Expense" no-caps />
+      <div class="flex md:gap-x-5 gap-1 justify-items-end">
+        <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
+            <q-list>
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Photos</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Videos</q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Articles</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown></div>
+        <div class="md:w-[200px]">
+          <q-select rounded outlined dense v-model="model" :options="options" label="Select">
+            <template v-slot:prepend>
+              <q-icon name="filter_alt_off" />
+            </template>
+          </q-select>
+        </div>
+        <div> <q-btn outline rounded to="/expense/add-expense" label="Add Expense" no-caps />
+
+        </div>
       </div>
     </section>
     <!-- Table -->
@@ -79,36 +109,6 @@
         </div>
       </section>
     </div>
-
-    <q-dialog v-model="confirm" class="">
-      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
-        <div class="flex justify-center py-10">
-          <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
-        </div>
-        <q-card-section class="grid grid-cols-2 gap-5">
-          <q-input outlined v-model="name" placeholder="First Name" bg-color="white" :dense="true" />
-          <q-input outlined v-model="name" placeholder="Last Name" bg-color="white" :dense="true" />
-          <q-input outlined v-model="text" placeholder="Email" :dense="true">
-            <template v-slot:prepend>
-              <q-icon name="mail" />
-            </template>
-          </q-input>
-          <q-input outlined v-model="text" placeholder="Phone Number" :dense="true">
-            <template v-slot:prepend>
-              <q-icon name="phone" />
-            </template>
-          </q-input>
-          <q-input outlined v-model="designation" placeholder="Designation" bg-color="white" :dense="true" />
-          <q-select class="bg-white" outlined v-model="model" :options="options" :dense="true" label="Select role" />
-          <q-input outlined v-model="designation" placeholder="Salary" bg-color="white" :dense="true" />
-          <q-btn label="Save" color="green" class="col" />
-        </q-card-section>
-        <!-- <q-card-actions align="center" class="row mx-2 py-5">
-          <q-btn label="Create" color="green" class="col" />
-          <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions> -->
-      </q-card>
-    </q-dialog>
   </main>
 </template>
 
@@ -198,12 +198,10 @@ const rows = [
 export default {
   setup() {
     const selected = ref([])
-    let confirm = ref(false);
     return {
       selected,
       columns,
       rows,
-      confirm,
       model: ref(null),
       name: ref(null),
       designation: ref(null),
