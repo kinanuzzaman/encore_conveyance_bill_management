@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
-import { $api } from '../boot/axios';
+import { ApiService } from '../service/api-service';
 
+const apiService = new ApiService();
 export const useUserStore = defineStore('user', {
   state: () => ({
     users: [],
@@ -16,11 +17,11 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async fetchAllUsers(query: any): Promise<any> {
-      const response = await $api.get('/users', {
+      const response = await apiService.get('/users', {
         params: query,
       });
-      this.users = response.data.data;
-      this.totalUsers = response.data.total;
+      this.users = response?.data.data;
+      this.totalUsers = response?.data.total;
     },
   },
 });

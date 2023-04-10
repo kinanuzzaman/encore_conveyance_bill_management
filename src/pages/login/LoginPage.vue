@@ -44,14 +44,21 @@ import { reactive } from "vue";
 import { useAuthStore } from "../../stores/auth.store";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+
+let socket = null;
 export default {
+  mounted() {
+    // this.$socket = io("http://localhost:3000");
+    socket = this.$socket;
+
+  },
   setup() {
     const $q = useQuasar();
     const router = useRouter();
     const authStore = useAuthStore();
     const loginPayload = reactive({
-      email: "",
-      password: "",
+      email: "admin@mail.com",
+      password: "123456",
     });
     const loginUser = async () => {
       try {
@@ -61,6 +68,7 @@ export default {
           color: "positive",
           position: "top",
         });
+        socket.emit("USER_LOGIN", authStore.userInfo._id);
         router.push("/user");
       } catch (error) {
         $q.notify({

@@ -7,7 +7,6 @@ const { token } = useAuthStore();
 export function AuthChecker() {
   return function (target: any) {
     const originalMethods = Object.getOwnPropertyDescriptors(target.prototype);
-
     Object.keys(originalMethods).forEach((methodName) => {
       const method = originalMethods[methodName].value;
 
@@ -17,6 +16,10 @@ export function AuthChecker() {
             // const userToken = localStorage.getItem('token');
             //! have to remove
             // console.log(userToken);
+            // console.log(
+            //   '🚀 ~ file: authGuard.decorator.ts:21 ~ Object.keys ~ token:',
+            //   token
+            // );
             if (token) {
               const decoded: any = JwtDecode(token);
               if (decoded.exp * 1000 < Date.now()) {
@@ -25,7 +28,12 @@ export function AuthChecker() {
                 location.href = '/login';
               } else {
                 $api.interceptors.request.use((config) => {
-                  return (config.headers.Authorization = `Bearer ${token}`);
+                  console.log(
+                    '🚀 ~ file: authGuard.decorator.ts:31 ~ $api.interceptors.request.use ~ config:',
+                    config
+                  );
+                  config.headers.Authorization = `Bearer ${token}`;
+                  return config;
                 });
               }
             }

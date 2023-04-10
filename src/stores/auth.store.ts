@@ -16,10 +16,7 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async UserLogin(payload: any): Promise<any> {
       const response = await $api.post('/users/login', payload);
-      console.log(
-        '🚀 ~ file: auth.store.ts:19 ~ UserLogin ~ response:',
-        response
-      );
+
       this.userInfo = response.data.data;
       this.userType = response.data.data.user_type;
       this.token = response.data.data.token;

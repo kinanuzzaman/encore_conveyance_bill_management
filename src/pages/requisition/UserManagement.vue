@@ -16,7 +16,7 @@
         <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" ref="tableRef" v-model:pagination="pagination" :loading="loading"
-            @request="onRequest" :filter="filter" :columns="columns" style="background: rgba(244, 244, 244, 0.8)">
+            @request="onRequest" :columns="columns" style="background: rgba(244, 244, 244, 0.8)">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
@@ -95,7 +95,7 @@
                           Delete
                         </q-tooltip>
                       </q-fab-action> -->
-                      <q-fab-action flat @click="onClick" icon="lock" class="bg-transparent shadow-none text-gray-700">
+                      <q-fab-action flat icon="lock" class="bg-transparent shadow-none text-gray-700">
                         <q-tooltip class="bg-blue-6 text-xs" anchor="top middle" self="center middle" :offset="[10, 10]">
                           Lock
                         </q-tooltip>
@@ -278,6 +278,7 @@ export default {
         page: page,
         limit: rowsPerPage,
       })
+      console.log("🚀 ~ file: UserManagement.vue:274 ~ onRequest ~ page:", page)
       // clear out existing data and add new
       rows.value.splice(0, rows.value.length, ...userStore.getAllUsers)
 
