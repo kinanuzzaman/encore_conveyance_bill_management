@@ -46,6 +46,10 @@ const routes = [
           import('src/pages/requisition/vendor/VendorPayments.vue'),
       },
       {
+        path: 'vendor/add-vendor',
+        component: () => import('src/pages/requisition/vendor/AddVendor.vue'),
+      },
+      {
         path: 'analytics',
         component: () => import('src/pages/requisition/AnalyticsPage.vue'),
       },

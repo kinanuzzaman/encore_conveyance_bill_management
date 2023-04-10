@@ -104,13 +104,11 @@
             </template>
           </q-table>
         </div>
-      </section>
-    </div>
-    <!-- mobile table -->
-    <div class="q-pa-md lt-md">
-      <q-table :rows="rows" :columns="columns" row-key="name" selection="multiple" v-model:selected="selected"
-        :filter="filter" grid hide-header>
-        <!-- <template v-slot:top-right>
+        <!-- mobile table -->
+        <div class="q-pa-md lt-md">
+          <q-table :rows="rows" :columns="columns" row-key="name" selection="multiple" v-model:selected="selected"
+            :filter="filter" grid hide-header>
+            <!-- <template v-slot:top-right>
           <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
             <template v-slot:append>
               <q-icon name="search" />
@@ -118,45 +116,48 @@
           </q-input>
         </template> -->
 
-        <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
-            :style="props.selected ? 'transform: scale(0.95);' : ''">
-            <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
-              <q-card-section class="flex justify-between">
-                <q-checkbox dense v-model="props.selected" :label="props.row.name" />
-                <div class="column items-end">
-                  <q-btn flat icon="more_vert">
-                    <q-menu anchor="top middle" self="top right">
-                      <q-item clickable>
-                        <q-item-section>Update</q-item-section>
-                      </q-item>
-                      <q-item clickable>
-                        <q-item-section>Delete</q-item-section>
-                      </q-item>
-                      <q-item clickable>
-                        <q-item-section>Update Status</q-item-section>
-                      </q-item>
-                    </q-menu>
-                  </q-btn>
-                </div>
-              </q-card-section>
-              <q-separator />
-              <q-list dense>
-                <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
-                  <q-item-section>
-                    <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-item-label caption>{{ col.value }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </div>
-        </template>
+            <template v-slot:item="props">
+              <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
+                :style="props.selected ? 'transform: scale(0.95);' : ''">
+                <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
+                  <q-card-section class="flex justify-between">
+                    <q-checkbox dense v-model="props.selected" :label="props.row.name" />
+                    <div class="column items-end">
+                      <q-btn flat icon="more_vert">
+                        <q-menu anchor="top middle" self="top right">
+                          <q-item clickable>
+                            <q-item-section>Update</q-item-section>
+                          </q-item>
+                          <q-item clickable>
+                            <q-item-section>Delete</q-item-section>
+                          </q-item>
+                          <q-item clickable>
+                            <q-item-section>Update Status</q-item-section>
+                          </q-item>
+                        </q-menu>
+                      </q-btn>
+                    </div>
+                  </q-card-section>
+                  <q-separator />
+                  <q-list dense>
+                    <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
+                      <q-item-section>
+                        <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-item-label caption>{{ col.value }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-card>
+              </div>
+            </template>
 
-      </q-table>
+          </q-table>
+        </div>
+      </section>
     </div>
+
 
   </main>
 </template>
