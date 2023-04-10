@@ -260,8 +260,10 @@ export default {
 }
 
 .bg-img {
-  background-image: url("../assets/images/home/bg1.png");
+  background-image: url("../assets/images/home/bg3.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: top;
+  background-attachment: fixed;
 }
 </style>

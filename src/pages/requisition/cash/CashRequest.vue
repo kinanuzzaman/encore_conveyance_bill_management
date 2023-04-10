@@ -43,7 +43,7 @@
     <!-- grid md:grid-cols-3 grid-cols-1 -->
     <div class="">
       <section class="">
-        <div class="q-px-md">
+        <div class="q-px-md gt-sm">
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
             :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems" row-key="name">
@@ -106,36 +106,58 @@
         </div>
       </section>
     </div>
+    <!-- mobile table -->
+    <div class="q-pa-md lt-md">
+      <q-table :rows="rows" :columns="columns" row-key="name" selection="multiple" v-model:selected="selected"
+        :filter="filter" grid hide-header>
+        <!-- <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template> -->
 
-    <q-dialog v-model="confirm" class="">
-      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
-        <div class="flex justify-center py-10">
-          <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
-        </div>
-        <q-card-section class="grid grid-cols-2 gap-5">
-          <q-input outlined v-model="name" placeholder="First Name" bg-color="white" :dense="true" />
-          <q-input outlined v-model="name" placeholder="Last Name" bg-color="white" :dense="true" />
-          <q-input outlined v-model="text" placeholder="Email" :dense="true">
-            <template v-slot:prepend>
-              <q-icon name="mail" />
-            </template>
-          </q-input>
-          <q-input outlined v-model="text" placeholder="Phone Number" :dense="true">
-            <template v-slot:prepend>
-              <q-icon name="phone" />
-            </template>
-          </q-input>
-          <q-input outlined v-model="designation" placeholder="Designation" bg-color="white" :dense="true" />
-          <q-select class="bg-white" outlined v-model="model" :options="options" :dense="true" label="Select role" />
-          <q-input outlined v-model="designation" placeholder="Salary" bg-color="white" :dense="true" />
-          <q-btn label="Save" color="green" class="col" />
-        </q-card-section>
-        <!-- <q-card-actions align="center" class="row mx-2 py-5">
-          <q-btn label="Create" color="green" class="col" />
-          <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions> -->
-      </q-card>
-    </q-dialog>
+        <template v-slot:item="props">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
+            :style="props.selected ? 'transform: scale(0.95);' : ''">
+            <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
+              <q-card-section class="flex justify-between">
+                <q-checkbox dense v-model="props.selected" :label="props.row.name" />
+                <div class="column items-end">
+                  <q-btn flat icon="more_vert">
+                    <q-menu anchor="top middle" self="top right">
+                      <q-item clickable>
+                        <q-item-section>Update</q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section>Delete</q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section>Update Status</q-item-section>
+                      </q-item>
+                    </q-menu>
+                  </q-btn>
+                </div>
+              </q-card-section>
+              <q-separator />
+              <q-list dense>
+                <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
+                  <q-item-section>
+                    <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card>
+          </div>
+        </template>
+
+      </q-table>
+    </div>
+
   </main>
 </template>
 

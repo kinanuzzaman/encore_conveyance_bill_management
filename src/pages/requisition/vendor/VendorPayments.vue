@@ -37,66 +37,69 @@
         </div>
     </section>
     <section>
-        <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems" row-key="name">
-            <!-- <template v-slot:top-right>
+        <div class="q-px-md">
+            <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
+                :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems"
+                row-key="name">
+                <!-- <template v-slot:top-right>
             <q-btn color="primary" label="Action" :disable="selectedItems.length === 0" @click="performAction" />
         </template> -->
-            <template v-slot:body="props">
-                <q-tr :props="props">
-                    <q-td>
-                        <q-checkbox v-model="props.selected" />
-                    </q-td>
-                    <q-td key="role" :props="props" @click="openDialog = true" class="">
+                <template v-slot:body="props">
+                    <q-tr :props="props">
+                        <q-td>
+                            <q-checkbox v-model="props.selected" />
+                        </q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
 
-                        <div>
-                            <div class="text-xs">{{ props.row.name }}</div>
-                        </div>
+                            <div>
+                                <div class="text-xs">{{ props.row.name }}</div>
+                            </div>
 
-                    </q-td>
-                    <q-td key="role" :props="props" class="">
-                        <div>
-                            <div class="text-xs">{{ props.row.email }}</div>
-                        </div>
-                    </q-td>
-                    <q-td key="role" :props="props" class="">
-                        <div>
-                            <div class="text-xs">{{ props.row.phone }}</div>
-                        </div>
-                    </q-td>
-                    <q-td key="role" :props="props" class="">
-                        <div>
-                            <div class="text-xs">{{ props.row.created }}</div>
-                        </div>
-                    </q-td>
-                    <q-td key="role" :props="props" @click="openDialog = true" class="">
-                        {{ props.row.status }}
-                    </q-td>
-                    <q-td key="role" :props="props" @click="openDialog = true" class="">
-                        <div class="bg-blue-200 inline p-2 text-blue-800">
-                            {{ props.row.role }}
-                        </div>
-                    </q-td>
-                    <q-td>
-                        <div class="column items-end">
-                            <q-btn flat icon="more_vert">
-                                <q-menu anchor="top middle" self="top right">
-                                    <q-item clickable>
-                                        <q-item-section>Update</q-item-section>
-                                    </q-item>
-                                    <q-item clickable>
-                                        <q-item-section>Delete</q-item-section>
-                                    </q-item>
-                                    <q-item clickable>
-                                        <q-item-section>Update Status</q-item-section>
-                                    </q-item>
-                                </q-menu>
-                            </q-btn>
-                        </div>
-                    </q-td>
-                </q-tr>
-            </template>
-        </q-table>
+                        </q-td>
+                        <q-td key="role" :props="props" class="">
+                            <div>
+                                <div class="text-xs">{{ props.row.email }}</div>
+                            </div>
+                        </q-td>
+                        <q-td key="role" :props="props" class="">
+                            <div>
+                                <div class="text-xs">{{ props.row.phone }}</div>
+                            </div>
+                        </q-td>
+                        <q-td key="role" :props="props" class="">
+                            <div>
+                                <div class="text-xs">{{ props.row.created }}</div>
+                            </div>
+                        </q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
+                            {{ props.row.status }}
+                        </q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
+                            <div class="bg-blue-200 inline p-2 text-blue-800">
+                                {{ props.row.role }}
+                            </div>
+                        </q-td>
+                        <q-td>
+                            <div class="column items-end">
+                                <q-btn flat icon="more_vert">
+                                    <q-menu anchor="top middle" self="top right">
+                                        <q-item clickable>
+                                            <q-item-section>Update</q-item-section>
+                                        </q-item>
+                                        <q-item clickable>
+                                            <q-item-section>Delete</q-item-section>
+                                        </q-item>
+                                        <q-item clickable>
+                                            <q-item-section>Update Status</q-item-section>
+                                        </q-item>
+                                    </q-menu>
+                                </q-btn>
+                            </div>
+                        </q-td>
+                    </q-tr>
+                </template>
+            </q-table>
+        </div>
     </section>
 </template>
   
