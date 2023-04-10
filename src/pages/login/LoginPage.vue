@@ -16,14 +16,17 @@
               <q-icon name="person_outline" />
             </template>
           </q-input>
-          <q-input dense filled bottom-slots v-model="loginPayload.password" placeholder="Password">
+          <q-input dense filled bottom-slots v-model="loginPayload.password" placeholder="Password"
+            :type="showPassword ? 'text' : 'password'">
             <template v-slot:prepend>
               <q-icon name="lock" />
             </template>
             <template v-slot:append>
-              <q-icon name="visibility_off" @click="text = ''" class="cursor-pointer" />
+              <q-btn flat :icon="showPassword ? 'visibility_off' : 'visibility'" @click="showPassword = !showPassword"
+                class="cursor-pointer" dense />
             </template>
           </q-input>
+
           <div class="text-golden text-right">
             <a href="/forgotpass">Forget Password?</a>
           </div>
@@ -32,7 +35,7 @@
           <q-btn color="green full-width" label="login" @click="loginUser" size="md" no-caps />
         </q-card-section>
       </q-card>
-      <div class="absolute bottom-0 right-0 w-[70%]">
+      <div class="absolute bottom-0 right-0 w-[60%]">
         <img src="../../assets/images/login/encore2.png" class="" />
       </div>
     </div>
@@ -40,7 +43,7 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useAuthStore } from "../../stores/auth.store";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
@@ -71,6 +74,7 @@ export default {
       }
     };
     return {
+      showPassword: ref(false),
       loginUser,
       loginPayload,
     };

@@ -1,7 +1,6 @@
 <template>
     <section class="mx-4 my-6 flex justify-between">
         <div class="text-2xl font-semibold">Vendor Payment</div>
-
         <div class="flex md:gap-x-5 gap-1 justify-items-end">
             <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
                     <q-list>
@@ -39,8 +38,7 @@
     <section>
         <div class="q-px-md gt-sm">
             <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-                :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems"
-                row-key="name">
+                :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
                 <!-- <template v-slot:top-right>
             <q-btn color="primary" label="Action" :disable="selectedItems.length === 0" @click="performAction" />
         </template> -->
@@ -242,7 +240,7 @@ export default {
                     status: "Active",
                 },
             ],
-            selectedItems: ref([]),
+            selected: ref([]),
         };
     },
 
