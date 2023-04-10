@@ -302,7 +302,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       tableRef,
       pagination,
@@ -314,30 +314,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.searchContantBack {
-  background-color: #f1f1f1;
-}
-
-.input-label {
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 10px;
-  margin-top: 24px;
-  opacity: 0.5;
-}
-
-.overlay {
-  // position: fixed;
-  // display: none;
-  // width: 100%;
-  // height: 100%;
-  // top: 0;
-  // left: 0;
-  // right: 0;
-  // bottom: 0;
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: -1;
-  cursor: pointer;
-}
-</style>
+<style lang="scss" scoped></style>
