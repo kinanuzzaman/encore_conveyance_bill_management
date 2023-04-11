@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia';
+import { useLocalStorage, StorageSerializers } from '@vueuse/core';
 import { $api } from '../boot/axios';
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     userInfo: null,
-    token: null,
+    token: useLocalStorage('token', null, {
+      serializer: StorageSerializers.string,
+    }),
     userType: null,
     permissions: null,
   }),
