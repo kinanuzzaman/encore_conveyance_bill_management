@@ -23,5 +23,8 @@ export const useUserStore = defineStore('user', {
       this.users = response?.data.data;
       this.totalUsers = response?.data.total;
     },
+    async usersRegister(payload: any) {
+      await $api.post('/users/invite-user', { param: payload });
+    },
   },
 });

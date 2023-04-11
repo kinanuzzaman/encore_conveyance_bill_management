@@ -108,54 +108,6 @@
           </q-table>
         </div>
       </section>
-      <!-- <section class="q-px-md">
-        <q-card flat class="h-[85vh] bg-transparent">
-          <div class="flex justify-center py-10">
-            <q-avatar
-              size="100px"
-              font-size="52px"
-              color="teal"
-              text-color="white"
-              icon="account_circle"
-            />
-          </div>
-          <q-card-section>
-            <q-input
-              outlined
-              v-model="name"
-              placeholder="Name"
-              bg-color="white"
-              :dense="true"
-            />
-          </q-card-section>
-          <q-card-section>
-            <q-input
-              outlined
-              v-model="designation"
-              placeholder="Designation"
-              bg-color="white"
-              :dense="true"
-            />
-          </q-card-section>
-          <q-card-section>
-            <q-select
-              class="bg-white"
-              outlined
-              v-model="model"
-              :options="options"
-              :dense="true"
-              label="Select role"
-            />
-          </q-card-section>
-          <q-card-actions
-            align="center"
-            class="px-3 py-5 absolute bottom-0 w-full"
-          >
-            <q-btn label="Create" color="green" class="col" />
-            <q-btn label="Decline" color="negative" class="col" />
-          </q-card-actions>
-        </q-card>
-      </section> -->
     </div>
 
     <q-dialog v-model="confirm" class="">
@@ -180,7 +132,7 @@
           <q-select class="bg-white" outlined v-model="userRegister.role" :options="options" :dense="true"
             label="Select role" />
           <q-input outlined v-model="userRegister.salry" placeholder="Salary" bg-color="white" :dense="true" />
-          <q-btn label="Save" color="green" class="col" @click="registerUser" />
+          <q-btn label="Save" color="green" class="col" @click="registerUser()" />
         </q-card-section>
         <!-- <q-card-actions align="center" class="row mx-2 py-5">
           <q-btn label="Create" color="green" class="col" />
@@ -281,7 +233,6 @@ export default {
       console.log("🚀 ~ file: UserManagement.vue:274 ~ onRequest ~ page:", page)
       // clear out existing data and add new
       rows.value.splice(0, rows.value.length, ...userStore.getAllUsers)
-
       pagination.value.rowsNumber = userStore.getTotalUsersCount
       pagination.value.page = page
       pagination.value.rowsPerPage = rowsPerPage
@@ -291,10 +242,13 @@ export default {
 
     onMounted(() => {
       tableRef.value.requestServerInteraction()
-    })
+    });
 
+    const registerUser = async () => {
+      await userStore.usersRegister(userRegister);
+    };
     return {
-      //registerUser,
+      registerUser,
       userRegister,
       rows,
       columns,

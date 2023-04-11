@@ -214,7 +214,7 @@ const menuList = [
       {
         icon: "payments",
         label: "Attendance",
-        link: "/",
+        link: "/attendance",
       },
     ],
   },

@@ -50,6 +50,16 @@ const routes = [
         component: () => import('src/pages/requisition/vendor/AddVendor.vue'),
       },
       {
+        path: 'attendance',
+        component: () =>
+          import('src/pages/analytics/attendance/AttendancePage.vue'),
+      },
+      {
+        path: 'attendance/add-attendance',
+        component: () =>
+          import('src/pages/analytics/attendance/AttendancePage.vue'),
+      },
+      {
         path: 'analytics',
         component: () => import('src/pages/requisition/AnalyticsPage.vue'),
       },
