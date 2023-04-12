@@ -15,6 +15,10 @@ const routes = [
         component: () => import('pages/login/ForgotPass.vue'),
       },
       { path: 'newpass', component: () => import('pages/login/NewPass.vue') },
+      {
+        path: 'accept-invitation/:id',
+        component: () => import('pages/OnBoard.vue'),
+      },
     ],
   },
 

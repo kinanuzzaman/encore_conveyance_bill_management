@@ -28,22 +28,18 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    if (to.path === '/') {
-      console.log('🚀 ~ file: index.ts:35 ~ Router.beforeEach ~ from:', from);
-      const token = localStorage.getItem('token');
-      if (token) {
-        console.log(
-          '🚀 ~ file: index.ts:38 ~ Router.beforeEach ~ token:',
-          token
-        );
-        const decoded: any = JwtDecode(token);
-        if (decoded.exp * 1000 < Date.now()) {
-          localStorage.removeItem('token');
-        } else {
-          next(from.path);
-        }
-      }
-    }
+    // if (to.path === '/') {
+    //   console.log('🚀 ~ file: index.ts:35 ~ Router.beforeEach ~ from:', from);
+    //   const token = localStorage.getItem('token');
+    //   if (token) {
+    //     const decoded: any = JwtDecode(token);
+    //     if (decoded.exp * 1000 < Date.now()) {
+    //       localStorage.removeItem('token');
+    //     } else {
+    //       next(from.path);
+    //     }
+    //   }
+    // }
     if (to.meta.requiresAuth) {
       const token = localStorage.getItem('token');
       if (token) {

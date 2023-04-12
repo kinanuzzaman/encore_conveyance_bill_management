@@ -44,7 +44,7 @@
                 </q-td>
                 <q-td key="role" :props="props" class="">
                   <div>
-                    <div class="text-xs">{{ props.row.created }}</div>
+                    <div class="text-xs">{{ props.row.createdAt }}</div>
                   </div>
                 </q-td>
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
@@ -52,7 +52,7 @@
                 </q-td>
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
                   <div class="bg-blue-200 inline p-2 text-blue-800">
-                    {{ props.row.role }}
+                    {{ props.row.role.role_name }}
                   </div>
                 </q-td>
                 <q-td>
@@ -147,6 +147,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useUserStore } from "../../stores/user.store";
 import { useRbacStore } from "../../stores/rbac.store";
+import { useQuasar } from "quasar";
 const columns = [
   {
     name: "user",
@@ -203,16 +204,17 @@ export default {
   setup() {
     const userStore = useUserStore();
     const rbacStore = useRbacStore();
-
+    const $q = useQuasar();
 
     let confirm = ref(false);
     const userRegister = reactive({
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone_number: "",
-      designation: "",
-      salary: "",
+      first_name: null,
+      last_name: null,
+      email: null,
+      phone_number: null,
+      designation: null,
+      salary: null,
+      role: null
     });
 
     const tableRef = ref()
@@ -251,12 +253,16 @@ export default {
     const registerUser = async () => {
 
       try {
-        await userStore.userInvite(userRegister);
+        await userStore.userInvite({
+          ...userRegister,
+          role: userRegister.role.value,
+        });
         $q.notify({
           message: "User created",
           color: "positive",
           position: "top",
         });
+        confirm.value = false;
       } catch (error) {
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
