@@ -25,9 +25,10 @@
                       <div>
                         <q-avatar font-size="40px" icon="account_circle" />
                       </div>
-                      <div>
-                        <div class="text-xs">{{ props.row.name }}</div>
-                        <div class="text-xs">{{ props.row.designation }}</div>
+                      <div class="flex gap-2">
+                        <span class="text-xs">{{ props.row.first_name }} {{ props.row.last_name }}</span>
+                        <span class="text-xs bg-gray-400 text-white rounded px-1">{{ props.row.designation
+                        }}</span>
                       </div>
                     </div>
                   </div>
