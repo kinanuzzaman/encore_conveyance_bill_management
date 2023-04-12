@@ -39,7 +39,7 @@
                 </q-td>
                 <q-td key="role" :props="props" class="">
                   <div>
-                    <div class="text-xs">{{ props.row.phone }}</div>
+                    <div class="text-xs">{{ props.row.phone_number }}</div>
                   </div>
                 </q-td>
                 <q-td key="role" :props="props" class="">
@@ -129,9 +129,9 @@
             </template>
           </q-input>
           <q-input outlined v-model="userRegister.designation" placeholder="Designation" bg-color="white" :dense="true" />
-          <q-select class="bg-white" outlined v-model="userRegister.role" :options="options" :dense="true"
+          <q-select class="bg-white" outlined v-model="userRegister.role" :options="rbacStore.getAllRoles" :dense="true"
             label="Select role" />
-          <q-input outlined v-model="userRegister.salry" placeholder="Salary" bg-color="white" :dense="true" />
+          <q-input outlined v-model="userRegister.salary" placeholder="Salary" bg-color="white" :dense="true" />
           <q-btn label="Save" color="green" class="col" @click="registerUser()" />
         </q-card-section>
         <!-- <q-card-actions align="center" class="row mx-2 py-5">
@@ -146,6 +146,7 @@
 <script>
 import { ref, reactive, onMounted } from "vue";
 import { useUserStore } from "../../stores/user.store";
+import { useRbacStore } from "../../stores/rbac.store";
 const columns = [
   {
     name: "user",
@@ -201,15 +202,17 @@ const columns = [
 export default {
   setup() {
     const userStore = useUserStore();
+    const rbacStore = useRbacStore();
+
+
     let confirm = ref(false);
     const userRegister = reactive({
       first_name: "",
       last_name: "",
       email: "",
-      dob: "",
-      profile_img: "",
-      designetion: "",
-      password: "",
+      phone_number: "",
+      designation: "",
+      salary: "",
     });
 
     const tableRef = ref()
@@ -241,13 +244,29 @@ export default {
     }
 
     onMounted(() => {
-      tableRef.value.requestServerInteraction()
+      tableRef.value.requestServerInteraction();
+      rbacStore.fetchAllRoles();
     });
 
     const registerUser = async () => {
-      await userStore.usersRegister(userRegister);
+
+      try {
+        await userStore.userInvite(userRegister);
+        $q.notify({
+          message: "User created",
+          color: "positive",
+          position: "top",
+        });
+      } catch (error) {
+        $q.notify({
+          message: error.response ? error.response.data.message : error.message,
+          color: "negative",
+          position: "top",
+        });
+      }
     };
     return {
+      rbacStore,
       registerUser,
       userRegister,
       rows,
@@ -256,7 +275,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      // options: rbacStore.getAllRoles,
       val: ref(true),
       tableRef,
       pagination,
