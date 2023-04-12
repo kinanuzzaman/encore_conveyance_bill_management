@@ -60,7 +60,7 @@
                   <div class="column items-end">
                     <q-fab square flat padding="none" text-color="black" icon="add" direction="left"
                       class="border border-black">
-                      <q-fab-action flat @click="confirm = true" icon="edit"
+                      <q-fab-action flat @click="openUserUpdateDialog(props.row)" icon="edit"
                         class="bg-transparent shadow-none text-blue-500">
                         <q-tooltip class="bg-blue-6 text-xs" anchor="top middle" self="center middle" :offset="[10, 10]">
                           Edit
@@ -132,8 +132,41 @@
           <q-input outlined v-model="userRegister.designation" placeholder="Designation" bg-color="white" :dense="true" />
           <q-select class="bg-white" outlined v-model="userRegister.role" :options="rbacStore.getAllRoles" :dense="true"
             label="Select role" />
+          <q-select class="bg-white" outlined v-model="userRegister.user_type"
+            :options="['SUPER_ADMIN', 'DEVELOPER', 'EMPLOYEE', 'CLIENT', 'VENDOR']" :dense="true" label="User type" />
           <q-input outlined v-model="userRegister.salary" placeholder="Salary" bg-color="white" :dense="true" />
           <q-btn label="Save" color="green" class="col" @click="registerUser()" />
+        </q-card-section>
+        <!-- <q-card-actions align="center" class="row mx-2 py-5">
+          <q-btn label="Create" color="green" class="col" />
+          <q-btn label="Decline" color="negative" class="col" />
+        </q-card-actions> -->
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="userUpdateDialog" class="">
+      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
+        <div class="flex justify-center py-10">
+          <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
+        </div>
+        <q-card-section class="grid grid-cols-2 gap-5">
+          <q-input outlined v-model="updateCandidate.first_name" placeholder="First Name" bg-color="white"
+            :dense="true" />
+          <q-input outlined v-model="updateCandidate.last_name" placeholder="Last Name" bg-color="white" :dense="true" />
+          <q-input outlined v-model="updateCandidate.email" placeholder="Email" :dense="true">
+            <template v-slot:prepend>
+              <q-icon name="mail" />
+            </template>
+          </q-input>
+          <q-input outlined v-model="updateCandidate.phone_number" placeholder="Phone Number" :dense="true">
+            <template v-slot:prepend>
+              <q-icon name="phone" />
+            </template>
+          </q-input>
+          <q-input outlined v-model="updateCandidate.designation" placeholder="Designation" bg-color="white"
+            :dense="true" />
+          <q-input outlined v-model="updateCandidate.salary" placeholder="Salary" bg-color="white" :dense="true" />
+          <q-btn label="Save" color="green" class="col" @click="updateUserInfo()" />
         </q-card-section>
         <!-- <q-card-actions align="center" class="row mx-2 py-5">
           <q-btn label="Create" color="green" class="col" />
@@ -149,6 +182,7 @@ import { ref, reactive, onMounted } from "vue";
 import { useUserStore } from "../../stores/user.store";
 import { useRbacStore } from "../../stores/rbac.store";
 import { useQuasar } from "quasar";
+import { ApiService } from 'src/service/api-service';
 const columns = [
   {
     name: "user",
@@ -203,9 +237,13 @@ const columns = [
 
 export default {
   setup() {
+    const apiSerivce = new ApiService();
     const userStore = useUserStore();
     const rbacStore = useRbacStore();
     const $q = useQuasar();
+
+    const userUpdateDialog = ref(false);
+    const updateCandidate = ref({});
 
     let confirm = ref(false);
     const userRegister = reactive({
@@ -215,6 +253,7 @@ export default {
       phone_number: null,
       designation: null,
       salary: null,
+      user_type: null,
       role: null
     });
 
@@ -272,6 +311,32 @@ export default {
         });
       }
     };
+
+    function openUserUpdateDialog(user) {
+      Object.assign(updateCandidate.value, user);
+      userUpdateDialog.value = true;
+    }
+
+    async function updateUserInfo() {
+      try {
+        await apiSerivce.put(`/users/${updateCandidate.value._id}`, {
+          ...updateCandidate.value,
+          role: updateCandidate.value.role.value,
+        });
+        $q.notify({
+          message: "User updated",
+          color: "positive",
+          position: "top",
+        });
+      } catch (error) {
+        $q.notify({
+          message: error.response ? error.response.data.message : error.message,
+          color: "negative",
+          position: "top",
+        });
+      }
+    }
+
     return {
       rbacStore,
       registerUser,
@@ -282,13 +347,16 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      // options: rbacStore.getAllRoles,
       val: ref(true),
       tableRef,
       pagination,
       loading,
       onClick: () => false,
       onRequest,
+      userUpdateDialog,
+      updateCandidate,
+      openUserUpdateDialog,
+      updateUserInfo
     };
   },
 };
