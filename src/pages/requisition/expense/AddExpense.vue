@@ -1,55 +1,23 @@
 <template>
-    <main class="px-5">
-        <div class="row">
-            <section class="col-md-6">
-                <div class="px-4">
-                    <q-select class="bg-white" outlined v-model="type" :options="options" :dense="true"
-                        label="Choose expense type" />
-                </div>
-                <div v-if="type == 'Product Purchase'">
-                    <ProductPurchase />
-                </div>
-                <div v-if="type == 'Office'">
-                    <OfficeExpense />
-                </div>
-                <div v-if="type == 'Delivery'">
-                    <DeliveryExp />
-                </div>
-                <div v-if="type == 'Conveyance'">
-                    <ConveyanceExp />
-                </div>
-                <div v-if="type == 'Factory'">
-                    <FactoryExp />
-                </div>
-                <div v-if="type == 'BP'">
-                    <BpExp />
-                </div>
-                <div v-if="type == 'Labour'">
-                    <LabourExp />
-                </div>
-                <div v-if="type == 'Marketing'">
-                    <MarketingExp />
-                </div>
-                <div v-if="type == 'Mobile Allowance'">
-                    <MobileAllowance />
-                </div>
-                <div v-if="type == 'Salary'">
-                    <SalaryExp />
-                </div>
-                <div v-if="type == 'Other Bill'">
-                    <OtherBill />
-                </div>
-
-            </section>
-            <section class="col-md-6 px-5 ">
-                <div>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcE5ok1cPwHeGuCEe03a_X5fxT0tIJSeKdolnp-0sqSyjVO6mD5p1ryrGuqCQyejAQnIM&usqp=CAU"
-                        spinner-color="primary" spinner-size="82px" class="rounded-xl md:h-[871px]" fit="fill" />
-                </div>
-            </section>
+  <main class="px-5">
+    <div class="row">
+      <section class="col-md-6">
+        <div class="px-4">
+          <q-select class="bg-white" outlined v-model="activeCompo" :options="options" :dense="true"
+            label="Choose expense type" />
         </div>
+        <component :is="activeCompo.value"></component>
+      </section>
+      <section class="col-md-6 px-5 ">
+        <div>
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcE5ok1cPwHeGuCEe03a_X5fxT0tIJSeKdolnp-0sqSyjVO6mD5p1ryrGuqCQyejAQnIM&usqp=CAU"
+            spinner-color="primary" spinner-size="82px" class="rounded-xl md:h-[871px]" fit="fill" />
+        </div>
+      </section>
+    </div>
 
-    </main>
+  </main>
 </template>
 
 <script>
@@ -64,26 +32,63 @@ import OfficeExpense from 'src/components/expense/OfficeExpense.vue';
 import OtherBill from 'src/components/expense/OtherBill.vue';
 import ProductPurchase from 'src/components/expense/ProductPurchase.vue';
 import SalaryExp from 'src/components/expense/SalaryExp.vue';
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 export default {
-    setup() {
+  components: { ProductPurchase, OfficeExpense, DeliveryExp, ConveyanceExp, FactoryExp, BpExp, LabourExp, OtherBill, SalaryExp, MobileAllowance, MarketingExp },
+  setup() {
+    const activeCompo = ref({
+      label: "BP",
+      value: "BpExp",
+    })
 
-        const userRegister = reactive({
-            first_name: "",
-            last_name: "",
-            email: "",
-            dob: "",
-            profile_img: "",
-            designetion: "",
-            password: "",
-        })
-        return {
-            userRegister,
-            type: ref(""),
-            options: ["Product Purchase", "Office", "Delivery", "Conveyance", "Factory", "BP", "Labour", "Marketing", "Mobile Allowance", "Salary", "Other Bill"],
-        };
-    },
-    components: { ProductPurchase, OfficeExpense, DeliveryExp, ConveyanceExp, FactoryExp, BpExp, LabourExp, OtherBill, SalaryExp, MobileAllowance, MarketingExp }
+    return {
+      activeCompo,
+      options: [ {
+        label: "Product Purchase",
+        value: "ProductPurchase",
+      },
+      {
+        label: "Office",
+        value: "OfficeExpense",
+      },
+      {
+        label: "Delivery",
+        value: "DeliveryExp",
+      },
+      {
+        label: "Conveyance",
+        value: "ConveyanceExp",
+      },
+      {
+        label: "Factory",
+        value: "FactoryExp",
+      },
+      {
+        label: "BP",
+        value: "BpExp",
+      },
+      {
+        label: "Labour",
+        value: "LabourExp",
+      },
+      {
+        label: "Marketing",
+        value: "MarketingExp",
+      },
+      {
+        label: "Mobile Allowance",
+        value: "MobileAllowance",
+      },
+      {
+        label: "Salary",
+        value: "SalaryExp",
+      },
+      {
+        label: "Other Bill",
+        value: "OtherBill",
+      }, ]
+    };
+  },
 }
 </script>
 

@@ -111,7 +111,7 @@
       </section>
     </div>
 
-    <q-dialog v-model="confirm" class="">
+    <q-dialog v-model="confirm" class="" persistent>
       <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
         <div class="flex justify-center py-10">
           <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
@@ -135,16 +135,16 @@
           <q-select class="bg-white" outlined v-model="userRegister.user_type"
             :options="['SUPER_ADMIN', 'DEVELOPER', 'EMPLOYEE', 'CLIENT', 'VENDOR']" :dense="true" label="User type" />
           <q-input outlined v-model="userRegister.salary" placeholder="Salary" bg-color="white" :dense="true" />
-          <q-btn label="Save" color="green" class="col" @click="registerUser()" />
+          <!-- <q-btn label="Save" color="green" class="col" /> -->
         </q-card-section>
-        <!-- <q-card-actions align="center" class="row mx-2 py-5">
-          <q-btn label="Create" color="green" class="col" />
-          <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions> -->
+        <q-card-actions align="center" class="row mx-2 py-5">
+          <q-btn label="Create" color="green" class="col" @click="registerUser()" />
+          <q-btn label="Cancel" color="negative" class="col" @click="confirm = false" />
+        </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="userUpdateDialog" class="">
+    <q-dialog v-model="userUpdateDialog" class="" persistent>
       <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
         <div class="flex justify-center py-10">
           <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
@@ -166,12 +166,12 @@
           <q-input outlined v-model="updateCandidate.designation" placeholder="Designation" bg-color="white"
             :dense="true" />
           <q-input outlined v-model="updateCandidate.salary" placeholder="Salary" bg-color="white" :dense="true" />
-          <q-btn label="Save" color="green" class="col" @click="updateUserInfo()" />
+          <!-- <q-btn label="Save" color="green" class="col" /> -->
         </q-card-section>
-        <!-- <q-card-actions align="center" class="row mx-2 py-5">
-          <q-btn label="Create" color="green" class="col" />
-          <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions> -->
+        <q-card-actions align="center" class="row mx-2 py-5">
+          <q-btn label="Update" color="green" class="col" @click="updateUserInfo()" />
+          <q-btn label="Cancel" color="negative" class="col" @click="userUpdateDialog = false" />
+        </q-card-actions>
       </q-card>
     </q-dialog>
   </main>

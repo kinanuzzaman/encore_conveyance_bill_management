@@ -3,7 +3,7 @@
     <div class="flex justify-center items-center h-screen bg-green">
       <q-card class="w-[400px] p-5 m-5">
         <q-card-section>
-          <img src="../../assets/images/login/encore1.png" class="" />
+          <img src="~assets/images/login/encore1.png" class="" />
         </q-card-section>
         <q-card-section>
           <div class="text-[24px] text-golden text-center font-semibold">
@@ -32,11 +32,11 @@
           </div>
         </q-card-section>
         <q-card-section>
-          <q-btn color="green full-width" label="login" @click="loginUser" size="md" no-caps />
+          <q-btn color="green full-width" label="login" @click="loginUser" :loading="loginBtnLoading" size="md" no-caps />
         </q-card-section>
       </q-card>
       <div class="absolute bottom-0 right-0 w-[60%]">
-        <img src="../../assets/images/login/encore2.png" class="" />
+        <img src="~assets/images/login/encore2.png" class="" />
       </div>
     </div>
   </div>
@@ -59,21 +59,20 @@ export default {
     const $q = useQuasar();
     const router = useRouter();
     const authStore = useAuthStore();
+    const loginBtnLoading = ref(false);
+
     const loginPayload = reactive({
       email: "admin@mail.com",
       password: "123456",
     });
     const loginUser = async () => {
       try {
+        loginBtnLoading.value = true;
         await authStore.UserLogin(loginPayload);
-        $q.notify({
-          message: "Login Success",
-          color: "positive",
-          position: "top",
-        });
         socket.emit("USER_LOGIN", authStore.userInfo._id);
         router.push("/user");
       } catch (error) {
+        loginBtnLoading.value = false;
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
           color: "negative",
@@ -82,6 +81,7 @@ export default {
       }
     };
     return {
+      loginBtnLoading,
       showPassword: ref(false),
       loginUser,
       loginPayload,
