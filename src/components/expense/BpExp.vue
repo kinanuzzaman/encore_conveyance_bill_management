@@ -2,10 +2,10 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid grid-cols-2 gap-5">
-        <SearchAddCompo for="product" :selected="formData.product.id" />
+        <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
-        <q-input outlined v-model="formData.vendor" placeholder="Vendor" :dense="true" />
-        <SearchAddCompo for="project" :selected="formData.project" />
+        <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
+        <SearchAddCompo label="Project" api="/project-control" @selected="e => formData.project = e" />
         <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
         <div class="flex">
           <q-input outlined v-model="formData.amount_per" placeholder="Amount per" bg-color="white" :dense="true"
@@ -35,7 +35,6 @@
 import { defineComponent, reactive, ref } from 'vue';
 import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
-  name: 'BpExp',
   components: {
     SearchAddCompo
   },
@@ -46,6 +45,8 @@ export default defineComponent({
         id: null,
         quantity: null,
       },
+      vendor: null,
+      request_type: 'BP',
       project: null,
       vendor: null,
       location: null,
@@ -57,13 +58,13 @@ export default defineComponent({
     });
     return {
       type: ref('pcs'),
-      units: [ "pcs", "feet", "kg", "meter", "inch" ],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },
   methods: {
     registerUser() {
-      this.$emit('addExpense', this.userRegister);
+      this.$emit('addExpense', this.formData);
     }
   }
 })

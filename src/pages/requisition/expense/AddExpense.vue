@@ -6,7 +6,7 @@
           <q-select class="bg-white" outlined v-model="activeCompo" :options="options" :dense="true"
             label="Choose expense type" />
         </div>
-        <component :is="activeCompo.value"></component>
+        <component :is="activeCompo.value" @addExpense="createExpance"></component>
       </section>
       <section class="col-md-6 px-5 ">
         <div>
@@ -33,15 +33,53 @@ import OtherBill from 'src/components/expense/OtherBill.vue';
 import ProductPurchase from 'src/components/expense/ProductPurchase.vue';
 import SalaryExp from 'src/components/expense/SalaryExp.vue';
 import { ref } from 'vue';
+import { ApiService } from 'src/service/api-service';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
 export default {
   components: { ProductPurchase, OfficeExpense, DeliveryExp, ConveyanceExp, FactoryExp, BpExp, LabourExp, OtherBill, SalaryExp, MobileAllowance, MarketingExp },
   setup() {
     const activeCompo = ref({
-      label: "BP",
-      value: "BpExp",
+      label: "Product Purchase",
+      value: "ProductPurchase",
     })
+    const apiService = new ApiService();
+    const $q = useQuasar();
+    const router = useRouter();
+    async function createExpance(e) {
+      if (!navigator.geolocation) {
+        $q.notify({
+          message: "Allow Geolocation, or you can't continue",
+          color: "red",
+          position: "top",
+        })
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        try {
+          console.log("🚀 ~ file: AddExpense.vue:49 ~ createExpance ~ position", position);
+          const { latitude, longitude } = position.coords;
+          e.creator_location = { latitude, longitude };
+          await apiService.post('/expence-control/create', e);
+          $q.notify({
+            message: "Expense created successfully",
+            color: "green",
+            position: "top",
+          })
+          router.back()
+        } catch (error) {
+          $q.notify({
+            message: "Something went wrong",
+            color: "red",
+            position: "top",
+          })
+        }
+      });
+
+    }
 
     return {
+      createExpance,
       activeCompo,
       options: [ {
         label: "Product Purchase",

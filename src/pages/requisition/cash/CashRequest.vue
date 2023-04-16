@@ -34,7 +34,7 @@
             </template>
           </q-select>
         </div>
-        <div> <q-btn outline rounded to="/expense/add-expense" label="Add request" no-caps />
+        <div> <q-btn outline rounded to="/cash/add-cash" label="Add request" no-caps />
 
         </div>
       </div>
@@ -258,7 +258,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.length}`

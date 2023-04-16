@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-select v-model="selectedOption" @input="onOptionSelect" :label="`${$props.for}`" dense outlined
+    <q-select v-model="selectedOption" @input="onOptionSelect" :label="`${$props.label}`" dense outlined
       option-label="label" option-value="value" :options="suggestedOptions" use-input @input-value="onFilter"
       :loading="loadingOptions" :no-options-label="noOptionsLabel">
       <template v-slot:no-option>
@@ -34,10 +34,14 @@ export default {
     };
   },
   props: {
-    for: {
+    api: {
       type: String,
       required: true
-    }
+    },
+    label: {
+      type: String,
+      required: true
+    },
   },
   watch: {
     selectedOption: {
@@ -64,7 +68,7 @@ export default {
     },
     async fetchSuggestions(searchQuery) {
       try {
-        const response = await this.apiService.get(`/${this.$props.for}-control`, {
+        const response = await this.apiService.get(this.$props.api, {
           params: {
             q: searchQuery
           }
@@ -81,7 +85,7 @@ export default {
     },
     async requestNewData() {
       try {
-        await this.apiService.post(`/${this.$props.for}-control/create`, {
+        await this.apiService.post(`/${this.$props.api}/create`, {
           title: this.searchQuery,
           isRequested: true
         });

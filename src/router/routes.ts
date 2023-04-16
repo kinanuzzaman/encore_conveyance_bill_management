@@ -36,6 +36,11 @@ const routes = [
         component: () => import('src/pages/requisition/cash/CashRequest.vue'),
       },
       {
+        path: 'cash/add-cash',
+        component: () =>
+          import('src/components/requisition/NewCashRequest.vue'),
+      },
+      {
         path: 'expense',
         component: () =>
           import('src/pages/requisition/expense/ExpensePage.vue'),

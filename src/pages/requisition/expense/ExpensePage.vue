@@ -45,7 +45,8 @@
       <section class="">
         <div class="q-px-md gt-sm">
           <!-- bordered  style="background-color: #f1f1f1" -->
-          <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
+          <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" :columns="columns" ref="tableRef"
+            v-model:pagination="pagination" :loading="loading" style="background: rgba(244, 244, 244, 0.8)"
             :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
@@ -55,18 +56,18 @@
                 <q-td>
 
                   <div>
-                    <div class="text-xs">{{ props.row.name }}</div>
+                    <div class="text-xs">{{ props.row.request_type }}</div>
                   </div>
 
                 </q-td>
                 <q-td>
                   <div>
-                    <div class="text-xs">{{ props.row.email }}</div>
+                    <div class="text-xs">{{ props.row.amount }}</div>
                   </div>
                 </q-td>
                 <q-td>
                   <div>
-                    <div class="text-xs">{{ props.row.phone }}</div>
+                    <div class="text-xs">{{ props.row.payee?.first_name + ' ' + props.row.payee?.last_name }}</div>
                   </div>
                 </q-td>
                 <q-td>
@@ -79,7 +80,8 @@
                 </q-td>
                 <q-td>
                   <div class="bg-blue-200 inline p-2 text-blue-800">
-                    {{ props.row.role }}
+                    {{ props.row.approvedBy ? props.row.approvedBy.first_name + ' ' + props.row.approvedBy.last_name :
+                      'N/A' }}
                   </div>
                 </q-td>
                 <q-td>
@@ -159,7 +161,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { ApiService } from 'src/service/api-service';
+// import { useQuasar } from 'quasar';
 
 const columns = [
   {
@@ -212,49 +216,88 @@ const columns = [
   },
 ];
 
-const rows = [
-  {
-    name: "Frozen Yogurt",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-  {
-    name: "Frozen",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-  {
-    name: "Yogurt",
-    designation: "Manager",
-    email: "demo@email.com",
-    phone: "1234567890",
-    created: "12 March 2023",
-    role: "Manager Author Connect",
-    status: "Active",
-  },
-];
+// const rows = [
+//   {
+//     name: "Frozen Yogurt",
+//     designation: "Manager",
+//     email: "demo@email.com",
+//     phone: "1234567890",
+//     created: "12 March 2023",
+//     role: "Manager Author Connect",
+//     status: "Active",
+//   },
+//   {
+//     name: "Frozen",
+//     designation: "Manager",
+//     email: "demo@email.com",
+//     phone: "1234567890",
+//     created: "12 March 2023",
+//     role: "Manager Author Connect",
+//     status: "Active",
+//   },
+//   {
+//     name: "Yogurt",
+//     designation: "Manager",
+//     email: "demo@email.com",
+//     phone: "1234567890",
+//     created: "12 March 2023",
+//     role: "Manager Author Connect",
+//     status: "Active",
+//   },
+// ];
 export default {
   setup() {
-    const selected = ref([])
+    const selected = ref([]);
+    const apiSerice = new ApiService();
+    // const $q = useQuasar();
+    // const exponces = ref([])
+
+    const tableRef = ref()
+    const rows = ref([])
+    const loading = ref(false)
+    const pagination = ref({
+      page: 1,
+      rowsPerPage: 10,
+      rowsNumber: 10
+    })
+
+    async function onRequest(props) {
+      const { page, rowsPerPage } = props.pagination
+
+      loading.value = true
+
+      const response = await apiSerice.get("/expence-control");
+      const result = response.data;
+      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data)
+
+      // clear out existing data and add new
+      rows.value.splice(0, rows.value.length, ...result.data)
+      pagination.value.rowsNumber = result.total
+      pagination.value.page = page
+      pagination.value.rowsPerPage = rowsPerPage
+
+      loading.value = false
+    }
+
+    onMounted(() => {
+      tableRef.value.requestServerInteraction();
+    });
+
     return {
+      tableRef,
+      pagination,
+      loading,
+      onRequest,
       selected,
       columns,
       rows,
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
-        return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.length}`
+        return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
       },
     };
   },

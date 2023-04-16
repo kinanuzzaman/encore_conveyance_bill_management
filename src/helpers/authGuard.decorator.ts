@@ -28,10 +28,6 @@ export function AuthChecker() {
                 location.href = '/login';
               } else {
                 $api.interceptors.request.use((config) => {
-                  console.log(
-                    '🚀 ~ file: authGuard.decorator.ts:31 ~ $api.interceptors.request.use ~ config:',
-                    config
-                  );
                   config.headers.Authorization = `Bearer ${token}`;
                   return config;
                 });
