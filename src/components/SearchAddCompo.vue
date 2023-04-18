@@ -75,7 +75,7 @@ export default {
         });
         this.suggestedOptions = response.data.data.map((item) => {
           return {
-            label: item.title,
+            label: item.title || item.first_name + ' ' + item.last_name,
             value: item._id
           };
         });
