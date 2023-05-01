@@ -18,7 +18,7 @@
         </q-toolbar-title>
         <!-- class="q-gutter-xs"  class="text-white" fingerprint-->
         <div class="flex justify-self-end">
-          <q-btn flat color="green" icon="fingerprint" @click="onClick" class="" />
+          <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" />
           <q-btn flat color="green" icon="notifications" @click="onClick" class="" />
           <q-input v-if="searchField" rounded outlined v-model="text" label="Search" dense color="green" />
           <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" />
@@ -123,10 +123,14 @@
         />
       </q-tabs>
     </q-footer> -->
+    <q-dialog v-model="confirm" persistent>
+      <EmpAttendance />
+    </q-dialog>
   </q-layout>
 </template>
 
 <script>
+import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
 import { ref } from "vue";
 
 const menuList = [
@@ -182,12 +186,12 @@ const menuList = [
       {
         icon: "request_quote",
         label: "All Project",
-        link: "/",
+        link: "",
       },
       {
         icon: "payments",
         label: "Project Type",
-        link: "/",
+        link: "",
       },
     ],
   },
@@ -199,17 +203,17 @@ const menuList = [
       {
         icon: "request_quote",
         label: "Project Analytics",
-        link: "/",
+        link: "",
       },
       {
         icon: "payments",
         label: "Store Analytics",
-        link: "/",
+        link: "",
       },
       {
         icon: "payments",
         label: "User Analytics",
-        link: "/",
+        link: "",
       },
       {
         icon: "payments",
@@ -242,8 +246,12 @@ const menuList = [
 ];
 
 export default {
+  components: { EmpAttendance },
   setup() {
+    const confirm = ref(false);
     return {
+      confirm,
+      response: ref(false),
       searchField: ref(false),
       expanded: ref(false),
       tab: ref("configuration"),
@@ -251,6 +259,7 @@ export default {
       menuList,
     };
   },
+
 };
 </script>
 
