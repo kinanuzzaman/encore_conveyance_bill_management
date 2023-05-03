@@ -68,6 +68,7 @@ export default {
     },
     async fetchSuggestions(searchQuery) {
       try {
+        if (!this.$props.api) return
         const response = await this.apiService.get(this.$props.api, {
           params: {
             q: searchQuery
