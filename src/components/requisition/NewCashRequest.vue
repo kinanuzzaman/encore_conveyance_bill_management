@@ -15,16 +15,19 @@
           Cash Request
         </q-card-section>
         <q-card-section>
-          <q-input outlined v-model="cashPayload.amount" placeholder="Amount" bg-color="white" :dense="true" />
-        </q-card-section>
-        <q-card-section>
-          <!-- <q-input outlined v-model="cashPayload.payeer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
-          <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payeer = e" />
-        </q-card-section>
-        <q-card-section>
           <q-select class="bg-white" outlined v-model="cashPayload.type" :options="options" :dense="true"
             label="Choose cash request type" />
         </q-card-section>
+        <div class="grid md:grid-cols-2 grid-cols-1">
+          <q-card-section>
+            <q-input outlined v-model="cashPayload.amount" placeholder="Amount" bg-color="white" :dense="true" />
+          </q-card-section>
+          <q-card-section>
+            <!-- <q-input outlined v-model="cashPayload.payeer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
+            <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payeer = e" />
+          </q-card-section>
+        </div>
+
         <q-card-actions align="center" class="px-3 py-5 absolute bottom-0 w-full">
           <q-btn label="Save" color="green" class="col" @click="saveCashRequest" />
           <q-btn label="Decline" color="negative" class="col" @click="$router.back()" />
@@ -44,7 +47,7 @@ export default {
   data() {
     return {
       apiService: new ApiService(),
-      options: [ "PAID", "RECEIVED" ],
+      options: ["PAID", "RECEIVED"],
       cashPayload: {
         amount: null,
         payeer: null,

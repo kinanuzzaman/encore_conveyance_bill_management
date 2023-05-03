@@ -76,6 +76,9 @@
                   </div>
                 </q-td>
                 <q-td>
+                  {{ props.row.location }}
+                </q-td>
+                <q-td>
                   {{ props.row.status }}
                 </q-td>
                 <q-td>
@@ -88,8 +91,8 @@
                   <div class="column items-end">
                     <q-btn flat icon="more_vert">
                       <q-menu anchor="top middle" self="top right">
-                        <q-item clickable>
-                          <q-item-section>Update</q-item-section>
+                        <q-item clickable @click="$router.push(`/expense/add-expense/?id=${props.row._id}`)">
+                          <q-item-section>Details</q-item-section>
                         </q-item>
                         <q-item clickable>
                           <q-item-section>Delete</q-item-section>
@@ -167,34 +170,40 @@ import { ApiService } from 'src/service/api-service';
 
 const columns = [
   {
-    name: "user",
+    name: "request_type",
     required: true,
-    label: "Request Type",
+    label: "Expense Type",
     align: "left",
     field: (row) => row.name,
     format: (val) => `${val}`,
     sortable: true,
   },
   {
-    name: "email",
+    name: "amount",
     align: "left",
     label: "Amount",
-    field: "email",
+    field: "amount",
     sortable: true,
   },
   {
-    name: "phone",
+    name: "paid",
     align: "left",
     label: "Paid By",
-    field: "phone",
+    field: "paid",
     sortable: true,
   },
   {
     name: "created",
     align: "left",
-    label: "User",
+    label: "Created On",
     field: "created",
     sortable: true,
+  },
+  {
+    name: "location",
+    align: "left",
+    label: "Location",
+    field: "location",
   },
   {
     name: "status",
@@ -204,10 +213,10 @@ const columns = [
     sortable: true,
   },
   {
-    name: "role",
+    name: "approvals",
     align: "left",
     label: "Approvals",
-    field: "role",
+    field: "approvals",
   },
   {
     name: "action",
@@ -278,7 +287,6 @@ export default {
 
       loading.value = false
     }
-
     onMounted(() => {
       tableRef.value.requestServerInteraction();
     });
@@ -294,7 +302,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`

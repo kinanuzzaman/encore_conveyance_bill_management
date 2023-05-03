@@ -179,14 +179,14 @@ const menuList = [
     ],
   },
   {
-    icon: "description",
+    icon: "work_history",
     label: "Projects",
     separator: false,
     submenus: [
       {
         icon: "request_quote",
         label: "All Project",
-        link: "",
+        link: "/projects",
       },
       {
         icon: "payments",
@@ -196,7 +196,7 @@ const menuList = [
     ],
   },
   {
-    icon: "description",
+    icon: "analytics",
     label: "Analytics",
     separator: false,
     submenus: [

@@ -47,7 +47,7 @@
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" v-model:pagination="pagination"
             :loading="loading" ref="tableRef" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selectedItems" row-key="name">
+            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
                 <q-td>
@@ -89,13 +89,13 @@
                   <div class="column items-end">
                     <q-btn flat icon="more_vert">
                       <q-menu anchor="top middle" self="top right">
-                        <q-item clickable>
+                        <q-item clickable @click="approval = true">
                           <q-item-section>Update</q-item-section>
                         </q-item>
                         <q-item clickable>
                           <q-item-section>Delete</q-item-section>
                         </q-item>
-                        <q-item clickable>
+                        <q-item clickable @click="approval = true">
                           <q-item-section>Update Status</q-item-section>
                         </q-item>
                       </q-menu>
@@ -160,13 +160,16 @@
       </section>
     </div>
 
-
+    <q-dialog v-model="approval" persistent>
+      <approval-process />
+    </q-dialog>
   </main>
 </template>
 
 <script>
 import { onMounted, ref } from "vue";
 import { ApiService } from 'src/service/api-service';
+import ApprovalProcess from "src/components/ApprovalProcess.vue";
 
 const columns = [
   {
@@ -221,44 +224,38 @@ const columns = [
 
 
 export default {
+  components: { ApprovalProcess },
   setup() {
     const selected = ref([]);
     const apiSerice = new ApiService();
     // const $q = useQuasar();
     // const exponces = ref([])
-
-    const tableRef = ref()
-    const rows = ref([])
-    const loading = ref(false)
+    const tableRef = ref();
+    const rows = ref([]);
+    const loading = ref(false);
     const pagination = ref({
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10
-    })
-
+    });
     async function onRequest(props) {
-      const { page, rowsPerPage } = props.pagination
-
-      loading.value = true
-
+      const { page, rowsPerPage } = props.pagination;
+      loading.value = true;
       const response = await apiSerice.get("/cash-control");
       const result = response.data;
-      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data)
-
+      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data);
       // clear out existing data and add new
-      rows.value.splice(0, rows.value.length, ...result.data)
-      pagination.value.rowsNumber = result.total
-      pagination.value.page = page
-      pagination.value.rowsPerPage = rowsPerPage
-
-      loading.value = false
+      rows.value.splice(0, rows.value.length, ...result.data);
+      pagination.value.rowsNumber = result.total;
+      pagination.value.page = page;
+      pagination.value.rowsPerPage = rowsPerPage;
+      loading.value = false;
     }
-
     onMounted(() => {
       tableRef.value.requestServerInteraction();
     });
-
     return {
+      approval: ref(false),
       tableRef,
       pagination,
       loading,
@@ -269,13 +266,14 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       getSelectedString() {
-        return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
+        return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;
       },
     };
   },
+
 };
 </script>
 

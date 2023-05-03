@@ -161,43 +161,14 @@
             </section>
         </div>
 
-        <q-dialog v-model="confirm" class="">
-            <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
-                <div class="flex justify-center py-10">
-                    <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
-                </div>
-                <q-card-section class="grid grid-cols-2 gap-5">
-                    <q-input outlined v-model="userRegister.first_name" placeholder="First Name" bg-color="white"
-                        :dense="true" />
-                    <q-input outlined v-model="userRegister.last_name" placeholder="Last Name" bg-color="white"
-                        :dense="true" />
-                    <q-input outlined v-model="userRegister.email" placeholder="Email" :dense="true">
-                        <template v-slot:prepend>
-                            <q-icon name="mail" />
-                        </template>
-                    </q-input>
-                    <q-input outlined v-model="userRegister.phone_number" placeholder="Phone Number" :dense="true">
-                        <template v-slot:prepend>
-                            <q-icon name="phone" />
-                        </template>
-                    </q-input>
-                    <q-input outlined v-model="userRegister.designation" placeholder="Designation" bg-color="white"
-                        :dense="true" />
-                    <q-select class="bg-white" outlined v-model="userRegister.role" :options="options" :dense="true"
-                        label="Select role" />
-                    <q-input outlined v-model="userRegister.salry" placeholder="Salary" bg-color="white" :dense="true" />
-                    <q-btn label="Save" color="green" class="col" @click="registerUser()" />
-                </q-card-section>
-                <!-- <q-card-actions align="center" class="row mx-2 py-5">
-          <q-btn label="Create" color="green" class="col" />
-          <q-btn label="Decline" color="negative" class="col" />
-        </q-card-actions> -->
-            </q-card>
+        <q-dialog v-model="confirm" persistent>
+            <emp-attendance />
         </q-dialog>
     </main>
 </template>
   
 <script>
+import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
 import { ref } from "vue";
 
 const columns = [
@@ -281,6 +252,7 @@ const rows = [
     },
 ];
 export default {
+    components: { EmpAttendance },
     setup() {
         let selected = ref([]);
         let confirm = ref(false);
@@ -296,7 +268,7 @@ export default {
             options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
             val: ref(true),
             getSelectedString() {
-                return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.length}`
+                return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.length}`;
             },
         };
     },

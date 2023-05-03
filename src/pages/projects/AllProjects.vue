@@ -1,6 +1,6 @@
 <template>
     <section class="mx-4 my-6 flex justify-between">
-        <div class="text-2xl font-semibold">Vendor Payment</div>
+        <div class="text-2xl font-semibold">Projects</div>
         <div class="flex md:gap-x-5 gap-1 justify-items-end">
             <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
                     <q-list>
@@ -30,7 +30,7 @@
                     </template>
                 </q-select>
             </div>
-            <div> <q-btn outline rounded to="/vendor/add-vendor" label="Add vendor" no-caps />
+            <div> <q-btn outline rounded to="/projects/add-project" label="Add project" no-caps />
 
             </div>
         </div>
@@ -47,35 +47,32 @@
                         <q-td>
                             <q-checkbox v-model="props.selected" />
                         </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
 
                             <div>
                                 <div class="text-xs">{{ props.row.name }}</div>
                             </div>
 
                         </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" class="">
                             <div>
                                 <div class="text-xs">{{ props.row.email }}</div>
                             </div>
                         </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" class="">
                             <div>
                                 <div class="text-xs">{{ props.row.phone }}</div>
                             </div>
                         </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" class="">
                             <div>
                                 <div class="text-xs">{{ props.row.created }}</div>
                             </div>
                         </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
                             {{ props.row.status }}
                         </q-td>
-                        <q-td>
-                            {{ props.row.status }}
-                        </q-td>
-                        <q-td>
+                        <q-td key="role" :props="props" @click="openDialog = true" class="">
                             <div class="bg-blue-200 inline p-2 text-blue-800">
                                 {{ props.row.role }}
                             </div>
@@ -167,7 +164,7 @@ export default {
                 {
                     name: "user",
                     required: true,
-                    label: "Vendor",
+                    label: "Request Type",
                     align: "left",
                     field: (row) => row.name,
                     format: (val) => `${val}`,
@@ -190,15 +187,8 @@ export default {
                 {
                     name: "created",
                     align: "left",
-                    label: "Created On",
+                    label: "User",
                     field: "created",
-                    sortable: true,
-                },
-                {
-                    name: "location",
-                    align: "left",
-                    label: "Location",
-                    field: "location",
                     sortable: true,
                 },
                 {

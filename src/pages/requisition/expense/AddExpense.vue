@@ -6,7 +6,7 @@
           <q-select class="bg-white" outlined v-model="activeCompo" :options="options" :dense="true"
             label="Choose expense type" />
         </div>
-        <component :is="activeCompo.value" @addExpense="createExpance"></component>
+        <component :is="activeCompo.value" @addExpense="createExpance" :expenseData="expenseDetails"></component>
       </section>
       <section class="col-md-6 px-5 ">
         <div>
@@ -32,10 +32,10 @@ import OfficeExpense from 'src/components/expense/OfficeExpense.vue';
 import OtherBill from 'src/components/expense/OtherBill.vue';
 import ProductPurchase from 'src/components/expense/ProductPurchase.vue';
 import SalaryExp from 'src/components/expense/SalaryExp.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { ApiService } from 'src/service/api-service';
 import { useQuasar } from 'quasar';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 export default {
   components: { ProductPurchase, OfficeExpense, DeliveryExp, ConveyanceExp, FactoryExp, BpExp, LabourExp, OtherBill, SalaryExp, MobileAllowance, MarketingExp },
   setup() {
@@ -46,6 +46,63 @@ export default {
     const apiService = new ApiService();
     const $q = useQuasar();
     const router = useRouter();
+    const route = useRoute();
+    const options = [{
+      label: "Product Purchase",
+      value: "ProductPurchase",
+      type: "PRODUCT_PURCHASE",
+    },
+    {
+      label: "Office",
+      value: "OfficeExpense",
+      type: "OFFICE",
+    },
+    {
+      label: "Delivery",
+      value: "DeliveryExp",
+      type: "DELIVERY",
+    },
+    {
+      label: "Conveyance",
+      value: "ConveyanceExp",
+      type: "CONVINCE",
+    },
+    {
+      label: "Factory",
+      value: "FactoryExp",
+      type: "FACTORY",
+    },
+    {
+      label: "BP",
+      value: "BpExp",
+      type: "BP",
+    },
+    {
+      label: "Labour",
+      value: "LabourExp",
+      type: "LABOUR",
+    },
+    {
+      label: "Marketing",
+      value: "MarketingExp",
+      type: "MARKETING",
+    },
+    {
+      label: "Mobile Allowance",
+      value: "MobileAllowance",
+      type: "MOBILE_ALLOWANCE",
+    },
+    {
+      label: "Salary",
+      value: "SalaryExp",
+      type: "SALARY",
+    },
+    {
+      label: "Other Bill",
+      value: "OtherBill",
+      type: "OTHERS",
+    },]
+    const expenseDetails = ref(null);
     async function createExpance(e) {
       if (!navigator.geolocation) {
         $q.notify({
@@ -77,54 +134,28 @@ export default {
       });
 
     }
+    onMounted(async () => {
+      if (route.query.id) {
+        const details = await apiService.get(`/expence-control/${route.query.id}`);
+        if (details.data.data) {
+          const type = options.find((item) => {
+            return item.type == details.data.data[0].request_type;
+          });
+
+          if (type) {
+            activeCompo.value = type;
+            expenseDetails.value = details.data.data[0];
+            console.log(details);
+          }
+        }
+      }
+    });
 
     return {
+      expenseDetails,
       createExpance,
       activeCompo,
-      options: [ {
-        label: "Product Purchase",
-        value: "ProductPurchase",
-      },
-      {
-        label: "Office",
-        value: "OfficeExpense",
-      },
-      {
-        label: "Delivery",
-        value: "DeliveryExp",
-      },
-      {
-        label: "Conveyance",
-        value: "ConveyanceExp",
-      },
-      {
-        label: "Factory",
-        value: "FactoryExp",
-      },
-      {
-        label: "BP",
-        value: "BpExp",
-      },
-      {
-        label: "Labour",
-        value: "LabourExp",
-      },
-      {
-        label: "Marketing",
-        value: "MarketingExp",
-      },
-      {
-        label: "Mobile Allowance",
-        value: "MobileAllowance",
-      },
-      {
-        label: "Salary",
-        value: "SalaryExp",
-      },
-      {
-        label: "Other Bill",
-        value: "OtherBill",
-      }, ]
+      options,
     };
   },
 }

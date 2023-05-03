@@ -2,19 +2,22 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid grid-cols-2 gap-5">
-        <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" />
-        <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
-        <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
-        <SearchAddCompo label="Project" api="/project-control" @selected="e => formData.project = e" />
-        <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
-        <div class="flex">
+        <!-- <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" /> -->
+        <q-input outlined v-model="formData.product.quantity" placeholder="Project Name" :dense="true" />
+        <!-- <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
+        <SearchAddCompo label="Project" api="/project-control" @selected="e => formData.project = e" /> -->
+        <q-input outlined v-model="formData.location" placeholder="Transport" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.location" placeholder="Location From" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.location" placeholder="Location To" bg-color="white" :dense="true" />
+        <!-- <div class="flex">
           <q-input outlined v-model="formData.amount_per" placeholder="Amount per" bg-color="white" :dense="true"
             class="w-3/4" />
           <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true" />
-        </div>
+        </div> -->
         <q-input outlined v-model="formData.amount" placeholder="Total Amount" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.amount_paid" placeholder="Paid Amount" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.amount_due" placeholder="Due Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount_paid" placeholder="Notes" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount_paid" placeholder="Labour Quantity" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount_due" placeholder="Amount" bg-color="white" :dense="true" />
         <div>
           <q-uploader url="http://localhost:4444/upload" label="Individual upload" color="green" multiple
             style="max-width: 300px" />
@@ -33,10 +36,10 @@
 
 <script>
 import { defineComponent, reactive, ref } from 'vue';
-import SearchAddCompo from '../SearchAddCompo.vue';
+// import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   components: {
-    SearchAddCompo
+    // SearchAddCompo
   },
   setup() {
 
@@ -58,7 +61,7 @@ export default defineComponent({
     });
     return {
       type: ref('pcs'),
-      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
+      units: ["PCS", "FEET", "KG", "METER", "INCH"],
       formData,
     }
   },

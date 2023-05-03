@@ -2,15 +2,17 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid grid-cols-2 gap-5">
-        <SearchAddCompo for="product" :selected="formData.product.id" />
+        <q-input outlined v-model="formData.vendor" placeholder="Product Name" :dense="true" />
+        <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
         <q-input outlined v-model="formData.vendor" placeholder="Vendor" :dense="true" />
-        <SearchAddCompo for="project" :selected="formData.project" />
+        <SearchAddCompo for="project" :selected="formData.project" label="Project" />
         <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
         <div class="flex">
           <q-input outlined v-model="formData.amount_per" placeholder="Amount per" bg-color="white" :dense="true"
             class="w-3/4" />
-          <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true" />
+          <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true"
+            label="Units" />
         </div>
         <q-input outlined v-model="formData.amount" placeholder="Total Amount" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.amount_paid" placeholder="Paid Amount" bg-color="white" :dense="true" />
@@ -57,7 +59,7 @@ export default defineComponent({
     });
     return {
       type: ref('pcs'),
-      units: [ "pcs", "feet", "kg", "meter", "inch" ],
+      units: ["pcs", "feet", "kg", "meter", "inch"],
       formData,
     }
   },

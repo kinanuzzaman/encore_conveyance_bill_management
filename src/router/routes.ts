@@ -72,6 +72,14 @@ const routes = [
         path: 'analytics',
         component: () => import('src/pages/requisition/AnalyticsPage.vue'),
       },
+      {
+        path: 'projects',
+        component: () => import('src/pages/projects/AllProjects.vue'),
+      },
+      {
+        path: 'projects/add-project',
+        component: () => import('src/pages/projects/AddProject.vue'),
+      },
     ],
   },
 
