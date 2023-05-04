@@ -2,7 +2,7 @@
   "name": "encore-erp",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Encore App",
+  "productName": "Encore",
   "author": "kinan <kinan2392@gmail.com>",
   "private": true,
   "scripts": {

@@ -113,10 +113,10 @@
 
     <q-dialog v-model="confirm" class="" persistent>
       <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
-        <div class="flex justify-center py-10">
+        <div class="flex justify-center md:py-10">
           <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
         </div>
-        <q-card-section class="grid grid-cols-2 gap-5">
+        <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
           <q-input outlined v-model="userRegister.first_name" placeholder="First Name" bg-color="white" :dense="true" />
           <q-input outlined v-model="userRegister.last_name" placeholder="Last Name" bg-color="white" :dense="true" />
           <q-input outlined v-model="userRegister.email" placeholder="Email" :dense="true">

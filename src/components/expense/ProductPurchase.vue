@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-card flat class="my-card">
-      <q-card-section class="grid grid-cols-2 gap-5">
+      <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <q-input outlined v-model="formData.vendor" placeholder="Product Name" :dense="true" />
         <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />

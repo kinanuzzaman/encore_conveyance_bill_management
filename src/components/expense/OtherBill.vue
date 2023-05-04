@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-card flat class="my-card">
-      <q-card-section class="grid grid-cols-2 gap-5">
+      <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <q-input outlined v-model="formData.reason" placeholder="Reason" :dense="true" />
         <q-input outlined v-model="formData.amount" placeholder="Total Amount" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" placeholder="Notes" bg-color="white" :dense="true" />
