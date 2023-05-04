@@ -13,7 +13,8 @@
 
         <div class="flex items-end justify-end">
 
-          <q-btn label="Save" color="green" class="px-10 py-2.5" @click="registerUser" />
+          <q-btn v-if="formData.amount" label="Update" color="green" class="px-10 py-2.5" />
+          <q-btn v-if="!formData.amount" label="Save" color="green" class="px-10 py-2.5" @click="registerUser" />
 
         </div>
       </q-card-section>
@@ -40,9 +41,11 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      console.log(props.expenseData);
-      if (Object.keys(props.expenseData).length) {
-        Object.assign(props.expenseData, formData);
+      console.log(props.expenseData.amount);
+      if (props.expenseData) {
+        formData.reason = props.expenseData.reason;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {

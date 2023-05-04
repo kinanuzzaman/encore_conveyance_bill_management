@@ -47,7 +47,7 @@ export default {
     const $q = useQuasar();
     const router = useRouter();
     const route = useRoute();
-    const options = [{
+    const options = [ {
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -101,7 +101,7 @@ export default {
       label: "Other Bill",
       value: "OtherBill",
       type: "OTHERS",
-    },]
+    }, ]
     const expenseDetails = ref(null);
     async function createExpance(e) {
       if (!navigator.geolocation) {
@@ -139,12 +139,12 @@ export default {
         const details = await apiService.get(`/expence-control/${route.query.id}`);
         if (details.data.data) {
           const type = options.find((item) => {
-            return item.type == details.data.data[0].request_type;
+            return item.type == details.data.data.request_type;
           });
 
           if (type) {
             activeCompo.value = type;
-            expenseDetails.value = details.data.data[0];
+            expenseDetails.value = details.data.data;
             console.log(details);
           }
         }

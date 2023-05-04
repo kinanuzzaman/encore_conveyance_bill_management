@@ -128,8 +128,8 @@
                     <div class="column items-end">
                       <q-btn flat icon="more_vert">
                         <q-menu anchor="top middle" self="top right">
-                          <q-item clickable>
-                            <q-item-section>Update</q-item-section>
+                          <q-item clickable @click="$router.push(`/expense/add-expense/?id=${props.row._id}`)">
+                            <q-item-section>Details</q-item-section>
                           </q-item>
                           <q-item clickable>
                             <q-item-section>Delete</q-item-section>
@@ -302,7 +302,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
