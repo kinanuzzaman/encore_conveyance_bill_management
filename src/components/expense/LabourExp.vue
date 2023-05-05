@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-card flat class="my-card">
-      <q-card-section class="grid grid-cols-2 gap-5">
+      <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
         <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
@@ -58,7 +58,7 @@ export default defineComponent({
     });
     return {
       type: ref('pcs'),
-      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
+      units: ["PCS", "FEET", "KG", "METER", "INCH"],
       formData,
     }
   },
