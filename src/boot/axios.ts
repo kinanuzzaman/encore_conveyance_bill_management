@@ -10,7 +10,7 @@ declare module '@vue/runtime-core' {
 const $api = axios.create({
   // baseURL: 'http://localhost:8000/api',
   // baseURL: 'http://192.168.0.195:5000/api/v1',
-  baseURL: 'http://brain.encore.com.bd/api',
+  baseURL: 'https://brain.encore.com.bd/api',
 });
 
 export default boot(({ app }) => {
