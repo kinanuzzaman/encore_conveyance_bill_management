@@ -11,12 +11,11 @@
         </div>
 
 
-        <div class="flex items-end justify-end">
-
-          <q-btn v-if="$props.expenseData?.amount" label="Update" color="green" class="px-10 py-2.5" />
+        <div class="flex items-end justify-end gap-3">
+          <q-btn v-if="$props.expenseData?.amount" label="Edit" color="green" class="px-10 py-2.5" />
+          <q-btn v-if="$props.expenseData?.amount" label="Update" color="orange" class="px-10 py-2.5" />
           <q-btn v-if="!$props.expenseData?.amount" label="Save" color="green" class="px-10 py-2.5"
             @click="registerUser" />
-
         </div>
       </q-card-section>
     </q-card>
@@ -57,7 +56,7 @@ export default defineComponent({
       const formData = new FormData();
 
       Object.keys(this.data).forEach((key) => {
-        formData.append(key, this.data[ key ]);
+        formData.append(key, this.data[key]);
       });
 
       this.images.forEach((image) => {

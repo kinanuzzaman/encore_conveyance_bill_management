@@ -243,6 +243,12 @@ const menuList = [
     label: "Help",
     separator: false,
   },
+  {
+    icon: "logout",
+    iconColor: "primary",
+    label: "Logout",
+    separator: false,
+  },
 ];
 
 export default {
