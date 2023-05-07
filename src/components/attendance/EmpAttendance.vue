@@ -1,51 +1,152 @@
 <template>
-    <q-card style="width: 700px; max-width: 90vw;">
-        <q-card-section class="text-center">
-            <div class="float-right"><q-btn icon="close" flat round dense v-close-popup /></div>
-            <h1 class="text-2xl mt-10">Please give your attendance</h1>
+  <q-card style="width: 700px; max-width: 90vw;">
+    <q-card-section class="text-center">
+      <div class="float-right"><q-btn icon="close" flat round dense v-close-popup /></div>
+      <h1 class="text-xl mt-10">Please give your attendance</h1>
 
-            <div class="m-10">
-                <q-icon name="fingerprint" size="120px" color="green" />
-            </div>
-        </q-card-section>
-        <!-- <q-card-actions align="center">
-            
-        </q-card-actions> -->
-        <div class="grid md:grid-cols-2 grid-cols-1 gap-5 mx-10">
-            <div class=" grid grid-cols-1 gap-5">
-                <q-btn label="Start your Attendance" color="green" v-close-popup no-caps />
-                <q-checkbox right-label v-model="add" label="Add custom time" />
-                <q-input dense outlined v-model="text" type="time" placeholder="Start time" />
-            </div>
-            <div class=" grid grid-cols-1 gap-5">
-                <q-btn label="End your Attendance" color="negative" v-close-popup no-caps />
-                <div>
-                    <q-checkbox right-label v-model="resume" label="Do you want to resume time" />
-                </div>
-                <q-input dense outlined v-model="text" type="time" placeholder="End time" />
-            </div>
+      <div class="m-10 flex flex-col items-center justify-center gap-5">
+        <q-icon name="fingerprint" size="120px" :color="isAttendanceStarted ? 'green' : 'black'" />
+        <span class="text-2xl font-bold">{{ timer }}</span>
+      </div>
+    </q-card-section>
+
+    <div class="px-5 flex flex-col items-center justify-center mb-16">
+      <q-btn label="Start your Attendance" color="green" v-if="!isAttendanceStarted" @click="startAttendance" no-caps />
+      <q-btn label="End Attendance" color="red" v-else @click="endAttendance" no-caps />
+    </div>
+
+    <div class="flex flex-col px-16 mb-10">
+      <q-checkbox right-label v-model="custom_time" label="Add custom time" dense />
+      <div class="flex flex-row justify-start gap-5 mt-2" v-if="custom_time">
+        <div class="flex flex-col w-full">
+          <span>Start Time</span>
+          <q-input dense outlined v-model="text" type="time" placeholder="Start time" />
         </div>
-        <div class="flex items-end justify-center m-10">
-
-            <q-btn label="Request" color="orange" class="px-20 py-1.5" no-caps />
-
+        <div class="flex flex-col w-full">
+          <span>End Time</span>
+          <q-input dense outlined v-model="text" type="time" placeholder="End time" />
         </div>
-    </q-card>
+        <q-btn label="Request" disable color="orange" unelevated class="w-full" no-caps />
+      </div>
+    </div>
+  </q-card>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue';
+import { useAttendanceStore } from "../../stores/attendance.store"
+import moment from 'moment'
 
 export default defineComponent({
-    name: 'EmpAttendance',
-    setup() {
-
-        return {
-            add: ref(false),
-            resume: ref(false),
-
-        }
+  name: 'EmpAttendance',
+  data() {
+    return {
+      moment: moment,
+      add: ref(false),
+      resume: ref(false),
+      custom_time: ref(false),
+      isAttendanceStarted: ref(false),
+      attendanceStore: useAttendanceStore(),
+      intervalId: null,
+      timer: null,
     }
+  },
+  async mounted() {
+    try {
+      await this.startTimer()
+    } catch (error) {
+      console.log("🚀 ~ file: EmpAttendance.vue:56 ~ mounted ~ error:", error)
+    }
+  },
+  methods: {
+    async startTimer() {
+      if (!this.attendanceStore.activeAttendance) {
+        await this.attendanceStore.getAttendanceStatus()
+      }
+      if (!this.attendanceStore.activeAttendance) {
+        return;
+      }
+      this.isAttendanceStarted = true;
+
+      if (this.intervalId) clearInterval(this.intervalId);
+      this.intervalId = setInterval(() => {
+        this.timer = this.elapsedTime(this.attendanceStore.activeAttendance.startAt)
+        this.$forceUpdate();
+      }, 1000);
+    },
+    async startAttendance() {
+      if (!navigator.geolocation) {
+        $q.notify({
+          message: "Allow Geolocation, or you can't continue",
+          color: "red",
+          position: "top",
+        })
+        return;
+      }
+      try {
+        const { coords: { latitude, longitude } } = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        await this.attendanceStore.startAttendance({
+          lat: latitude,
+          lng: longitude,
+        })
+        this.isAttendanceStarted = true
+        await this.startTimer()
+      } catch (error) {
+        this.$q.notify({
+          message: error.message,
+          color: 'negative',
+          position: 'top',
+          icon: 'report_problem',
+          timeout: 2500,
+        })
+      }
+    },
+    async endAttendance() {
+      if (!navigator.geolocation) {
+        $q.notify({
+          message: "Allow Geolocation, or you can't continue",
+          color: "red",
+          position: "top",
+        })
+        return;
+      }
+      try {
+        const { coords: { latitude, longitude } } = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+        await this.attendanceStore.endAttendance({
+          lat: latitude,
+          lng: longitude,
+        })
+        this.isAttendanceStarted = false
+        clearInterval(this.intervalId);
+        this.timer = null;
+        await this.attendanceStore.getAttendanceStatus()
+      } catch (error) {
+        this.$q.notify({
+          message: error.message,
+          color: 'negative',
+          position: 'top',
+          icon: 'report_problem',
+          timeout: 2500,
+        })
+      }
+    },
+    elapsedTime(startTime) {
+      const startTimeMoment = moment(startTime);
+      const currentTimeMoment = moment();
+      const diffDuration = moment.duration(currentTimeMoment.diff(startTimeMoment));
+      const hours = Math.floor(diffDuration.asHours()).toString().padStart(2, '0');
+      const minutes = diffDuration.minutes().toString().padStart(2, '0');
+      const seconds = diffDuration.seconds().toString().padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
+    },
+  },
+  beforeUnmount() {
+    clearInterval(this.intervalId);
+  },
 })
 </script>
 

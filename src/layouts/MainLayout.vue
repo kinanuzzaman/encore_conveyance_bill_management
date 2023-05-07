@@ -132,6 +132,7 @@
 <script>
 import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
 import { ref } from "vue";
+import { useAttendanceStore } from "../stores/attendance.store"
 
 const menuList = [
   {
@@ -265,7 +266,14 @@ export default {
       menuList,
     };
   },
-
+  data() {
+    return {
+      attendenceStore: useAttendanceStore(),
+    };
+  },
+  async mounted() {
+    this.attendenceStore.getAttendanceStatus();
+  },
 };
 </script>
 
