@@ -153,7 +153,7 @@ const menuList = [
       {
         icon: "manage_accounts",
         label: "User Role",
-        link: "",
+        link: "/role",
       },
     ],
   },

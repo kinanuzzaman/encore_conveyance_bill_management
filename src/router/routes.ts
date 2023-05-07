@@ -29,7 +29,11 @@ const routes = [
     children: [
       {
         path: 'user',
-        component: () => import('src/pages/requisition/UserManagement.vue'),
+        component: () => import('src/pages/users/UserManagement.vue'),
+      },
+      {
+        path: 'role',
+        component: () => import('src/pages/users/UsersRole.vue'),
       },
       {
         path: 'cash',
