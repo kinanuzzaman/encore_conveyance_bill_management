@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       apiService: new ApiService(),
-      options: ["PAID", "RECEIVED"],
+      // options: ["PAID", "RECEIVED"],
       cashPayload: {
         amount: null,
         payeer: null,
@@ -68,6 +68,66 @@ export default {
           timeout: 2000,
         });
       }
+    }
+  },
+  setup() {
+    const options = [{
+      label: "Product Purchase",
+      value: "ProductPurchase",
+      type: "PRODUCT_PURCHASE",
+    },
+    {
+      label: "Office",
+      value: "OfficeExpense",
+      type: "OFFICE",
+    },
+    {
+      label: "Delivery",
+      value: "DeliveryExp",
+      type: "DELIVERY",
+    },
+    {
+      label: "Conveyance",
+      value: "ConveyanceExp",
+      type: "CONVINCE",
+    },
+    {
+      label: "Factory",
+      value: "FactoryExp",
+      type: "FACTORY",
+    },
+    {
+      label: "BP",
+      value: "BpExp",
+      type: "BP",
+    },
+    {
+      label: "Labour",
+      value: "LabourExp",
+      type: "LABOUR",
+    },
+    {
+      label: "Marketing",
+      value: "MarketingExp",
+      type: "MARKETING",
+    },
+    {
+      label: "Mobile Allowance",
+      value: "MobileAllowance",
+      type: "MOBILE_ALLOWANCE",
+    },
+    {
+      label: "Salary",
+      value: "SalaryExp",
+      type: "SALARY",
+    },
+    {
+      label: "Other Bill",
+      value: "OtherBill",
+      type: "OTHERS",
+    },]
+    return {
+      options,
     }
   }
 };

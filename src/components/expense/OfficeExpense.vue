@@ -5,7 +5,7 @@
         <q-input outlined v-model="formData.reason" placeholder="Reason" :dense="true" />
         <q-input outlined v-model="formData.amount" placeholder="Amount" :dense="true" />
 
-        <q-input outlined v-model="formData.designation" placeholder="Paid to" bg-color="white" :dense="true" />
+        <!-- <q-input outlined v-model="formData.payeer" placeholder="Paid to" bg-color="white" :dense="true" /> -->
         <SearchAddCompo label="Paid to" api="/users" @selected="e => formData.payeer = e" />
 
 
@@ -28,11 +28,14 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive } from 'vue';
 import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   components: {
     SearchAddCompo
+  },
+  props: {
+    expenseData: Object,
   },
   setup() {
 
@@ -51,7 +54,15 @@ export default defineComponent({
     registerUser() {
       this.$emit('addExpense', this.formData);
     }
-  }
+  },
+  mounted() {
+    if (this.$props.expenseData) {
+      this.data.payeer = this.$props.expenseData.payeer;
+      this.data.reason = this.$props.expenseData.reason;
+      this.data.amount = this.$props.expenseData.amount;
+      this.data.details = this.$props.expenseData.details;
+    }
+  },
 })
 </script>
 
