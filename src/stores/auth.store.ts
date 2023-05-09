@@ -9,7 +9,9 @@ export const useAuthStore = defineStore('auth', {
       serializer: StorageSerializers.string,
     }),
     userType: null,
-    permissions: null,
+    permissions: useLocalStorage('permissions', null, {
+      serializer: StorageSerializers.string,
+    }),
   }),
   getters: {
     getUserInfo: (state) => state.userInfo,
@@ -33,11 +35,13 @@ export const useAuthStore = defineStore('auth', {
       });
       return response.data;
     },
-    hasAccess(state: any): any {
-      return (permission: string[]): boolean => {
-        const permissions = state.permissions;
-        return permission.some((perm: string) => permissions.includes(perm));
-      };
+    hasAccess(permission: string[]): boolean {
+      console.log(
+        '🚀 ~ file: auth.store.ts:37 ~ hasAccess ~ permission:',
+        permission
+      );
+      const permissions = this.permissions;
+      return permission?.some((perm: string) => permissions.includes(perm));
     },
     logout() {
       this.userInfo = null;

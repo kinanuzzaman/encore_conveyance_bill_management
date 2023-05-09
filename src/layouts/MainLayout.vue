@@ -52,13 +52,16 @@
             <!-- v-for="menu in menuList" :key="menu" -->
             <!--  :class="expanded ? 'bg-white text-green' : 'bg-green text-white'" -->
             <q-expansion-item class="text-white" :label="menu.label" :icon="menu.icon"
-              :hide-expand-icon="menu.submenus ? false : true" group="somegroup" expand-icon-class="text-white">
+              v-if="authStore.hasAccess(menu.permissions)" :hide-expand-icon="menu.submenus ? false : true"
+              group="somegroup" expand-icon-class="text-white">
               <q-item clickable v-ripple v-for="submenu in menu.submenus" :key="submenu" :to="submenu.link"
                 class="bg-white text-green">
-                <q-item-section avatar>
-                  <q-avatar text-color="green" :icon="submenu.icon" />
-                </q-item-section>
-                <q-item-section class="">{{ submenu.label }}</q-item-section>
+                <div v-if="authStore.hasAccess(submenu.permissions)" class="flex ">
+                  <q-item-section avatar>
+                    <q-avatar text-color="green" :icon="submenu.icon" />
+                  </q-item-section>
+                  <q-item-section class="">{{ submenu.label }}</q-item-section>
+                </div>
               </q-item>
             </q-expansion-item>
 
@@ -133,6 +136,7 @@
 import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
 import { ref } from "vue";
 import { useAttendanceStore } from "../stores/attendance.store"
+import { useAuthStore } from "../stores/auth.store"
 
 const menuList = [
   {
@@ -144,15 +148,18 @@ const menuList = [
     icon: "supervised_user_circle",
     label: "Configuration",
     separator: false,
+    permissions: [ 'role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write', 'user_create', 'user_read', 'user_write' ],
     submenus: [
       {
         icon: "account_circle",
         label: "User Management",
+        permissions: [ 'user_create', 'user_read', 'user_write' ],
         link: "/user",
       },
       {
         icon: "manage_accounts",
         label: "User Role",
+        permissions: [ 'role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write' ],
         link: "/role",
       },
     ],
@@ -160,16 +167,19 @@ const menuList = [
   {
     icon: "description",
     label: "Requisition",
+    permissions: [ 'cash_read', 'cash_write', 'expence_read', 'expence_write', 'expence_create' ],
     separator: false,
     submenus: [
       {
         icon: "request_quote",
         label: "Cash Request",
+        permissions: [ 'cash_read', 'cash_write', 'cash_create' ],
         link: "/cash",
       },
       {
         icon: "payments",
         label: "Expense",
+        permissions: [ 'expence_read', 'expence_write', 'expence_create' ],
         link: "/expense",
       },
       {
@@ -182,23 +192,26 @@ const menuList = [
   {
     icon: "work_history",
     label: "Projects",
+    permissions: [ 'project_read', 'project_write', 'project_create' ],
     separator: false,
     submenus: [
       {
         icon: "request_quote",
         label: "All Project",
+        permissions: [ 'project_read', 'project_write', 'project_create' ],
         link: "/projects",
       },
-      {
-        icon: "payments",
-        label: "Project Type",
-        link: "",
-      },
+      // {
+      //   icon: "payments",
+      //   label: "Project Type",
+      //   link: "",
+      // },
     ],
   },
   {
     icon: "analytics",
     label: "Analytics",
+    permissions: [ 'analytics_read' ],
     separator: false,
     submenus: [
       {
@@ -223,27 +236,27 @@ const menuList = [
       },
     ],
   },
-  {
-    icon: "error",
-    label: "Spam",
-    separator: true,
-  },
-  {
-    icon: "settings",
-    label: "Settings",
-    separator: false,
-  },
-  {
-    icon: "feedback",
-    label: "Send Feedback",
-    separator: false,
-  },
-  {
-    icon: "help",
-    iconColor: "primary",
-    label: "Help",
-    separator: false,
-  },
+  // {
+  //   icon: "error",
+  //   label: "Spam",
+  //   separator: true,
+  // },
+  // {
+  //   icon: "settings",
+  //   label: "Settings",
+  //   separator: false,
+  // },
+  // {
+  //   icon: "feedback",
+  //   label: "Send Feedback",
+  //   separator: false,
+  // },
+  // {
+  //   icon: "help",
+  //   iconColor: "primary",
+  //   label: "Help",
+  //   separator: false,
+  // },
   {
     icon: "logout",
     iconColor: "primary",
@@ -269,6 +282,7 @@ export default {
   data() {
     return {
       attendenceStore: useAttendanceStore(),
+      authStore: useAuthStore(),
     };
   },
   async mounted() {
