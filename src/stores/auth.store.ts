@@ -41,6 +41,7 @@ export const useAuthStore = defineStore('auth', {
         permission
       );
       const permissions = this.permissions;
+      if (this.userType == 'SUPER_ADMIN' || 'DEVELOPER') return true;
       return permission?.some((perm: string) => permissions.includes(perm));
     },
     logout() {
