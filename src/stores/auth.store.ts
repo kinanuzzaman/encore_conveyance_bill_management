@@ -36,10 +36,6 @@ export const useAuthStore = defineStore('auth', {
       return response.data;
     },
     hasAccess(permission: string[]): boolean {
-      console.log(
-        '🚀 ~ file: auth.store.ts:37 ~ hasAccess ~ permission:',
-        permission
-      );
       const permissions = this.permissions;
       if (this.userType == 'SUPER_ADMIN' || 'DEVELOPER') return true;
       return permission?.some((perm: string) => permissions.includes(perm));
