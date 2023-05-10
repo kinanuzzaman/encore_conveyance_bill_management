@@ -122,7 +122,7 @@ export default {
       type: "SALARY",
     },
     {
-      label: "Other Bill",
+      label: "Other",
       value: "OtherBill",
       type: "OTHERS",
     },]

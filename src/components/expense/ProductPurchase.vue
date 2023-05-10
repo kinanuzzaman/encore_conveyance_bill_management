@@ -3,10 +3,11 @@
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <q-input outlined v-model="formData.vendor" placeholder="Product Name" :dense="true" />
-        <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category" />
+        <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category"
+          api="product-control" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
         <q-input outlined v-model="formData.vendor" placeholder="Vendor" :dense="true" />
-        <SearchAddCompo for="project" :selected="formData.project" label="Project" />
+        <SearchAddCompo for="project" :selected="formData.project" label="Project" api="project-control" />
         <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
         <div class="flex">
           <q-input outlined v-model="formData.amount_per" placeholder="Amount per" bg-color="white" :dense="true"

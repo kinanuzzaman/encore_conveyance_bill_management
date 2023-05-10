@@ -37,17 +37,6 @@
               </q-btn>
             </q-item-section>
           </q-item>
-          <!-- <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
-              <q-item-section avatar class="text-white">
-                <q-icon :name="menuItem.icon" />
-              </q-item-section>
-              <q-item-section>
-                {{ menuItem.label }}
-              </q-item-section>
-            </q-item>
-            <q-separator :key="'sep' + index" v-if="menuItem.separator" />
-          </template> -->
           <template v-for="(menu, index) in menuList" :key="index">
             <!-- v-for="menu in menuList" :key="menu" -->
             <!--  :class="expanded ? 'bg-white text-green' : 'bg-green text-white'" -->
@@ -65,15 +54,8 @@
               </q-item>
             </q-expansion-item>
 
-            <!-- <div v-else>
-                  <q-expansion-item
-                    :label="menu.label"
-                    :icon="menu.icon"
-                    :hide-expand-icon="true"
-                    :href="'#/' + menu.link"
-                  />
-                </div> -->
           </template>
+          <q-expansion-item class="text-white" label="Logout" icon="logout" :hide-expand-icon="true" @click="logout" />
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -88,44 +70,6 @@
         </div> -->
       </q-page>
     </q-page-container>
-    <!-- <q-footer
-      elevated
-      class="bg-green"
-      style="font-family: 'Roboto Slab', serif"
-    >
-      <q-tabs
-        v-model="tab"
-        class="text-white"
-        align="justify"
-        :inline-label="$q.screen.gt.sm"
-      >
-        <q-route-tab
-          to="/configuration"
-          class="gt-sm"
-          icon="manage_accounts"
-          label="Configuration"
-          no-caps
-        />
-        <q-route-tab
-          to="/cashin"
-          icon="credit_card"
-          label="Cash request"
-          no-caps
-        />
-        <q-route-tab
-          name="Expense"
-          icon="account_balance_wallet"
-          label="Expense"
-          no-caps
-        />
-        <q-route-tab
-          name="Analytics"
-          icon="donut_small"
-          label="Analytics"
-          no-caps
-        />
-      </q-tabs>
-    </q-footer> -->
     <q-dialog v-model="confirm" persistent>
       <EmpAttendance />
     </q-dialog>
@@ -137,6 +81,7 @@ import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
 import { ref } from "vue";
 import { useAttendanceStore } from "../stores/attendance.store"
 import { useAuthStore } from "../stores/auth.store"
+import { useRouter } from 'vue-router';
 
 const menuList = [
   {
@@ -148,18 +93,18 @@ const menuList = [
     icon: "supervised_user_circle",
     label: "Configuration",
     separator: false,
-    permissions: [ 'role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write', 'user_create', 'user_read', 'user_write' ],
+    permissions: ['role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write', 'user_create', 'user_read', 'user_write'],
     submenus: [
       {
         icon: "account_circle",
         label: "User Management",
-        permissions: [ 'user_create', 'user_read', 'user_write' ],
+        permissions: ['user_create', 'user_read', 'user_write'],
         link: "/user",
       },
       {
         icon: "manage_accounts",
         label: "User Role",
-        permissions: [ 'role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write' ],
+        permissions: ['role_create', 'role_read', 'role_write', 'permission_create', 'permission_read', 'permission_write'],
         link: "/role",
       },
     ],
@@ -167,19 +112,19 @@ const menuList = [
   {
     icon: "description",
     label: "Requisition",
-    permissions: [ 'cash_read', 'cash_write', 'expence_read', 'expence_write', 'expence_create' ],
+    permissions: ['cash_read', 'cash_write', 'expence_read', 'expence_write', 'expence_create'],
     separator: false,
     submenus: [
       {
         icon: "request_quote",
         label: "Cash Request",
-        permissions: [ 'cash_read', 'cash_write', 'cash_create' ],
+        permissions: ['cash_read', 'cash_write', 'cash_create'],
         link: "/cash",
       },
       {
         icon: "payments",
         label: "Expense",
-        permissions: [ 'expence_read', 'expence_write', 'expence_create' ],
+        permissions: ['expence_read', 'expence_write', 'expence_create'],
         link: "/expense",
       },
       {
@@ -192,13 +137,13 @@ const menuList = [
   {
     icon: "work_history",
     label: "Projects",
-    permissions: [ 'project_read', 'project_write', 'project_create' ],
+    permissions: ['project_read', 'project_write', 'project_create'],
     separator: false,
     submenus: [
       {
         icon: "request_quote",
         label: "All Project",
-        permissions: [ 'project_read', 'project_write', 'project_create' ],
+        permissions: ['project_read', 'project_write', 'project_create'],
         link: "/projects",
       },
       // {
@@ -211,7 +156,7 @@ const menuList = [
   {
     icon: "analytics",
     label: "Analytics",
-    permissions: [ 'analytics_read' ],
+    permissions: ['analytics_read'],
     separator: false,
     submenus: [
       {
@@ -257,19 +202,26 @@ const menuList = [
   //   label: "Help",
   //   separator: false,
   // },
-  {
-    icon: "logout",
-    iconColor: "primary",
-    label: "Logout",
-    separator: false,
-  },
+  // {
+  //   icon: "logout",
+  //   iconColor: "primary",
+  //   label: "Logout",
+  //   separator: false,
+  // },
 ];
 
 export default {
   components: { EmpAttendance },
   setup() {
+    const router = useRouter();
+    // const route = useRoute();
     const confirm = ref(false);
+    const logout = () => {
+      localStorage.clear();
+      router.push({ path: "/" });
+    };
     return {
+      logout,
       confirm,
       response: ref(false),
       searchField: ref(false),
