@@ -150,9 +150,12 @@
                         :dense="true" />
                     <q-input outlined v-model="createRole.description" placeholder="Description" bg-color="white"
                         :dense="true" />
+                    <q-select class="bg-white" outlined multiple v-model="createRole.modules"
+                        :options="['User', 'Requisition', 'Analytics']" :dense="true" label="Module type" />
                     <q-select class="bg-white" outlined multiple v-model="createRole.permissions"
                         :options="['Create User', 'Delete User', 'Approvals', 'Edit User', 'See Analytics']" :dense="true"
                         label="Permission type" />
+
                 </q-card-section>
                 <q-card-actions align="center" class="row mx-2 py-5">
                     <q-btn label="Create" color="green" class="col" @click="registerUser()" />
@@ -224,6 +227,7 @@ export default {
             role_name: null,
             description: null,
             permissions: null,
+            modules: null,
         });
 
         const tableRef = ref()
