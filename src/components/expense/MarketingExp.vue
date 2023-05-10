@@ -31,20 +31,10 @@ export default defineComponent({
   setup() {
 
     const formData = reactive({
-      product: {
-        id: null,
-        quantity: null,
-      },
-      vendor: null,
-      request_type: 'BP',
-      project: null,
-      vendor: null,
-      location: null,
+      request_type: 'FACTORY',
+      reason: null,
       amount: null,
-      amount_paid: null,
-      amount_per: null,
-      amount_per_unit: null,
-      amount_due: null,
+      notes: null,
     });
     return {
       type: ref('pcs'),
