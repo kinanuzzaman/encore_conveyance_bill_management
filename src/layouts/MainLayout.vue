@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lff" class="">
     <!--  elevated -->
     <q-header flat class="bg-white p-2">
-      <q-toolbar class="grid grid-cols-1 md:grid-cols-2">
+      <q-toolbar class="grid grid-cols-2">
         <!-- <q-btn
           flat
           color="green"
@@ -13,16 +13,19 @@
         /> -->
         <q-toolbar-title>
           <q-btn flat @click="drawer = !drawer" v-if="!drawer">
-            <img src="../assets/images/login/encore1.png" class="h-[26px] w-[169px]" />
+            <img src="../assets/images/login/encore1.png" class="md:h-[26px] md:w-[169px] w-[120px] h-[20px]" />
           </q-btn>
         </q-toolbar-title>
-        <!-- class="q-gutter-xs"  class="text-white" fingerprint-->
+        <!--:size="$q.screen.lt.md ? 'sm' : 'md'"class="q-gutter-xs"  class="text-white" fingerprint-->
         <div class="flex justify-self-end">
-          <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" />
-          <q-btn flat color="green" icon="notifications" @click="onClick" class="" />
-          <q-input v-if="searchField" rounded outlined v-model="text" label="Search" dense color="green" />
-          <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" />
-          <q-btn flat color="green" icon="account_circle" @click="onClick" />
+          <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" dense />
+          <q-btn flat color="green" icon="notifications" @click="onClick" class="" dense />
+          <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" />
+          <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense />
+          <q-btn flat color="green" icon="account_circle" @click="onClick" dense />
+        </div>
+        <div class="col-span-2">
+          <q-input v-if="searchField" class="lt-md" rounded outlined v-model="text" label="Search" dense color="green" />
         </div>
       </q-toolbar>
     </q-header>
