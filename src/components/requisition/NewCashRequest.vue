@@ -23,8 +23,8 @@
             <q-input outlined v-model="cashPayload.amount" placeholder="Amount" bg-color="white" :dense="true" />
           </q-card-section>
           <q-card-section>
-            <!-- <q-input outlined v-model="cashPayload.payeer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
-            <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payeer = e" />
+            <!-- <q-input outlined v-model="cashPayload.payer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
+            <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payer = e" />
           </q-card-section>
         </div>
 
@@ -50,7 +50,7 @@ export default {
       // options: ["PAID", "RECEIVED"],
       cashPayload: {
         amount: null,
-        payeer: null,
+        payer: null,
         type: null,
       }
     };
@@ -58,7 +58,10 @@ export default {
   methods: {
     async saveCashRequest() {
       try {
-        await this.apiService.post('/cash-control/create', this.cashPayload);
+        await this.apiService.post('/cash-control/create', {
+          ...this.cashPayload,
+          type: this.cashPayload.type.type,
+        });
         this.$router.back();
       } catch (error) {
         this.$q.notify({
@@ -71,7 +74,7 @@ export default {
     }
   },
   setup() {
-    const options = [{
+    const options = [ {
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -125,7 +128,7 @@ export default {
       label: "Other",
       value: "OtherBill",
       type: "OTHERS",
-    },]
+    }, ]
     return {
       options,
     }

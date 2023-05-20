@@ -88,8 +88,10 @@ export default defineComponent({
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
         await this.attendanceStore.startAttendance({
-          lat: latitude,
-          lng: longitude,
+          start_location: {
+            lat: latitude,
+            lng: longitude,
+          }
         })
         this.isAttendanceStarted = true
         await this.startTimer()
@@ -117,8 +119,10 @@ export default defineComponent({
           navigator.geolocation.getCurrentPosition(resolve, reject);
         });
         await this.attendanceStore.endAttendance({
-          lat: latitude,
-          lng: longitude,
+          end_location: {
+            lat: latitude,
+            lng: longitude,
+          }
         })
         this.isAttendanceStarted = false
         clearInterval(this.intervalId);
