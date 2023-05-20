@@ -115,7 +115,7 @@ const menuList = [
   {
     icon: "description",
     label: "Requisition",
-    permissions: ['cash_read', 'cash_write', 'expence_read', 'expence_write', 'expence_create'],
+    permissions: ['cash_read', 'cash_write', 'expense_read', 'expense_write', 'expense_create'],
     separator: false,
     submenus: [
       {
@@ -127,7 +127,7 @@ const menuList = [
       {
         icon: "payments",
         label: "Expense",
-        permissions: ['expence_read', 'expence_write', 'expence_create'],
+        permissions: ['expense_read', 'expense_write', 'expense_create'],
         link: "/expense",
       },
       {

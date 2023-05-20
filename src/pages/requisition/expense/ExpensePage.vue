@@ -275,7 +275,7 @@ export default {
 
       loading.value = true
 
-      const response = await apiSerice.get("/expence-control");
+      const response = await apiSerice.get("/expense-control");
       const result = response.data;
       console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data)
 
@@ -302,7 +302,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`

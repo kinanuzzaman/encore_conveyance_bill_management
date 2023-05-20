@@ -1,14 +1,14 @@
 <template>
   <main class="px-5">
     <div class="row">
-      <section class="col-md-6">
+      <section class="col-lg-6">
         <div class="px-4">
           <q-select class="bg-white" outlined v-model="activeCompo" :options="options" :dense="true"
             label="Choose expense type" />
         </div>
         <component :is="activeCompo.value" @addExpense="createExpance" :expenseData="expenseDetails"></component>
       </section>
-      <section class="col-md-6 px-5 ">
+      <section class="col-lg-6 px-5 ">
         <div>
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcE5ok1cPwHeGuCEe03a_X5fxT0tIJSeKdolnp-0sqSyjVO6mD5p1ryrGuqCQyejAQnIM&usqp=CAU"
@@ -47,7 +47,7 @@ export default {
     const $q = useQuasar();
     const router = useRouter();
     const route = useRoute();
-    const options = [ {
+    const options = [{
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -101,7 +101,7 @@ export default {
       label: "Other Bill",
       value: "OtherBill",
       type: "OTHERS",
-    }, ]
+    },]
     const expenseDetails = ref(null);
     async function createExpance(e) {
       if (!navigator.geolocation) {
@@ -117,7 +117,7 @@ export default {
           console.log("🚀 ~ file: AddExpense.vue:49 ~ createExpance ~ position", position);
           const { latitude, longitude } = position.coords;
           e.creator_location = { latitude, longitude };
-          await apiService.post('/expence-control/create', e);
+          await apiService.post('/expense-control/create', e);
           $q.notify({
             message: "Expense created successfully",
             color: "green",
@@ -136,7 +136,7 @@ export default {
     }
     onMounted(async () => {
       if (route.query.id) {
-        const details = await apiService.get(`/expence-control/${route.query.id}`);
+        const details = await apiService.get(`/expense-control/${route.query.id}`);
         if (details.data.data) {
           const type = options.find((item) => {
             return item.type == details.data.data.request_type;

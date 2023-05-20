@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <section class="col-md-6 px-4 ">
+        <section class="col-lg-6 px-4 ">
             <div>
                 <q-card flat class="my-card">
                     <q-card-section>
@@ -33,7 +33,7 @@
                 </q-card>
             </div>
         </section>
-        <section class="col-md-6 px-5 ">
+        <section class="col-lg-6 px-5 ">
             <div>
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcE5ok1cPwHeGuCEe03a_X5fxT0tIJSeKdolnp-0sqSyjVO6mD5p1ryrGuqCQyejAQnIM&usqp=CAU"
                     spinner-color="primary" spinner-size="82px" class="rounded-xl md:h-[871px]" fit="fill" />

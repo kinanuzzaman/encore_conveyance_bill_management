@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex justify-center items-center h-screen bg-green">
     <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
       <div>
         <p>Invited by: {{ invitedUsersData?.invited_by?.first_name + '' + invitedUsersData?.invited_by?.last_name }}</p>
@@ -16,6 +16,9 @@
       </q-card-section>
 
     </q-card>
+    <div class="absolute bottom-0 right-0 w-[60%]">
+      <img src="~assets/images/login/encore2.png" class="" />
+    </div>
   </div>
 </template>
 
