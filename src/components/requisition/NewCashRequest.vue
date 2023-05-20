@@ -24,7 +24,8 @@
           </q-card-section>
           <q-card-section>
             <!-- <q-input outlined v-model="cashPayload.payer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
-            <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payer = e" />
+            <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payer = e"
+              :modelValue="cashPayload.payer" />
           </q-card-section>
         </div>
 
@@ -38,43 +39,24 @@
 </template>
 
 <script>
+import { onMounted, reactive } from 'vue';
 import { ApiService } from 'src/service/api-service';
 import SearchAddCompo from '../SearchAddCompo.vue';
+import { useRoute, useRouter } from 'vue-router';
 export default {
   components: {
     SearchAddCompo
   },
-  data() {
-    return {
-      apiService: new ApiService(),
-      // options: ["PAID", "RECEIVED"],
-      cashPayload: {
-        amount: null,
-        payer: null,
-        type: null,
-      }
-    };
-  },
-  methods: {
-    async saveCashRequest() {
-      try {
-        await this.apiService.post('/cash-control/create', {
-          ...this.cashPayload,
-          type: this.cashPayload.type.type,
-        });
-        this.$router.back();
-      } catch (error) {
-        this.$q.notify({
-          message: error.message,
-          color: 'negative',
-          position: 'top',
-          timeout: 2000,
-        });
-      }
-    }
-  },
   setup() {
-    const options = [ {
+    const route = useRoute();
+    const router = useRouter();
+    const apiService = new ApiService();
+    const cashPayload = reactive({
+      amount: null,
+      payer: null,
+      type: null,
+    });
+    const options = [{
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -128,8 +110,46 @@ export default {
       label: "Other",
       value: "OtherBill",
       type: "OTHERS",
-    }, ]
+    },]
+
+    const saveCashRequest = async () => {
+      try {
+        await apiService.post('/cash-control/create', {
+          ...cashPayload,
+          type: cashPayload.type.type,
+        });
+        router.back();
+      } catch (error) {
+        this.$q.notify({
+          message: error.message,
+          color: 'negative',
+          position: 'top',
+          timeout: 2000,
+        });
+      }
+    }
+    onMounted(async () => {
+      if (route.query.id) {
+        const details = await apiService.get(`/cash-control/${route.query.id}`);
+        console.log("🚀 ~ file: NewCashRequest.vue:140 ~ onRequest ~ data:", details.data.data);
+        if (details.data.data) {
+          const type = options.find((item) => {
+            return item.type == details.data.data[0].type;
+          });
+
+          if (type) {
+            cashPayload.type = type;
+            cashPayload.amount = details.data.data[0].amount;
+            cashPayload.payer = details.data.data[0].payer.first_name;
+            // concat(" ", details.data.data[0].payer.last_name)
+            console.log(details);
+          }
+        }
+      }
+    });
     return {
+      cashPayload,
+      saveCashRequest,
       options,
     }
   }

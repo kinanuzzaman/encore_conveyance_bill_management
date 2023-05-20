@@ -89,8 +89,8 @@
                   <div class="column items-end">
                     <q-btn flat icon="more_vert">
                       <q-menu anchor="top middle" self="top right">
-                        <q-item clickable @click="approval = true">
-                          <q-item-section>Update</q-item-section>
+                        <q-item clickable @click="$router.push(`/cash/add-cash?id=${props.row._id}`)">
+                          <q-item-section>Details</q-item-section>
                         </q-item>
                         <q-item clickable>
                           <q-item-section>Delete</q-item-section>
