@@ -175,7 +175,7 @@ const menuList = [
       {
         icon: "payments",
         label: "User Analytics",
-        link: "",
+        link: "/user-analytics",
       },
       {
         icon: "payments",

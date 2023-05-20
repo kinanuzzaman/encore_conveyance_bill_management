@@ -73,6 +73,10 @@ const routes = [
           import('src/pages/analytics/attendance/AttendancePage.vue'),
       },
       {
+        path: 'user-analytics',
+        component: () => import('src/pages/analytics/user/UserAnalytics.vue'),
+      },
+      {
         path: 'analytics',
         component: () => import('src/pages/requisition/AnalyticsPage.vue'),
       },
