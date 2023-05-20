@@ -19,10 +19,10 @@
         <!--:size="$q.screen.lt.md ? 'sm' : 'md'"class="q-gutter-xs"  class="text-white" fingerprint-->
         <div class="flex justify-self-end">
           <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" dense />
-          <q-btn flat color="green" icon="notifications" @click="onClick" class="" dense />
+          <q-btn flat color="green" icon="notifications" class="" dense />
           <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" />
           <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense />
-          <q-btn flat color="green" icon="account_circle" @click="onClick" dense />
+          <q-btn flat color="green" icon="account_circle" dense />
         </div>
         <div class="col-span-2">
           <q-input v-if="searchField" class="lt-md" rounded outlined v-model="text" label="Search" dense color="green" />

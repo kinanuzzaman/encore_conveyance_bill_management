@@ -25,7 +25,7 @@
           <q-card-section>
             <!-- <q-input outlined v-model="cashPayload.payer" placeholder="Paid By" bg-color="white" :dense="true" /> -->
             <SearchAddCompo label="Paid By" api="/users/?user_type=EMPLOYEE" @selected="e => cashPayload.payer = e"
-              :modelValue="cashPayload.payer" />
+              :v-model="cashPayload.payer" />
           </q-card-section>
         </div>
 
