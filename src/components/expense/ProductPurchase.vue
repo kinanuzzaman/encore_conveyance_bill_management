@@ -35,14 +35,17 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   name: 'ProductPurchase',
   components: {
     SearchAddCompo
   },
-  setup() {
+  props: {
+    expenseData: Object,
+  },
+  setup(props) {
 
     const formData = reactive({
       product: {
@@ -57,6 +60,13 @@ export default defineComponent({
       amount_per: null,
       amount_per_unit: null,
       amount_due: null,
+    });
+    onMounted(() => {
+      if (props.expenseData) {
+        data.reason = props.expenseData.reason;
+        data.amount = props.expenseData.amount;
+        data.notes = props.expenseData.notes;
+      }
     });
     return {
       type: ref('pcs'),

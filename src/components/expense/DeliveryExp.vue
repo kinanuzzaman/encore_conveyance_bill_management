@@ -41,13 +41,16 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 // import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   components: {
     // SearchAddCompo
   },
-  setup() {
+  props: {
+    expenseData: Object,
+  },
+  setup(props) {
 
     const formData = reactive({
       request_type: 'DELIVERY',
@@ -59,6 +62,13 @@ export default defineComponent({
       notes: null,
       labour_amount: null,
       labour_quantity: null,
+    });
+    onMounted(() => {
+      if (props.expenseData) {
+        data.reason = props.expenseData.reason;
+        data.amount = props.expenseData.amount;
+        data.notes = props.expenseData.notes;
+      }
     });
     return {
       labour: ref(false),

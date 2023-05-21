@@ -22,13 +22,16 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, onMounted } from 'vue';
 // import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   components: {
     // SearchAddCompo
   },
-  setup() {
+  props: {
+    expenseData: Object,
+  },
+  setup(props) {
 
     const formData = reactive({
       request_type: 'FACTORY',
@@ -36,6 +39,13 @@ export default defineComponent({
       details: null,
       amount: null,
       notes: null,
+    });
+    onMounted(() => {
+      if (props.expenseData) {
+        data.reason = props.expenseData.reason;
+        data.amount = props.expenseData.amount;
+        data.notes = props.expenseData.notes;
+      }
     });
     return {
       formData,

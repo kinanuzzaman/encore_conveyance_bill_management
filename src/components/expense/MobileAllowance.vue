@@ -21,16 +21,26 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from 'vue';
+import { defineComponent, reactive, ref, onMounted } from 'vue';
 export default defineComponent({
   components: {
 
   },
-  setup() {
+  props: {
+    expenseData: Object,
+  },
+  setup(props) {
 
     const formData = reactive({
       amount: null,
 
+    });
+    onMounted(() => {
+      if (props.expenseData) {
+        data.reason = props.expenseData.reason;
+        data.amount = props.expenseData.amount;
+        data.notes = props.expenseData.notes;
+      }
     });
     return {
       type: ref('pcs'),

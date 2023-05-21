@@ -97,7 +97,7 @@
                         <q-item clickable>
                           <q-item-section>Delete</q-item-section>
                         </q-item>
-                        <q-item clickable>
+                        <q-item clickable @click="approval = true">
                           <q-item-section>Update Status</q-item-section>
                         </q-item>
                       </q-menu>
@@ -134,7 +134,7 @@
                           <q-item clickable>
                             <q-item-section>Delete</q-item-section>
                           </q-item>
-                          <q-item clickable>
+                          <q-item clickable @click="approval = true">
                             <q-item-section>Update Status</q-item-section>
                           </q-item>
                         </q-menu>
@@ -160,12 +160,16 @@
         </div>
       </section>
     </div>
+    <q-dialog v-model="approval" persistent>
+      <approval-process />
+    </q-dialog>
   </main>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
 import { ApiService } from 'src/service/api-service';
+import ApprovalProcess from "src/components/ApprovalProcess.vue";
 // import { useQuasar } from 'quasar';
 
 const columns = [
@@ -260,38 +264,32 @@ export default {
     const apiSerice = new ApiService();
     // const $q = useQuasar();
     // const exponces = ref([])
-
-    const tableRef = ref()
-    const rows = ref([])
-    const loading = ref(false)
+    const tableRef = ref();
+    const rows = ref([]);
+    const loading = ref(false);
     const pagination = ref({
       page: 1,
       rowsPerPage: 10,
       rowsNumber: 10
-    })
-
+    });
     async function onRequest(props) {
-      const { page, rowsPerPage } = props.pagination
-
-      loading.value = true
-
+      const { page, rowsPerPage } = props.pagination;
+      loading.value = true;
       const response = await apiSerice.get("/expense-control");
       const result = response.data;
-      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data)
-
+      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data);
       // clear out existing data and add new
-      rows.value.splice(0, rows.value.length, ...result.data)
-      pagination.value.rowsNumber = result.total
-      pagination.value.page = page
-      pagination.value.rowsPerPage = rowsPerPage
-
-      loading.value = false
+      rows.value.splice(0, rows.value.length, ...result.data);
+      pagination.value.rowsNumber = result.total;
+      pagination.value.page = page;
+      pagination.value.rowsPerPage = rowsPerPage;
+      loading.value = false;
     }
     onMounted(() => {
       tableRef.value.requestServerInteraction();
     });
-
     return {
+      approval: ref(false),
       tableRef,
       pagination,
       loading,
@@ -305,10 +303,11 @@ export default {
       options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       getSelectedString() {
-        return selected.value.length === 0 ? '' : `${selected.value.length} record${selected.value.length > 1 ? 's' : ''} selected of ${rows.value.length}`
+        return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;
       },
     };
   },
+  components: { ApprovalProcess }
 };
 </script>
 
