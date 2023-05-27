@@ -6,7 +6,7 @@
         <q-input outlined v-model="formData.amount" placeholder="Amount" :dense="true" />
 
         <!-- <q-input outlined v-model="formData.payeer" placeholder="Paid to" bg-color="white" :dense="true" /> -->
-        <SearchAddCompo label="Paid to" api="/users" @selected="e => formData.payeer = e" />
+        <SearchAddCompo label="Paid to" api="users" @selected="e => formData.payeer = e" />
 
 
         <q-input outlined v-model="formData.details" placeholder="Details" bg-color="white" :dense="true" />

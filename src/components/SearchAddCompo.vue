@@ -3,6 +3,9 @@
     <q-select v-model="selectedOption" @input="onOptionSelect" :label="`${$props.label}`" dense outlined
       option-label="label" option-value="value" :options="suggestedOptions" use-input @input-value="onFilter"
       :loading="loadingOptions" :no-options-label="noOptionsLabel">
+      <template v-slot:append>
+        <q-icon v-if="selectedOption" name="close" @click.stop.prevent="selectedOption = null" class="cursor-pointer" />
+      </template>
       <template v-slot:no-option>
         <q-item>
           <q-item-section>
@@ -42,12 +45,17 @@ export default {
       type: String,
       required: true
     },
+    userType: {
+      type: String,
+      enum: [ "CLIENT", "VENDOR" ],
+      required: false
+    }
   },
   watch: {
     selectedOption: {
       handler: function (val) {
         console.log('Selected option:', val);
-        this.$emit('selected', val.value);
+        if (val && val.value) this.$emit('selected', val.value);
       },
       deep: true
     }
@@ -60,14 +68,15 @@ export default {
     onFilter(val) {
       this.searchQuery = val;
 
-      if (val.length > 3) {
-        this.loadingOptions = true;
+      if (val.length >= 1) {
         this.fetchSuggestions(this.searchQuery);
-        this.loadingOptions = false;
+      } else {
+        this.fetchSuggestions();
       }
     },
     async fetchSuggestions(searchQuery) {
       try {
+        this.loadingOptions = true;
         if (!this.$props.api) return
         const response = await this.apiService.get(this.$props.api, {
           params: {
@@ -80,19 +89,33 @@ export default {
             value: item._id
           };
         });
+        this.loadingOptions = false;
       } catch (error) {
         console.log(error);
+        this.loadingOptions = false;
       }
     },
     async requestNewData() {
       try {
-        await this.apiService.post(`/${this.$props.api}/create`, {
+        let payload = {
           title: this.searchQuery,
           isRequested: true
-        });
+        }
+        if (this.$props.userType) {
+          payload = {
+            user_type: this.$props.userType,
+            name: this.searchQuery,
+          }
+        }
+        await this.apiService.post(`/${this.$props.api}/create`, payload);
         await this.fetchSuggestions();
       } catch (error) {
-        console.log(error);
+        this.$q.notify({
+          color: 'negative',
+          message: error.response ? error.response.data.message : error.message,
+          position: 'top',
+          icon: 'report_problem'
+        });
       }
     }
   },

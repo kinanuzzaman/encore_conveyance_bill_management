@@ -6,7 +6,7 @@
         <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category"
           api="product-control" />
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
-        <q-input outlined v-model="formData.vendor" placeholder="Vendor" :dense="true" />
+        <SearchAddCompo :selected="formData.vendor" label="Vendor" api="users" userType="VENDOR" />
         <SearchAddCompo for="project" :selected="formData.project" label="Project" api="project-control" />
         <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
         <div class="flex">
@@ -70,7 +70,7 @@ export default defineComponent({
     });
     return {
       type: ref('pcs'),
-      units: ["pcs", "feet", "kg", "meter", "inch"],
+      units: [ "pcs", "feet", "kg", "meter", "inch" ],
       formData,
     }
   },
