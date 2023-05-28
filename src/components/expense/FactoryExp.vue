@@ -42,9 +42,9 @@ export default defineComponent({
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.reason = props.expenseData.reason;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {

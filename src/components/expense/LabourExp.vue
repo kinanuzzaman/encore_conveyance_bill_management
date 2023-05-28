@@ -2,7 +2,7 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
-        <SearchAddCompo label="Project Name" api="project-control" @selected="e => formData.project = e" />
+        <SearchAddCompo label="Project Name" api="project-control" :selected="formData.project" />
         <q-input outlined v-model="formData.labour_quantity" placeholder="Labour quantity" :dense="true" />
         <q-input outlined v-model="formData.amount" placeholder="Amount" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" placeholder="Notes" bg-color="white" :dense="true" />
@@ -43,9 +43,9 @@ export default defineComponent({
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.reason = props.expenseData.reason;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {

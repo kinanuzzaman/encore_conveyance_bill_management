@@ -49,7 +49,11 @@ export default {
       type: String,
       enum: [ "CLIENT", "VENDOR" ],
       required: false
-    }
+    },
+    createApi: {
+      type: String,
+      required: false
+    },
   },
   watch: {
     selectedOption: {
@@ -77,8 +81,10 @@ export default {
     async fetchSuggestions(searchQuery) {
       try {
         this.loadingOptions = true;
-        if (!this.$props.api) return
-        const response = await this.apiService.get(this.$props.api, {
+        if (!this.$props.api && !this.$props.createApi) return
+        const api = this.$props.createApi ? this.$props.createApi : this.$props.api
+        console.log("🚀 ~ file: SearchAddCompo.vue:86 ~ fetchSuggestions ~ api:", api)
+        const response = await this.apiService.get(api, {
           params: {
             q: searchQuery
           }
@@ -107,7 +113,8 @@ export default {
             name: this.searchQuery,
           }
         }
-        await this.apiService.post(`/${this.$props.api}/create`, payload);
+        const api = this.$props.createApi || `/${this.$props.api}/create`
+        await this.apiService.post(api, payload);
         await this.fetchSuggestions();
       } catch (error) {
         this.$q.notify({

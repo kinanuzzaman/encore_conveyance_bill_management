@@ -67,7 +67,7 @@
                 </q-td>
                 <q-td>
                   <div>
-                    <div class="text-xs">{{ props.row.payee?.first_name + ' ' + props.row.payee?.last_name }}</div>
+                    <div class="text-xs">{{ props.row.payer?.first_name + ' ' + props.row.payer?.last_name }}</div>
                   </div>
                 </q-td>
                 <q-td>
@@ -300,7 +300,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;

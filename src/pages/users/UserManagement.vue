@@ -53,7 +53,7 @@
                 </q-td>
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
                   <div class="bg-blue-200 inline p-2 text-blue-800">
-                    {{ props.row.role.role_name }}
+                    {{ props.row.role?.role_name }}
                   </div>
                 </q-td>
                 <q-td>
@@ -141,7 +141,7 @@
                         <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
-                        <q-item-label caption v-if="col.label == 'Role'">{{ col.value.role_name }}</q-item-label>
+                        <q-item-label caption v-if="col.label == 'Role'">{{ col.value?.role_name }}</q-item-label>
                         <q-item-label caption v-else>{{ col.value }}</q-item-label>
                       </q-item-section>
                     </q-item>

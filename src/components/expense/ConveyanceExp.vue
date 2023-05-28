@@ -2,22 +2,15 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
-        <!-- <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" /> -->
-        <q-input outlined v-model="formData.product.quantity" placeholder="Reason" :dense="true" />
-        <!-- <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
-        <SearchAddCompo label="Project" api="/project-control" @selected="e => formData.project = e" /> -->
-        <q-input outlined v-model="formData.location" placeholder="Transport" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.location" placeholder="Location From" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.location" placeholder="Location To" bg-color="white" :dense="true" />
-        <!-- <div class="flex">
-          <q-input outlined v-model="formData.amount_per" placeholder="Amount per" bg-color="white" :dense="true"
-            class="w-3/4" />
-          <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true" />
-        </div> -->
+        <q-input outlined v-model="formData.reason" placeholder="Reason" :dense="true" />
+        <q-input outlined v-model="formData.transport" placeholder="Transport" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.transportation_location.from" placeholder="Location From" bg-color="white"
+          :dense="true" />
+        <q-input outlined v-model="formData.transportation_location.to" placeholder="Location To" bg-color="white"
+          :dense="true" />
+
         <q-input outlined v-model="formData.amount" placeholder="Total Amount" bg-color="white" :dense="true" />
-        <!-- <q-input outlined v-model="formData.amount_paid" placeholder="Paid Amount" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.amount_due" placeholder="Due Amount" bg-color="white" :dense="true" /> -->
-        <q-input outlined v-model="formData.amount_due" placeholder="Notes" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.notes" placeholder="Notes" bg-color="white" :dense="true" />
         <div>
           <q-uploader url="http://localhost:4444/upload" label="Individual upload" color="green" multiple
             style="max-width: 300px" />
@@ -36,42 +29,37 @@
 
 <script>
 import { defineComponent, reactive, ref, onMounted } from 'vue';
-// import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
-  components: {
-    // SearchAddCompo
-  },
   props: {
     expenseData: Object,
   },
   setup(props) {
 
     const formData = reactive({
-      product: {
-        id: null,
-        quantity: null,
+      reason: null,
+      request_type: 'CONVINCE',
+      transportation_location: {
+        from: null,
+        to: null,
       },
-      vendor: null,
-      request_type: 'BP',
-      project: null,
-      vendor: null,
-      location: null,
+      transport: null,
       amount: null,
-      amount_paid: null,
-      amount_per: null,
-      amount_per_unit: null,
-      amount_due: null,
+      notes: null,
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.reason = props.expenseData.reason;
+        formData.request_type = props.expenseData.request_type;
+        formData.transportation_location.from = props.expenseData.transportation_location.from;
+        formData.transportation_location.to = props.expenseData.transportation_location.to;
+        formData.transport = props.expenseData.transport;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {
       type: ref('pcs'),
-      units: ["PCS", "FEET", "KG", "METER", "INCH"],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },

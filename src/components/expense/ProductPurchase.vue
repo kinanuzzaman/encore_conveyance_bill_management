@@ -2,9 +2,11 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
-        <q-input outlined v-model="formData.vendor" placeholder="Product Name" :dense="true" />
+
+        <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product" api="product-control" />
         <SearchAddCompo for="product" :selected="formData.product.id" label="Choose product Category"
-          api="product-control" />
+          createApi="product-control/category" />
+
         <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
         <SearchAddCompo :selected="formData.vendor" label="Vendor" api="users" userType="VENDOR" />
         <SearchAddCompo for="project" :selected="formData.project" label="Project" api="project-control" />
@@ -60,17 +62,18 @@ export default defineComponent({
       amount_per: null,
       amount_per_unit: null,
       amount_due: null,
+      request_type: 'PRODUCT_PURCHASE',
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.reason = props.expenseData.reason;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {
       type: ref('pcs'),
-      units: [ "pcs", "feet", "kg", "meter", "inch" ],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },

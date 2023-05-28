@@ -34,21 +34,21 @@ export default defineComponent({
   setup(props) {
 
     const formData = reactive({
-      request_type: 'FACTORY',
+      request_type: 'MARKETING',
       reason: null,
       amount: null,
       notes: null,
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.reason = props.expenseData.reason;
+        formData.amount = props.expenseData.amount;
+        formData.notes = props.expenseData.notes;
       }
     });
     return {
       type: ref('pcs'),
-      units: ["PCS", "FEET", "KG", "METER", "INCH"],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },

@@ -2,8 +2,8 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
-        <!-- <SearchAddCompo label="Product" api="/product-control" @selected="e => formData.product.id = e" /> -->
-        <q-input outlined v-model="formData.project" placeholder="Project Name" :dense="true" />
+        <SearchAddCompo label="Project" api="project-control" :selected="formData.project" />
+        <!-- <q-input outlined v-model="formData.project" placeholder="Project Name" :dense="true" /> -->
         <!-- <SearchAddCompo label="Vendor" api="/users/?user_type=VENDOR" @selected="e => formData.vendor = e" />
         <SearchAddCompo label="Project" api="/project-control" @selected="e => formData.project = e" /> -->
         <q-input outlined v-model="formData.transprt" placeholder="Transport" bg-color="white" :dense="true" />
@@ -42,10 +42,10 @@
 
 <script>
 import { defineComponent, reactive, ref, onMounted } from 'vue';
-// import SearchAddCompo from '../SearchAddCompo.vue';
+import SearchAddCompo from '../SearchAddCompo.vue';
 export default defineComponent({
   components: {
-    // SearchAddCompo
+    SearchAddCompo
   },
   props: {
     expenseData: Object,
@@ -73,7 +73,7 @@ export default defineComponent({
     return {
       labour: ref(false),
       // type: ref('pcs'),
-      units: ["PCS", "FEET", "KG", "METER", "INCH"],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },

@@ -33,18 +33,16 @@ export default defineComponent({
 
     const formData = reactive({
       amount: null,
-
+      request_type: 'SALARY',
     });
     onMounted(() => {
       if (props.expenseData) {
-        data.reason = props.expenseData.reason;
-        data.amount = props.expenseData.amount;
-        data.notes = props.expenseData.notes;
+        formData.amount = props.expenseData.amount;
       }
     });
     return {
       type: ref('pcs'),
-      units: ["PCS", "FEET", "KG", "METER", "INCH"],
+      units: [ "PCS", "FEET", "KG", "METER", "INCH" ],
       formData,
     }
   },
