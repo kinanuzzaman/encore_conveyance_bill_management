@@ -6,13 +6,14 @@
 
       <div class="m-10 flex flex-col items-center justify-center gap-5">
         <q-icon name="fingerprint" size="120px" :color="isAttendanceStarted ? 'green' : 'black'" />
-        <span class="text-2xl font-bold">{{ timer }}</span>
+        <span class="text-2xl font-bold" v-if="isAttendanceStarted">Present on-going</span>
+
       </div>
     </q-card-section>
 
     <div class="px-5 flex flex-col items-center justify-center mb-16">
       <q-btn label="Start your Attendance" color="green" v-if="!isAttendanceStarted" @click="startAttendance" no-caps />
-      <q-btn label="End Attendance" color="red" v-else @click="endAttendance" no-caps />
+      <!-- <q-btn label="End Attendance" color="red" v-else @click="endAttendance" no-caps /> -->
     </div>
 
     <div class="flex flex-col px-16 mb-10">
@@ -22,10 +23,10 @@
           <span>Start Time</span>
           <q-input dense outlined v-model="text" type="time" placeholder="Start time" />
         </div>
-        <div class="flex flex-col w-full">
+        <!-- <div class="flex flex-col w-full">
           <span>End Time</span>
           <q-input dense outlined v-model="text" type="time" placeholder="End time" />
-        </div>
+        </div> -->
         <q-btn label="Request" disable color="orange" unelevated class="w-full" no-caps />
       </div>
     </div>
@@ -35,7 +36,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { useAttendanceStore } from "../../stores/attendance.store"
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 export default defineComponent({
   name: 'EmpAttendance',
@@ -49,6 +50,7 @@ export default defineComponent({
       attendanceStore: useAttendanceStore(),
       intervalId: null,
       timer: null,
+      lateTime: null,
     }
   },
   async mounted() {
@@ -67,14 +69,24 @@ export default defineComponent({
         return;
       }
       this.isAttendanceStarted = true;
-
-      if (this.intervalId) clearInterval(this.intervalId);
-      this.intervalId = setInterval(() => {
-        this.timer = this.elapsedTime(this.attendanceStore.activeAttendance.startAt)
-        this.$forceUpdate();
-      }, 1000);
+      this.lateTime = this.elapsedTime(this.attendanceStore.activeAttendance.startAt)
+      // if (this.intervalId) clearInterval(this.intervalId);
+      // this.intervalId = setInterval(() => {
+      //   this.timer = this.elapsedTime(this.attendanceStore.activeAttendance.startAt)
+      //   this.$forceUpdate();
+      // }, 1000);
     },
     async startAttendance() {
+      if (this.isBefore9AM()) {
+        this.$q.notify({
+          message: "You can't start attendance before 9AM",
+          color: 'negative',
+          position: 'top',
+          icon: 'report_problem',
+          timeout: 2500,
+        })
+        return;
+      }
       if (!navigator.geolocation) {
         $q.notify({
           message: "Allow Geolocation, or you can't continue",
@@ -138,9 +150,15 @@ export default defineComponent({
         })
       }
     },
+    isBefore9AM() {
+      const currentMoment = moment().tz('Asia/Dhaka');
+      const startTimeMoment = currentMoment.clone().startOf('day').add(9, 'hours');
+
+      return currentMoment.isBefore(startTimeMoment);
+    },
     elapsedTime(startTime) {
       const startTimeMoment = moment(startTime);
-      const currentTimeMoment = moment();
+      const currentTimeMoment = moment().tz('Asia/Dhaka').startOf('day').add(9, 'hours');
       const diffDuration = moment.duration(currentTimeMoment.diff(startTimeMoment));
       const hours = Math.floor(diffDuration.asHours()).toString().padStart(2, '0');
       const minutes = diffDuration.minutes().toString().padStart(2, '0');
