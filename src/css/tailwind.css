@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Your custom styles go here */
+thead {
+  background-color: #3ab44b;
+  color: white;
+}
+thead .q-checkbox__inner {
+  color: white;
+}
