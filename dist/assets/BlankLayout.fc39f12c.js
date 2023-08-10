@@ -1,0 +1,1 @@
+import{b as t,c as n}from"./QLayout.d6634224.js";import{_ as r,d as s,a4 as c,o as u,a5 as _,a6 as e,f as a}from"./index.5b2acc78.js";const p=s({name:"BlankLayout",setup(){return{}}});function l(f,i,d,m,k,v){const o=c("router-view");return u(),_(t,null,{default:e(()=>[a(n,null,{default:e(()=>[a(o)]),_:1})]),_:1})}var C=r(p,[["render",l]]);export{C as default};
