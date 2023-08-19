@@ -63,13 +63,9 @@
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" v-model:pagination="pagination"
             :loading="loading" ref="tableRef" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
+            :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td>
-
-                  <q-checkbox v-model="props.selected" />
-                </q-td>
                 <q-td>
 
                   <div>
@@ -150,11 +146,10 @@
         </template> -->
 
             <template v-slot:item="props">
-              <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
-                :style="props.selected ? 'transform: scale(0.95);' : ''">
-                <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
+              <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+                <q-card bordered flat>
                   <q-card-section class="flex justify-between">
-                    <q-checkbox dense v-model="props.selected" :label="props.row.name" />
+                    <!-- <q-checkbox dense v-model="props.selected" :label="props.row.name" /> -->
                     <div class="column items-end">
                       <q-btn flat icon="more_vert">
                         <q-menu anchor="top middle" self="top right">

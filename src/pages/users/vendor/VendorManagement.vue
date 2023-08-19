@@ -51,7 +51,7 @@
                 </q-td>
                 <q-td key="role" :props="props" class="">
                   <div>
-                    <div class="text-xs">{{ props.row.createdAt }}</div>
+                    <div class="text-xs">{{ moment(props.row.createdAt).format("LL | h:mma") }}</div>
                   </div>
                 </q-td>
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
@@ -125,7 +125,8 @@
                   </q-card-section>
                   <q-separator />
                   <q-list dense>
-                    <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
+                    <q-item class="font-bold" v-for="col in props.cols.filter(col => col.name !== 'desc')"
+                      :key="col.name">
                       <q-item-section>
                         <q-item-label caption v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
@@ -133,6 +134,9 @@
                         <q-item-label v-if="col.label == 'User'">{{ props.row.first_name }} {{ props.row.last_name
                         }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Role'">{{ col.value?.role_name }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Created'">
+                          {{ moment(props.row.createdAt).format("LL | h:mma") }}
+                        </q-item-label>
                         <q-item-label v-else>{{ col.value }}</q-item-label>
                       </q-item-section>
                     </q-item>
@@ -213,6 +217,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import { ref, reactive, onMounted } from "vue";
 import { useUserStore } from "src/stores/user.store";
 import { useRbacStore } from "src/stores/rbac.store";
@@ -458,6 +463,7 @@ export default {
 
 
     return {
+      moment,
       rbacStore,
       registerUser,
       userRegister,

@@ -177,21 +177,25 @@ const menuList = [
       // {
       //   icon: "request_quote",
       //   label: "Project Analytics",
+      //   permissions: [ 'analytics_read' ],
       //   link: "",
       // },
       // {
       //   icon: "payments",
       //   label: "Store Analytics",
+      //   permissions: [ 'analytics_read' ],
       //   link: "",
       // },
       {
         icon: "payments",
         label: "User Analytics",
+        permissions: [ 'analytics_read' ],
         link: "/user-analytics",
       },
       {
         icon: "payments",
         label: "Attendance",
+        permissions: [ 'analytics_read' ],
         link: "/attendance",
       },
     ],

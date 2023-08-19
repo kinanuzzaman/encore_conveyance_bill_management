@@ -50,7 +50,7 @@
                 </q-td>
                 <q-td key="role" :props="props" class="">
                   <div>
-                    <div class="text-xs">{{ props.row.createdAt }}</div>
+                    <div class="text-xs">{{ moment(props.row.createdAt).format("LL | h:mma") }}</div>
                   </div>
                 </q-td>
                 <q-td key="role" :props="props" @click="openDialog = true" class="">
@@ -97,14 +97,13 @@
         </div>
         <!-- mobile table -->
         <div class="q-pa-md lt-md">
-          <q-table :rows="rows" :columns="columns" row-key="name" selection="multiple" v-model:selected="selected"
-            :filter="filter" grid hide-header>
+          <q-table :rows="rows" :columns="columns" row-key="name" :filter="filter" grid hide-header>
             <template v-slot:item="props">
               <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
                 :style="props.selected ? 'transform: scale(0.95);' : ''">
                 <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
                   <q-card-section class="flex justify-between bg-green text-white">
-                    <q-checkbox dense v-model="props.selected" :label="props.row.name" color="white" keep-color />
+                    <!-- <q-checkbox dense v-model="props.selected" :label="props.row.name" color="white" keep-color /> -->
                     <div class="column items-end">
                       <q-btn flat icon="more_vert">
                         <q-menu anchor="top middle" self="top right">
@@ -124,7 +123,8 @@
                   </q-card-section>
                   <q-separator />
                   <q-list dense>
-                    <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
+                    <q-item class="font-bold" v-for="col in props.cols.filter(col => col.name !== 'desc')"
+                      :key="col.name">
                       <q-item-section>
                         <q-item-label caption v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
@@ -132,6 +132,9 @@
                         <q-item-label v-if="col.label == 'User'">{{ props.row.first_name }} {{ props.row.last_name
                         }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Role'">{{ col.value?.role_name }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Created'">
+                          {{ moment(props.row.createdAt).format("LL | h:mma") }}
+                        </q-item-label>
                         <q-item-label v-else>{{ col.value }}</q-item-label>
                       </q-item-section>
                     </q-item>
@@ -219,6 +222,7 @@ import { useQuasar } from "quasar";
 import { ApiService } from 'src/service/api-service';
 import { useAuthStore } from 'src/stores/auth.store';
 import AvatarUploader from "src/components/AvatarUploader.vue";
+import moment from 'moment';
 const columns = [
   {
     name: "user",
@@ -457,6 +461,7 @@ export default {
 
 
     return {
+      moment,
       rbacStore,
       registerUser,
       userRegister,

@@ -63,12 +63,10 @@
           <!-- bordered  style="background-color: #f1f1f1" -->
           <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" :columns="columns" ref="tableRef"
             v-model:pagination="pagination" :loading="loading" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
+            :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td>
-                  <q-checkbox left-label v-model="props.selected" />
-                </q-td>
+
                 <q-td>
 
                   <div>
@@ -186,8 +184,8 @@
                         <q-item-label v-else-if="col.label == 'Created On'">
                           {{ moment(props.row.createdAt).format("LL | h:mma") }}
                         </q-item-label>
-                        <q-item-label v-else-if="col.label == 'Location' && authStore.getUserRoleName == 'super_admin'"> <a
-                            target="_blank" class="text-blue-500"
+                        <q-item-label v-else-if="col.label == 'Location' && authStore.getUserRoleName == 'super_admin'">
+                          <a target="_blank" class="text-blue-500"
                             :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
                             Map</a></q-item-label>
                         <q-item-label v-else-if="col.label == 'Status'">{{ props.row.status }}</q-item-label>
