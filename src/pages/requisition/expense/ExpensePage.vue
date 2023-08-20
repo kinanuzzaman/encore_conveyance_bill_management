@@ -115,7 +115,7 @@
                           @click="$router.push(`/expense/add-expense/?id=${props.row._id}&type=${props.row.request_type}`)">
                           <q-item-section>Details</q-item-section>
                         </q-item>
-                        <q-item v-if="authStore.canAccess('expense_write')" clickable
+                        <q-item v-if="authStore.canAccess('expense_write') && props.row.status !== 'APPROVED'" clickable
                           @click="deleteExpanse(props.row._id)">
                           <q-item-section>Delete</q-item-section>
                         </q-item>
@@ -156,7 +156,7 @@
                             @click="$router.push(`/expense/add-expense/?id=${props.row._id}&type=${props.row.request_type}`)">
                             <q-item-section>Details</q-item-section>
                           </q-item>
-                          <q-item clickable v-if="authStore.canAccess('expense_write')"
+                          <q-item clickable v-if="authStore.canAccess('expense_write') && props.row.status !== 'APPROVED'"
                             @click="deleteExpanse(props.row._id)">
                             <q-item-section>Delete</q-item-section>
                           </q-item>

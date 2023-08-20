@@ -8,7 +8,8 @@
         <q-input outlined v-model="formData.amount" label="Amount" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" label="Notes" bg-color="white" :dense="true" />
         <div>
-          <q-uploader label="Individual upload" color="green" multiple @added="onAdded" @removed="onRemoved"
+          <q-uploader v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'"
+            label="Individual upload" color="green" multiple @added="onAdded" @removed="onRemoved"
             style="max-width: 300px" />
         </div>
 
@@ -18,8 +19,8 @@
         <div></div>
         <div class="flex items-center gap-5 justify-end">
 
-          <q-btn v-if="authStore.canAccess('expense_write')" label="Save" color="green" class="px-10 py-2.5"
-            @click="registerUser" />
+          <q-btn v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'" label="Save" color="green"
+            class="px-10 py-2.5" @click="registerUser" />
           <q-btn label="Back" color="red" class="px-10 py-2.5" @click="$router.back()" />
 
         </div>

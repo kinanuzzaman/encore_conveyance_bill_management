@@ -29,8 +29,8 @@
         </div>
 
         <q-card-actions align="center" class="px-3 py-5 absolute bottom-0 w-full">
-          <q-btn v-if="authStore.canAccess('cash_write')" label="Save" color="green" class="col"
-            @click="saveCashRequest" />
+          <q-btn v-if="authStore.canAccess('cash_write') && cashPayload.status !== 'APPROVED'" label="Save" color="green"
+            class="col" @click="saveCashRequest" />
           <q-btn label="Back" color="negative" class="col" @click="$router.back()" />
         </q-card-actions>
       </q-card>

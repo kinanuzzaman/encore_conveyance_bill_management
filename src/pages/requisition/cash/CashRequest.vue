@@ -118,7 +118,8 @@
                         <q-item clickable @click="$router.push(`/cash/add-cash?id=${props.row._id}`)">
                           <q-item-section>Details</q-item-section>
                         </q-item>
-                        <q-item clickable v-if="authStore.canAccess('cash_write')" @click="deleteCC(props.row._id)">
+                        <q-item clickable v-if="authStore.canAccess('cash_write') && props.row.status !== 'APPROVED'"
+                          @click="deleteCC(props.row._id)">
                           <q-item-section>Delete</q-item-section>
                         </q-item>
                         <q-item clickable v-if="authStore.canAccess('cash_write') || authStore.canAccess('cash_read')"
@@ -156,7 +157,8 @@
                           <q-item clickable @click="$router.push(`/cash/add-cash?id=${props.row._id}`)">
                             <q-item-section>Details</q-item-section>
                           </q-item>
-                          <q-item clickable v-if="authStore.canAccess('cash_write')" @click="deleteCC(props.row._id)">
+                          <q-item clickable v-if="authStore.canAccess('cash_write') && props.row.status !== 'APPROVED'"
+                            @click="deleteCC(props.row._id)">
                             <q-item-section>Delete</q-item-section>
                           </q-item>
                           <q-item clickable v-if="authStore.canAccess('cash_write') || authStore.canAccess('cash_read')"

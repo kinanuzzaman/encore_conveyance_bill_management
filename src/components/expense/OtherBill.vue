@@ -6,8 +6,8 @@
         <q-input outlined v-model="data.amount" label="Total Amount" bg-color="white" :dense="true" />
         <q-input outlined v-model="data.notes" label="Notes" bg-color="white" :dense="true" />
         <div>
-          <q-uploader label="Individual upload" color="green" multiple @added="onAdded" @removed="onRemoved"
-            class="w-full" />
+          <q-uploader v-if="authStore.canAccess('expense_write') && data.status !== 'APPROVED'" label="Individual upload"
+            color="green" multiple @added="onAdded" @removed="onRemoved" class="w-full" />
         </div>
         <q-btn v-if="data.uploads.length && authStore.canAccess('expense_write')" no-caps color="primary" icon="image"
           label="View images" @click="imageViewDialog = true" />
@@ -15,8 +15,8 @@
         <div></div>
         <div class="flex items-center gap-5 justify-end">
 
-          <q-btn v-if="authStore.canAccess('expense_write')" label="Save" color="green" class="px-10 py-2.5"
-            @click="registerUser" />
+          <q-btn v-if="authStore.canAccess('expense_write') && data.status !== 'APPROVED'" label="Save" color="green"
+            class="px-10 py-2.5" @click="registerUser" />
           <q-btn label="Back" color="red" class="px-10 py-2.5" @click="$router.back()" />
 
         </div>
