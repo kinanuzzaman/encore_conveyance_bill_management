@@ -294,7 +294,6 @@ export default {
 
     const userUpdateDialog = ref(false);
     const updateCandidate = ref({});
-    const updateCandidateFormData = new FormData();
 
     let confirm = ref(false);
     const userRegister = reactive({
@@ -363,6 +362,7 @@ export default {
         });
         confirm.value = false;
       } catch (error) {
+        btnLoaders.value.create_btn = false;
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
           color: "negative",
@@ -430,7 +430,7 @@ export default {
     async function updateUserInfo() {
       try {
         btnLoaders.value.update_btn = true;
-
+        let updateCandidateFormData = new FormData();
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
             updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
@@ -447,6 +447,7 @@ export default {
           position: "top",
         });
       } catch (error) {
+        btnLoaders.value.update_btn = false;
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
           color: "negative",
