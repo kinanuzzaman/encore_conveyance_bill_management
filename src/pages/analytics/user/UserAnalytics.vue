@@ -1,83 +1,83 @@
 <template>
   <section class="mx-4 my-6 flex justify-between">
-    <div class="text-2xl font-semibold">User Analytics</div>
-    <div class="flex md:gap-x-5 gap-1 justify-items-end">
-      <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
-          <q-list>
-            <q-item clickable v-close-popup @click="onItemClick">
-              <q-item-section>
-                <q-item-label>Delete All</q-item-label>
-              </q-item-section>
-            </q-item>
+    <div class="text-2xl font-semibold">Users Analytics</div>
 
-            <!-- <q-item clickable v-close-popup @click="onItemClick">
-                            <q-item-section>
-                                <q-item-label>Videos</q-item-label>
-                            </q-item-section>
-                        </q-item>
+    <div class="flex md:gap-x-5 gap-1 flex-row justify-items-end items-center">
+      <!-- <div class="w-full">
+        </div>
+        <div class="w-full">
+        </div> -->
+      <div class="md:w-[150px]">
+        <q-select class="w-full" outlined dense v-model="year" :options="['2023', '2024', '2025']" label="Year" filled />
 
-                        <q-item clickable v-close-popup @click="onItemClick">
-                            <q-item-section>
-                                <q-item-label>Articles</q-item-label>
-                            </q-item-section>
-                        </q-item> -->
-          </q-list>
-        </q-btn-dropdown></div>
-      <div class="md:w-[200px]">
-        <q-select rounded outlined dense v-model="model" :options="options" label="Select">
-          <template v-slot:prepend>
-            <q-icon name="filter_alt_off" />
-          </template>
-        </q-select>
       </div>
-      <div> <q-btn outline rounded to="" label="Monthly Report" no-caps />
-
+      <div class="md:w-[150px]">
+        <q-select class="w-full" outlined dense v-model="month" :options="months" label="Month" filled />
+      </div>
+      <div>
+        <q-btn color="green" unelevated no-caps label="Apply" @click="fetchAnalytics" />
       </div>
     </div>
   </section>
   <section>
     <div class="q-px-md gt-sm">
       <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-        :selected-rows-label="getSelectedString" selection="multiple" v-model:selected="selected" row-key="name">
+        row-key="name">
         <!-- <template v-slot:top-right>
             <q-btn color="primary" label="Action" :disable="selectedItems.length === 0" @click="performAction" />
         </template> -->
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td>
-              <q-checkbox v-model="props.selected" />
-            </q-td>
-            <q-td>
-
               <div>
-                <div class="text-xs">{{ props.row.name }}</div>
-              </div>
-
-            </q-td>
-            <q-td>
-              <div>
-                <div class="text-xs">{{ props.row.email }}</div>
+                <div class="text-xs">{{ props.row.user_data.first_name + ' ' + props.row.user_data.last_name }}</div>
               </div>
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.phone }}</div>
+                <div class="text-xs">{{ props.row.user_data.email }}</div>
               </div>
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ moment(props.row.created).format("LL | h:mma") }}</div>
+                <div class="text-xs">{{ props.row.user_data.balance }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
-              {{ props.row.status }}
+              <div>
+                <div class="text-xs">{{ props.row.user_data?.salary }} &#2547;</div>
+              </div>
             </q-td>
             <q-td>
-              {{ props.row.status }}
+              <div>
+                <div class="text-xs">{{ props.row.cash_data?.total_amount }} &#2547;</div>
+              </div>
             </q-td>
             <q-td>
-              <div class="bg-blue-200 inline p-2 text-blue-800">
-                {{ props.row.role }}
+              <div>
+                <div class="text-xs">{{ props.row.cash_data?.cashs?.length }}</div>
+              </div>
+            </q-td>
+            <q-td>
+              <div>
+                <div class="text-xs">{{ props.row.expense_data?.expenses?.length }} </div>
+              </div>
+            </q-td>
+            <q-td>
+              <div>
+                <div class="text-xs">{{ props.row.expense_data?.total_amount }} &#2547;</div>
+              </div>
+            </q-td>
+            <q-td>
+              <div>
+                <div class="text-xs">{{ props.row.salary_request ? `Requested - ${props.row.salary_request.status}` : 'No'
+                }}</div>
+              </div>
+            </q-td>
+            <q-td>
+              <div>
+                <div class="text-xs">{{ props.row.salary_received ? `Requested - ${props.row.salary_received.status}` :
+                  'No' }}</div>
               </div>
             </q-td>
             <q-td>
@@ -85,14 +85,26 @@
                 <q-btn flat icon="more_vert">
                   <q-menu anchor="top middle" self="top right">
                     <q-item clickable>
-                      <q-item-section>Update</q-item-section>
+                      <q-item-section>View Cash Requests</q-item-section>
                     </q-item>
                     <q-item clickable>
-                      <q-item-section>Delete</q-item-section>
+                      <q-item-section>View Expense Requests</q-item-section>
                     </q-item>
-                    <q-item clickable>
-                      <q-item-section>Update Status</q-item-section>
+
+                    <q-item v-if="props.row.salary_request" @click="createSalaryReq(props.row)" clickable>
+                      <q-item-section v-if="props.row.salary_request.status !== 'APPROVED'">Update Salary Request
+                        Status</q-item-section>
                     </q-item>
+
+                    <q-item @click="approvalCash(props.row)" v-if="!props.row.salary_request" clickable>
+                      <q-item-section> Send Salary</q-item-section>
+                    </q-item>
+
+                    <q-item @click="approvalExp(props.row)"
+                      v-if="props.row.salary_received && props.row.salary_received.status !== 'APPROVED'" clickable>
+                      <q-item-section>Update Salary Receive Request</q-item-section>
+                    </q-item>
+
                   </q-menu>
                 </q-btn>
               </div>
@@ -153,17 +165,30 @@
       </q-table>
     </div>
   </section>
+  <q-dialog v-model="confirm" persistent>
+    <emp-attendance />
+  </q-dialog>
+  <q-dialog v-model="approvalExp" persistent>
+    <approval-process :data="approvalCandidate" req_type="expense" user_type="payer" @close="closeStatusWindow" />
+  </q-dialog>
+  <q-dialog v-model="approvalCash" persistent>
+    <approval-process :data="approvalCandidate" req_type="cash" user_type="payee" @close="closeStatusWindow" />
+  </q-dialog>
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
-import moment from 'moment';
+import EmpAttendance from "src/components/attendance/EmpAttendance.vue";
+import ApprovalProcess from "src/components/ApprovalProcess.vue";
+import { ref, onMounted } from "vue";
 import { ApiService } from 'src/service/api-service';
+import { useQuasar } from 'quasar';
+import { useAuthStore } from "src/stores/auth.store";
+import moment from 'moment';
 const columns = [
   {
     name: "user",
     required: true,
-    label: "Vendor",
+    label: "User",
     align: "left",
     field: (row) => row.name,
     format: (val) => `${val}`,
@@ -172,43 +197,65 @@ const columns = [
   {
     name: "email",
     align: "left",
-    label: "Amount",
+    label: "Email",
     field: "email",
     sortable: true,
   },
   {
-    name: "phone",
+    name: "balance",
     align: "left",
-    label: "Paid By",
-    field: "phone",
+    label: "Balance",
+    field: "balance",
     sortable: true,
   },
   {
-    name: "created",
+    name: "salary",
     align: "left",
-    label: "Created On",
-    field: "created",
+    label: "Salary",
+    field: "salary",
     sortable: true,
   },
   {
-    name: "location",
+    name: "total_cash",
     align: "left",
-    label: "Location",
-    field: "location",
+    label: "Total Cash Amount",
+    field: "total_cash",
     sortable: true,
   },
   {
-    name: "status",
+    name: "total_cash_count",
     align: "left",
-    label: "Status",
-    field: "status",
+    label: "Total Cash Requests",
+    field: "total_cash_count",
     sortable: true,
   },
   {
-    name: "role",
+    name: "total_expense",
     align: "left",
-    label: "Approvals",
-    field: "role",
+    label: "Total Expense Amount",
+    field: "total_expense",
+    sortable: true,
+  },
+  {
+    name: "total_expense_count",
+    align: "left",
+    label: "Total Expense Requests",
+    field: "total_expense_count",
+    sortable: true,
+  },
+  {
+    name: "salary_request",
+    align: "left",
+    label: "Is Salary Requested",
+    field: "salary_request",
+    sortable: true,
+  },
+  {
+    name: "salary_received",
+    align: "left",
+    label: "Is Salary Received Requested",
+    field: "salary_received",
+    sortable: true,
   },
   {
     name: "action",
@@ -217,53 +264,155 @@ const columns = [
   },
 ]
 
-export default {
-  setup() {
-    const apiSerivce = new ApiService();
+const months = [
+  {
+    label: "January",
+    value: "01",
+  },
+  {
+    label: "February",
+    value: "02",
+  },
+  {
+    label: "March",
+    value: "03",
+  },
+  {
+    label: "April",
+    value: "04",
+  },
+  {
+    label: "May",
+    value: "05",
+  },
+  {
+    label: "June",
+    value: "06",
+  },
+  {
+    label: "July",
+    value: "07",
+  },
+  {
+    label: "August",
+    value: "08",
+  },
+  {
+    label: "September",
+    value: "09",
+  },
+  {
+    label: "October",
+    value: "10",
+  },
+  {
+    label: "November",
+    value: "11",
+  },
+  {
+    label: "December",
+    value: "12",
+  }
+]
 
-    onMounted(async () => {
-      const response = await apiSerivce.get("/users/analytics");
-      console.log(response);
+
+export default {
+  components: { EmpAttendance, ApprovalProcess },
+  setup() {
+    const selected = ref([]);
+    const apiSerivce = new ApiService();
+    const $q = useQuasar();
+    const authStore = useAuthStore();
+    const rows = ref([]);
+    const approvalExp = ref(false)
+    const approvalCash = ref(false)
+    const approvalCandidate = ref(null);
+    const loading = ref(false);
+    const year = ref('');
+    const month = ref({});
+
+    onMounted(() => {
+
+      const currentDate = new Date();
+      const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+      month.value = months.find(month => month.value === currentMonth);
+      year.value = currentDate.getFullYear();
+
+      fetchAnalytics()
     });
 
-    return {
-      moment,
-      columns,
+    async function fetchAnalytics() {
+      try {
+        loading.value = true;
+        const response = await apiSerivce.get("/users/analytics", {
+          params: {
+            year: year.value,
+            month: month.value.value,
+          }
+        });
+        rows.value = response.data.data;
+        loading.value = false;
+      } catch (error) {
+        console.log("🚀 ~ file: AttendancePage.vue:260 ~ fetchAnalytics ~ error:", error)
 
-      rows: [
-        {
-          name: "Frozen Yogurt",
-          designation: "Manager",
-          email: "demo@email.com",
-          phone: "1234567890",
-          created: "12 March 2023",
-          role: "Manager Author Connect",
-          status: "Active",
-        },
-        {
-          name: "Frozen ",
-          designation: "Manager",
-          email: "demo@email.com",
-          phone: "1234567890",
-          created: "12 March 2023",
-          role: "Manager Author Connect",
-          status: "Active",
-        },
-        {
-          name: "Yogurt",
-          designation: "Manager",
-          email: "demo@email.com",
-          phone: "1234567890",
-          created: "12 March 2023",
-          role: "Manager Author Connect",
-          status: "Active",
-        },
-      ],
-      selected: ref([]),
+      }
+    }
+
+    function closeStatusWindow() {
+      approvalExp.value = false;
+      approvalCash.value = false;
+      fetchAnalytics()
+    }
+
+    async function createSalaryReq(data) {
+      try {
+        const response = await apiSerivce.post("/send-cash", {
+          amount: data.salary,
+          payee: data.user_data._id,
+        });
+        console.log("🚀 ~ file: UserAnalytics.vue:350 ~ createSalaryReq ~ response:", response)
+        $q.notify({
+          color: "green-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Salary Request Approved",
+        });
+        fetchAnalytics();
+      } catch (error) {
+        console.log("🚀 ~ file: UserAnalytics.vue:330 ~ createSalaryReq ~ error:", error)
+
+      }
+    }
+
+    function approveSalaryRequest(data) {
+      approvalCandidate.value = data;
+      approvalCash.value = true;
+    }
+
+    function approveExpenseRequest(data) {
+      approvalCandidate.value = data;
+      approvalExp.value = true;
+    }
+
+    return {
+      columns,
+      rows,
+      selected,
+      $q,
+      authStore,
+      loading,
+      months,
+      month,
+      year,
+      fetchAnalytics,
+      moment,
+      createSalaryReq,
+      approvalExp,
+      approvalCash,
+      closeStatusWindow,
+      approveSalaryRequest,
+      approveExpenseRequest,
     };
   },
-
-
-
 };
 </script>
