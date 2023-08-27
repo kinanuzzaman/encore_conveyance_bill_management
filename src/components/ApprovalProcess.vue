@@ -1,19 +1,22 @@
 <template>
   <q-card class="my-card">
-    <q-card-section class="text-center">
-      <div class="float-right"><q-btn icon="close" flat round dense v-close-popup /></div>
-      <h1 class="text-2xl mt-10">Approval/Reject Process</h1>
-    </q-card-section>
     <div class="card">
-      <!-- <q-card-section>
-            </q-card-section> -->
-      <q-card-section class="grid grid-cols-2">
-        <div class="flex flex-col justify-end text-lg gap-3">
-          <span>Type: {{ props.data.type }}</span>
-          <span>Amount: {{ props.data.amount }}</span>
+      <q-card-section class="text-center flex justify-between">
+        <h1 class="md:text-2xl text-xl">Approval/Reject Process</h1>
+        <div class="float-right"><q-btn icon="close" flat round dense v-close-popup /></div>
+      </q-card-section>
+      <q-card-section class="grid md:grid-cols-2 grid-cols-1">
+        <div class="flex md:flex-col flex-row justify-between  md:text-lg text-md gap-3">
+          <div>
+            <span class="text-gray-600 text-bold">Type:</span> <span>{{ props.data.type || props.data.request_type
+            }}</span>
+          </div>
+          <div>
+            <span class="text-gray-600 text-bold">Amount:</span><span>{{ props.data.amount }}</span>
+          </div>
         </div>
         <div class="flex flex-col gap-3">
-          <span class="font-bold">Request by</span>
+          <span class="font-bold md:pt-0 pt-5">Request by</span>
           <div class="flex items-center gap-2">
             <q-avatar font-size="20px" color="green" text-color="white">
               <img v-if="props.data[user_type].profile_img" :src="props.data[user_type].profile_img" alt="">
@@ -28,7 +31,7 @@
           </div>
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="gt-sm">
         <q-table title="History" :rows="usersStatusTableData" :columns="columns" flat>
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -52,10 +55,48 @@
           </template>
         </q-table>
       </q-card-section>
+      <div class="lt-md">
+        <q-table :rows="usersStatusTableData" :columns="columns" row-key="name" selection="multiple"
+          v-model:selected="selected" :filter="filter" grid hide-header>
+          <!-- <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template> -->
+          <template v-slot:item="props">
+            <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+              <q-card bordered flat>
+                <q-list dense>
+                  <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
+                    <q-item-section>
+                      <q-item-label>{{ col.label }}</q-item-label>
+                    </q-item-section>
+                    <q-item-section side>
+                      <q-item-label v-if="col.label == 'User'">{{ props.row.user }}</q-item-label>
+                      <q-item-label v-else-if="col.label == 'Note'">{{ props.row.note }}</q-item-label>
+                      <q-item-label v-else-if="col.label == 'Action'">{{ props.row.status }}</q-item-label>
+                      <q-item-label v-else-if="col.label == 'Active'">
+                        <div class="text-xs" :class="props.row.changed ? 'text-red-500' : 'text-green'">{{
+                          props.row.changed ?
+                          'No' : 'Yes' }}</div>
+                      </q-item-label>
+                      <q-item-label v-else-if="col.label == 'Time'" class="text-xs">{{ props.row.timeStamp
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card>
+            </div>
+          </template>
+
+        </q-table>
+      </div>
       <q-card-actions>
-        <div class="flex w-full justify-center">
-          <q-input class="w-1/2" dense outlined v-model="note" type="text" placeholder="Notes" />
-          <div class="flex w-1/2 justify-center gap-3 items-center">
+        <div class="flex md:flex-row flex-col w-full justify-center">
+          <q-input class="md:w-1/2 md:pb-0 pb-3" dense outlined v-model="note" type="text" placeholder="Notes" />
+          <div class="flex md:w-1/2 justify-center gap-3 items-center">
             <q-btn unelevated no-caps label="Approve" color="green" v-if="showApproveBtn"
               @click="updateStatus('APPROVED')" />
             <q-btn unelevated no-caps label="Reject" color="negative" v-if="showRejectBtn"
@@ -113,7 +154,7 @@ const columns = [
 const apiService = new ApiService();
 const authStore = useAuthStore();
 const $q = useQuasar();
-const emit = defineEmits([ 'close' ]);
+const emit = defineEmits(['close']);
 
 const showApproveBtn = ref(false);
 const showRejectBtn = ref(false);
@@ -212,6 +253,10 @@ async function updateStatus(status) {
 }
 
 .card {
-  padding: 0px 50px 50px 50px;
+  padding: 32px 50px 50px 50px;
+
+  @media (max-width: 768px) {
+    padding: 8px 10px 20px 10px;
+  }
 }
 </style>

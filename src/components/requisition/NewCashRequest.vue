@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="q-px-md">
-      <q-card flat class="h-[85vh] bg-transparent w-1/2">
+      <q-card flat class="h-[85vh] bg-transparent md:w-1/2">
         <!-- <div class="flex justify-center py-10">
             <q-avatar
               size="100px"
@@ -11,7 +11,7 @@
               icon="account_circle"
             />
           </div> -->
-        <q-card-section class="text-center text-4xl font-bold">
+        <q-card-section class="text-center md:text-4xl text-2xl font-bold">
           Cash Request
         </q-card-section>
         <q-card-section>
@@ -64,7 +64,7 @@ export default {
       payer: null,
       type: null,
     });
-    const options = [ {
+    const options = [{
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -118,7 +118,7 @@ export default {
       label: "Other",
       value: "OtherBill",
       type: "OTHERS",
-    }, ]
+    },]
 
     const saveCashRequest = async () => {
       if (!navigator.geolocation) {
@@ -166,15 +166,15 @@ export default {
         console.log("🚀 ~ file: NewCashRequest.vue:140 ~ onRequest ~ data:", details.data.data);
         if (details.data.data) {
           const type = options.find((item) => {
-            return item.type == details.data.data[ 0 ].type;
+            return item.type == details.data.data[0].type;
           });
 
           if (type) {
             cashPayload.type = type;
-            cashPayload.amount = details.data.data[ 0 ].amount;
-            cashPayload.payer = details.data.data[ 0 ].payer._id;
-            payerData.label = details.data.data[ 0 ].payer.first_name + " " + details.data.data[ 0 ].payer.last_name;
-            payerData.value = details.data.data[ 0 ].payer._id;
+            cashPayload.amount = details.data.data[0].amount;
+            cashPayload.payer = details.data.data[0].payer._id;
+            payerData.label = details.data.data[0].payer.first_name + " " + details.data.data[0].payer.last_name;
+            payerData.value = details.data.data[0].payer._id;
             // concat(" ", details.data.data[0].payer.last_name)
             console.log(details);
           }

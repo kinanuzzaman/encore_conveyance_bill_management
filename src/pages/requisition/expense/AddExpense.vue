@@ -1,7 +1,7 @@
 <template>
   <main class="px-5">
-    <div class="row">
-      <section class="col-lg-6">
+    <div class="flex md:justify-start justify-center">
+      <section class="lg:w-1/2">
         <div class="px-4">
           <q-select :disable="!!$route.query.id" class="bg-white" outlined v-model="activeCompo" :options="options"
             :dense="true" label="Choose expense type" />
@@ -40,7 +40,7 @@ export default {
     const $q = useQuasar();
     const router = useRouter();
     const route = useRoute();
-    const options = [ {
+    const options = [{
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -94,7 +94,7 @@ export default {
       label: "Other Bill",
       value: "OtherBill",
       type: "OTHERS",
-    }, ]
+    },]
     const expenseDetails = ref(null);
     async function createExpance(formData) {
       if (!navigator.geolocation) {

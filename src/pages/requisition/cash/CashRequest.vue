@@ -3,7 +3,7 @@
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
     <section class="mx-4 my-6 flex justify-between">
-      <div class="text-2xl font-semibold">Cash Request</div>
+      <div class="md:text-2xl text-xl font-semibold">Cash Request</div>
 
       <div class="flex md:gap-x-5 gap-1 justify-items-end">
         <!-- <div> <q-btn-dropdown outline rounded label="Action" icon="edit">
@@ -305,7 +305,7 @@ const columns = ref([
     field: "action",
   },
 ])
-const cash_types = [ {
+const cash_types = [{
   label: "Product Purchase",
   value: "ProductPurchase",
   type: "PRODUCT_PURCHASE",
@@ -359,7 +359,7 @@ const cash_types = [ {
   label: "Other",
   value: "OtherBill",
   type: "OTHERS",
-}, ]
+},]
 
 export default {
   components: { SearchAddCompo, ApprovalProcess },
@@ -389,13 +389,13 @@ export default {
 
     function doFilter() {
       if (data_filter.own_data) {
-        filter_values[ 'payee' ] = authStore.getUserInfo._id;
+        filter_values['payee'] = authStore.getUserInfo._id;
       }
       if (data_filter.employee) {
-        filter_values[ 'payee' ] = data_filter.employee;
+        filter_values['payee'] = data_filter.employee;
       }
       if (data_filter.type) {
-        filter_values[ 'request_type' ] = data_filter.type.type;
+        filter_values['request_type'] = data_filter.type.type;
       }
       tableRef.value.requestServerInteraction();
     }
@@ -501,7 +501,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
+      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;

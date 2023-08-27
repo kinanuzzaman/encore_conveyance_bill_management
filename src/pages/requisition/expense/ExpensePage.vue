@@ -36,17 +36,19 @@
         </div> -->
         <div>
           <q-btn outline label="Filter" rounded>
-            <q-menu max-width="500px">
-              <div class="flex flex-col gap-3 w-auto q-pa-md">
+            <q-menu class="q-pa-sm" anchor="bottom left" self="top middle">
+              <q-list class="flex flex-col justify-center gap-3 min-w-[180px]">
                 <q-toggle v-if="authStore.canAccess('read_all_expense')" v-model="data_filter.own_data"
                   label="My Request" />
                 <q-select dense outlined v-model="data_filter.type" :options="expense_types" label="Type" filled />
-                <SearchAddCompo v-if="authStore.canAccess('read_all_expense')" :disable="data_filter.own_data"
-                  @selected="e => data_filter.employee = e" label="Employee" api="users" userType="EMPLOYEE" />
+
+                <SearchAddCompo :disable="data_filter.own_data" @selected="e => data_filter.employee = e" label="Employee"
+                  api="users" userType="EMPLOYEE" class="w-full" />
+
                 <q-separator class="mt-3" />
                 <q-btn color="green" label="Apply" no-caps @click="doFilter" />
                 <q-btn color="red" label="Clear" no-caps @click="clearFilter" />
-              </div>
+              </q-list>
             </q-menu>
           </q-btn>
         </div>
@@ -292,7 +294,7 @@ const columns = ref([
     field: "action",
   },
 ])
-const expense_types = [ {
+const expense_types = [{
   label: "Product Purchase",
   value: "ProductPurchase",
   type: "PRODUCT_PURCHASE",
@@ -346,7 +348,7 @@ const expense_types = [ {
   label: "Other Bill",
   value: "OtherBill",
   type: "OTHERS",
-}, ]
+},]
 export default {
   components: {
     SearchAddCompo,
@@ -377,13 +379,13 @@ export default {
 
     function doFilter() {
       if (data_filter.own_data) {
-        filter_values[ 'payer' ] = authStore.getUserInfo._id;
+        filter_values['payer'] = authStore.getUserInfo._id;
       }
       if (data_filter.employee) {
-        filter_values[ 'payer' ] = data_filter.employee;
+        filter_values['payer'] = data_filter.employee;
       }
       if (data_filter.type) {
-        filter_values[ 'request_type' ] = data_filter.type.type;
+        filter_values['request_type'] = data_filter.type.type;
       }
       tableRef.value.requestServerInteraction();
     }

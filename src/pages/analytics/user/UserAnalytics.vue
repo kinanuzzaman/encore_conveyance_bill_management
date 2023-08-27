@@ -1,8 +1,8 @@
 <template>
-  <section class="mx-4 my-6 flex justify-between">
+  <section class="mx-4 my-6 flex md:flex-row flex-col justify-between">
     <div class="text-2xl font-semibold">Users Analytics</div>
 
-    <div class="flex md:gap-x-5 gap-1 flex-row justify-items-end items-center">
+    <div class="flex md:gap-x-5 gap-1 justify-center items-center md:mt-0 mt-3">
       <!-- <div class="w-full">
         </div>
         <div class="w-full">

@@ -3,7 +3,7 @@
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
     <section class="mx-4 py-6 flex justify-between">
-      <div class="text-2xl font-semibold">User Management</div>
+      <div class="md:text-2xl text-xl font-semibold">User Management</div>
 
       <div class="flex gap-5">
         <q-btn color="orange" v-if="authStore.canAccess('user_create')" @click="confirm = true" class="rounded-lg"
@@ -149,11 +149,11 @@
     </div>
 
     <q-dialog v-model="confirm" class="" persistent>
-      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
+      <q-card class="my-card md:p-10 pt-5">
         <!-- <div class="flex justify-center md:py-10">
           <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
         </div> -->
-        <span class="text-xl py-5 text-center">Invite new user</span>
+        <span class="text-xl p-5 text-center">Invite new user</span>
         <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
           <q-input outlined v-model="userRegister.first_name" label="First Name" bg-color="white" :dense="true" />
           <q-input outlined v-model="userRegister.last_name" label="Last Name" bg-color="white" :dense="true" />
@@ -353,7 +353,7 @@ export default {
         btnLoaders.value.create_btn = false;
         tableRef.value.requestServerInteraction();
         Object.keys(userRegister).forEach((key) => {
-          userRegister[ key ] = null;
+          userRegister[key] = null;
         });
         $q.notify({
           message: "User created",
@@ -433,8 +433,8 @@ export default {
         let updateCandidateFormData = new FormData();
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
-            updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
-          } else updateCandidateFormData.append(key, updateCandidate.value[ key ]);
+            updateCandidateFormData.append(key, updateCandidate.value[key].value);
+          } else updateCandidateFormData.append(key, updateCandidate.value[key]);
         });
 
         await apiSerivce.put(`/users/${updateCandidate.value._id}`, updateCandidateFormData);
@@ -492,4 +492,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-card {
+  width: 1020px;
+  max-width: 80vw;
+
+  @media (max-width: 768px) {
+    max-width: 100vw;
+  }
+}
+</style>

@@ -2,14 +2,10 @@
   <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
-    <section class="mx-4 my-6 flex justify-between">
+    <section class="mx-4 my-6 flex md:flex-row flex-col justify-between">
       <div class="text-2xl font-semibold">Attendance Analytics</div>
 
-      <div class="flex md:gap-x-5 gap-1 flex-row justify-items-end items-center">
-        <!-- <div class="w-full">
-        </div>
-        <div class="w-full">
-        </div> -->
+      <div class="flex md:gap-x-5 gap-1 justify-center items-center md:mt-0 mt-3">
         <div class="md:w-[150px]">
           <q-select class="w-full" outlined dense v-model="year" :options="['2023', '2024', '2025']" label="Year"
             filled />
@@ -39,10 +35,10 @@
                     <div class="flex items-center gap-4">
                       <div>
                         <q-avatar font-size="20px" color="green" text-color="white">
-                            <img v-if="props.row.user.profile_img" :src="props.row.user.profile_img" alt="">
-                            <span v-else>{{ props.row.user.first_name.charAt(0)
-                              + props.row.user.last_name.charAt(0) }}</span>
-                          </q-avatar>
+                          <img v-if="props.row.user.profile_img" :src="props.row.user.profile_img" alt="">
+                          <span v-else>{{ props.row.user.first_name.charAt(0)
+                            + props.row.user.last_name.charAt(0) }}</span>
+                        </q-avatar>
                       </div>
                       <div class="flex gap-2">
                         <span class="text-xs">{{ props.row.user.first_name }} {{ props.row.user.last_name }}</span>
