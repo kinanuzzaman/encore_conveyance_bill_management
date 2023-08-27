@@ -67,4 +67,13 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-card {
+    width: 1020px;
+    max-width: 80vw;
+
+    @media (max-width: 768px) {
+        max-width: 100vw;
+    }
+}
+</style>

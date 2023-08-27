@@ -5,7 +5,7 @@
     <section class="mx-4 py-6 flex justify-between">
       <div class="text-2xl font-semibold">Vendor Management</div>
 
-      <div class="flex gap-5">
+      <div class="flex md:gap-5 gap-3 md:mt-0 mt-3">
         <q-btn color="blue" @click="$router.push('vendor/pending')" class="rounded-lg" unelevated
           label="Pending Vendors" />
         <q-btn color="orange" v-if="authStore.canAccess('user_create')" @click="confirm = true" class="rounded-lg"
@@ -151,7 +151,7 @@
     </div>
 
     <q-dialog v-model="confirm" class="" persistent>
-      <q-card class="my-card p-10" style="width: 1020px; max-width: 80vw">
+      <q-card class="my-card md:p-10 p-5">
         <!-- <div class="flex justify-center md:py-10">
           <q-avatar size="100px" font-size="52px" color="teal" text-color="white" icon="account_circle" />
         </div> -->
@@ -356,7 +356,7 @@ export default {
         btnLoaders.value.create_btn = false;
         tableRef.value.requestServerInteraction();
         Object.keys(userRegister).forEach((key) => {
-          userRegister[ key ] = null;
+          userRegister[key] = null;
         });
         $q.notify({
           message: "Vendor User created",
@@ -435,8 +435,8 @@ export default {
 
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
-            updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
-          } else updateCandidateFormData.append(key, updateCandidate.value[ key ]);
+            updateCandidateFormData.append(key, updateCandidate.value[key].value);
+          } else updateCandidateFormData.append(key, updateCandidate.value[key]);
         });
 
         await apiSerivce.put(`/users/${updateCandidate.value._id}`, updateCandidateFormData);
@@ -493,4 +493,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-card {
+  width: 1020px;
+  max-width: 80vw;
+
+  @media (max-width: 768px) {
+    max-width: 100vw;
+  }
+}
+</style>

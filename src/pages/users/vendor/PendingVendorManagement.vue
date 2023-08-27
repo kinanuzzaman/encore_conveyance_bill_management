@@ -2,9 +2,9 @@
   <!-- class="bg-[url('../assets/home/bg.png')] bg-no-repeat bg-cover" -->
   <main>
     <!-- Section Name  style="font-family: 'Roboto Slab', 'serif'"-->
-    <section class="mx-4 py-6 flex justify-between">
-      <div class="text-2xl font-semibold">Pending Vendor Management</div>
-      <q-btn color="red" label="Back" no-caps @click="$router.back()" />
+    <section class="mx-4 py-6 flex">
+      <q-btn flat color="green" icon="arrow_back" no-caps @click="$router.back()" />
+      <div class="md:text-2xl text-xl font-semibold">Pending Vendor Management</div>
     </section>
     <!-- Table -->
     <!-- grid md:grid-cols-3 grid-cols-1 -->

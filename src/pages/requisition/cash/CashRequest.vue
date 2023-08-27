@@ -36,8 +36,8 @@
         </div> -->
         <div>
           <q-btn outline label="Filter" rounded>
-            <q-menu max-width="500px">
-              <div class="flex flex-col gap-3 w-auto q-pa-md">
+            <q-menu class="q-pa-sm" anchor="bottom left" self="top middle">
+              <div class="flex flex-col justify-center gap-3 min-w-[180px]">
                 <q-toggle v-if="authStore.canAccess('read_all_cash')" v-model="data_filter.own_data" label="My Request" />
                 <q-select dense outlined v-model="data_filter.type" :options="cash_types" label="Type" filled />
                 <SearchAddCompo v-if="authStore.canAccess('read_all_cash')" :disable="data_filter.own_data"
