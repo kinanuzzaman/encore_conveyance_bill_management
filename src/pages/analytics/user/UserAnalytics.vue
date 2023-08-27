@@ -81,26 +81,31 @@
               </div>
             </q-td>
             <q-td>
+              <div>
+                <div class="text-xs">{{ props.row.payable_amount }}</div>
+              </div>
+            </q-td>
+            <q-td>
               <div class="column items-end">
                 <q-btn flat icon="more_vert">
                   <q-menu anchor="top middle" self="top right">
-                    <q-item clickable>
+                    <q-item clickable @click="$router.push(`/cash?user=${props.row.user_data._id}`)">
                       <q-item-section>View Cash Requests</q-item-section>
                     </q-item>
-                    <q-item clickable>
+                    <q-item clickable @click="$router.push(`/expense?user=${props.row.user_data._id}`)">
                       <q-item-section>View Expense Requests</q-item-section>
                     </q-item>
 
-                    <q-item v-if="props.row.salary_request" @click="createSalaryReq(props.row)" clickable>
+                    <q-item v-if="props.row.salary_request" @click="approveSalaryRequest(props.row)" clickable>
                       <q-item-section v-if="props.row.salary_request.status !== 'APPROVED'">Update Salary Request
                         Status</q-item-section>
                     </q-item>
 
-                    <q-item @click="approvalCash(props.row)" v-if="!props.row.salary_request" clickable>
+                    <q-item @click="createSalaryReq(props.row)" v-if="!props.row.salary_request" clickable>
                       <q-item-section> Send Salary</q-item-section>
                     </q-item>
 
-                    <q-item @click="approvalExp(props.row)"
+                    <q-item @click="approveExpenseRequest(props.row)"
                       v-if="props.row.salary_received && props.row.salary_received.status !== 'APPROVED'" clickable>
                       <q-item-section>Update Salary Receive Request</q-item-section>
                     </q-item>
@@ -165,6 +170,9 @@
       </q-table>
     </div>
   </section>
+
+
+
   <q-dialog v-model="confirm" persistent>
     <emp-attendance />
   </q-dialog>
@@ -172,7 +180,7 @@
     <approval-process :data="approvalCandidate" req_type="expense" user_type="payer" @close="closeStatusWindow" />
   </q-dialog>
   <q-dialog v-model="approvalCash" persistent>
-    <approval-process :data="approvalCandidate" req_type="cash" user_type="payee" @close="closeStatusWindow" />
+    <approval-process :data="approvalCandidate" user_type="payee" @close="closeStatusWindow" />
   </q-dialog>
 </template>
 
@@ -218,43 +226,50 @@ const columns = [
   {
     name: "total_cash",
     align: "left",
-    label: "Total Cash Amount",
+    label: "Cash Amount",
     field: "total_cash",
     sortable: true,
   },
   {
     name: "total_cash_count",
     align: "left",
-    label: "Total Cash Requests",
+    label: "Cash Requests",
     field: "total_cash_count",
     sortable: true,
   },
   {
     name: "total_expense",
     align: "left",
-    label: "Total Expense Amount",
+    label: "Expense Amount",
     field: "total_expense",
     sortable: true,
   },
   {
     name: "total_expense_count",
     align: "left",
-    label: "Total Expense Requests",
+    label: "Expense Requests",
     field: "total_expense_count",
     sortable: true,
   },
   {
     name: "salary_request",
     align: "left",
-    label: "Is Salary Requested",
+    label: "Salary Requested",
     field: "salary_request",
     sortable: true,
   },
   {
     name: "salary_received",
     align: "left",
-    label: "Is Salary Received Requested",
+    label: "Salary Received Requested",
     field: "salary_received",
+    sortable: true,
+  },
+  {
+    name: "payable_amount",
+    align: "left",
+    label: "Payable Amount",
+    field: "payable_amount",
     sortable: true,
   },
   {
@@ -366,8 +381,8 @@ export default {
 
     async function createSalaryReq(data) {
       try {
-        const response = await apiSerivce.post("/send-cash", {
-          amount: data.salary,
+        const response = await apiSerivce.post("/cash-control/send-cash", {
+          amount: data.payable_amount,
           payee: data.user_data._id,
         });
         console.log("🚀 ~ file: UserAnalytics.vue:350 ~ createSalaryReq ~ response:", response)
@@ -375,22 +390,28 @@ export default {
           color: "green-4",
           textColor: "white",
           icon: "cloud_done",
-          message: "Salary Request Approved",
+          message: "Salary Request Created Successfully",
         });
         fetchAnalytics();
       } catch (error) {
-        console.log("🚀 ~ file: UserAnalytics.vue:330 ~ createSalaryReq ~ error:", error)
+        console.log("🚀 ~ file: UserAnalytics.vue:350 ~ createSalaryReq ~ error:", error)
+        $q.notify({
+          color: "red-4",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Salary Request Creation Failed",
+        });
 
       }
     }
 
     function approveSalaryRequest(data) {
-      approvalCandidate.value = data;
+      approvalCandidate.value = data.salary_request;
       approvalCash.value = true;
     }
 
     function approveExpenseRequest(data) {
-      approvalCandidate.value = data;
+      approvalCandidate.value = data.salary_received;
       approvalExp.value = true;
     }
 
@@ -412,6 +433,7 @@ export default {
       closeStatusWindow,
       approveSalaryRequest,
       approveExpenseRequest,
+      approvalCandidate
     };
   },
 };

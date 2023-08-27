@@ -38,10 +38,10 @@
           <q-btn outline label="Filter" rounded>
             <q-menu max-width="500px">
               <div class="flex flex-col gap-3 w-auto q-pa-md">
-                <q-toggle v-model="data_filter.own_data" label="My Request" />
+                <q-toggle v-if="authStore.canAccess('read_all_cash')" v-model="data_filter.own_data" label="My Request" />
                 <q-select dense outlined v-model="data_filter.type" :options="cash_types" label="Type" filled />
-                <SearchAddCompo :disable="data_filter.own_data" @selected="e => data_filter.employee = e" label="Employee"
-                  api="users" userType="EMPLOYEE" />
+                <SearchAddCompo v-if="authStore.canAccess('read_all_cash')" :disable="data_filter.own_data"
+                  @selected="e => data_filter.employee = e" label="Employee" api="users" userType="EMPLOYEE" />
                 <q-separator class="mt-3" />
                 <q-btn color="green" label="Apply" no-caps @click="doFilter" />
                 <q-btn color="red" label="Clear" no-caps @click="clearFilter" />
@@ -89,10 +89,12 @@
                   </div>
                 </q-td>
 
-                <q-td v-if="authStore.getUserRoleName == 'super_admin' && props.row.creator_location">
-                  <a target="_blank" class="text-blue-500"
+                <q-td>
+                  <a v-if="authStore.getUserRoleName == 'super_admin' && props.row.creator_location" target="_blank"
+                    class="text-blue-500"
                     :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
                     Map</a>
+                  <span v-if="authStore.getUserRoleName == 'super_admin' && !props.row.creator_location">N/A</span>
                 </q-td>
 
                 <q-td>
@@ -184,11 +186,12 @@
                         <q-item-label v-else-if="col.label == 'User'">{{ props.row.payee?.first_name + ' ' +
                           props.row.payee?.last_name
                         }}</q-item-label>
-                        <q-item-label
-                          v-else-if="col.label == 'Location' && authStore.getUserRoleName == 'super_admin' && props.row.creator_location">
-                          <a target="_blank" class="text-blue-500"
+                        <q-item-label v-else-if="col.label == 'Location' && authStore.getUserRoleName == 'super_admin'">
+                          <a v-if="props.row.creator_location" target="_blank" class="text-blue-500"
                             :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
-                            Map</a></q-item-label>
+                            Map</a>
+                          <span v-else>N/A</span>
+                        </q-item-label>
                         <q-item-label v-else-if="col.label == 'Status'">{{ props.row.status }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Created On'">
                           {{ moment(props.row.createdAt).format("LL | h:mma") }}
@@ -230,6 +233,8 @@ import { useQuasar } from "quasar";
 import { useAuthStore } from "src/stores/auth.store"
 import moment from "moment";
 import SearchAddCompo from 'src/components/SearchAddCompo.vue';
+import { useRoute } from 'vue-router';
+
 const columns = ref([
   {
     name: "user",
@@ -369,6 +374,7 @@ export default {
     const loading = ref(false);
     const approvalCandidate = ref(null);
     const approval = ref(false)
+    const route = useRoute();
     const pagination = ref({
       page: 1,
       rowsPerPage: 10,
@@ -426,6 +432,13 @@ export default {
       if (authStore.getUserRoleName !== 'super_admin') {
         removeLocationColumn();
       }
+      if (route.query.user) {
+        const hasAccess = authStore.canAccess('read_all_cash');
+        if (hasAccess) {
+          data_filter.employee = route.query.user;
+          doFilter();
+        } else tableRef.value.requestServerInteraction();
+      } else tableRef.value.requestServerInteraction();
       tableRef.value.requestServerInteraction();
     });
 

@@ -38,10 +38,11 @@
           <q-btn outline label="Filter" rounded>
             <q-menu max-width="500px">
               <div class="flex flex-col gap-3 w-auto q-pa-md">
-                <q-toggle v-model="data_filter.own_data" label="My Request" />
+                <q-toggle v-if="authStore.canAccess('read_all_expense')" v-model="data_filter.own_data"
+                  label="My Request" />
                 <q-select dense outlined v-model="data_filter.type" :options="expense_types" label="Type" filled />
-                <SearchAddCompo :disable="data_filter.own_data" @selected="e => data_filter.employee = e" label="Employee"
-                  api="users" userType="EMPLOYEE" />
+                <SearchAddCompo v-if="authStore.canAccess('read_all_expense')" :disable="data_filter.own_data"
+                  @selected="e => data_filter.employee = e" label="Employee" api="users" userType="EMPLOYEE" />
                 <q-separator class="mt-3" />
                 <q-btn color="green" label="Apply" no-caps @click="doFilter" />
                 <q-btn color="red" label="Clear" no-caps @click="clearFilter" />
@@ -89,10 +90,12 @@
                     <div class="text-xs">{{ moment(props.row.createdAt).format("LL | h:mma") }}</div>
                   </div>
                 </q-td>
-                <q-td v-if="authStore.getUserRoleName == 'super_admin'">
-                  <a target="_blank" class="text-blue-500"
+                <q-td>
+                  <a v-if="authStore.getUserRoleName == 'super_admin' && props.row.creator_location" target="_blank"
+                    class="text-blue-500"
                     :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
                     Map</a>
+                  <span v-if="authStore.getUserRoleName == 'super_admin' && !props.row.creator_location">N/A</span>
                 </q-td>
                 <q-td>
                   {{ props.row.status }}
@@ -185,9 +188,11 @@
                           {{ moment(props.row.createdAt).format("LL | h:mma") }}
                         </q-item-label>
                         <q-item-label v-else-if="col.label == 'Location' && authStore.getUserRoleName == 'super_admin'">
-                          <a target="_blank" class="text-blue-500"
+                          <a v-if="props.row.creator_location" target="_blank" class="text-blue-500"
                             :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
-                            Map</a></q-item-label>
+                            Map</a>
+                          <span v-else>N/A</span>
+                        </q-item-label>
                         <q-item-label v-else-if="col.label == 'Status'">{{ props.row.status }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Approvals'">
                           <div class="bg-blue-200 inline p-1 text-blue-800">
@@ -224,7 +229,7 @@ import moment from "moment";
 import { useQuasar } from 'quasar';
 import { useAuthStore } from "src/stores/auth.store"
 import SearchAddCompo from '../../../components/SearchAddCompo.vue';
-
+import { useRoute } from 'vue-router';
 const columns = ref([
   {
     name: "request_type",
@@ -357,6 +362,7 @@ export default {
     const approvalCandidate = ref(null);
     const approval = ref(false)
     const loading = ref(false);
+    const route = useRoute();
     const pagination = ref({
       page: 1,
       rowsPerPage: 10,
@@ -371,10 +377,10 @@ export default {
 
     function doFilter() {
       if (data_filter.own_data) {
-        filter_values[ 'payee' ] = authStore.getUserInfo._id;
+        filter_values[ 'payer' ] = authStore.getUserInfo._id;
       }
       if (data_filter.employee) {
-        filter_values[ 'payee' ] = data_filter.employee;
+        filter_values[ 'payer' ] = data_filter.employee;
       }
       if (data_filter.type) {
         filter_values[ 'request_type' ] = data_filter.type.type;
@@ -403,7 +409,6 @@ export default {
         }
       });
       const result = response.data;
-      console.log("🚀 ~ file: ExpensePage.vue:270 ~ onRequest ~ data:", result.data);
       // clear out existing data and add new
       rows.value.splice(0, rows.value.length, ...result.data);
       pagination.value.rowsNumber = result.total;
@@ -415,7 +420,13 @@ export default {
       if (authStore.getUserRoleName !== 'super_admin') {
         removeLocationColumn();
       }
-      tableRef.value.requestServerInteraction();
+      if (route.query.user) {
+        const hasAccess = authStore.canAccess('read_all_expense');
+        if (hasAccess) {
+          data_filter.employee = route.query.user;
+          doFilter();
+        } else tableRef.value.requestServerInteraction();
+      } else tableRef.value.requestServerInteraction();
     });
     function closeStatusWindow() {
       approval.value = false;
@@ -473,7 +484,6 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;
