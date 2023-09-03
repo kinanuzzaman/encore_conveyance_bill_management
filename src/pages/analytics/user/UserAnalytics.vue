@@ -40,17 +40,17 @@
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.user_data.balance }} &#2547;</div>
+                <div class="text-xs">{{ props.row.user_data.balance || 0 }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.user_data?.salary }} &#2547;</div>
+                <div class="text-xs">{{ props.row.user_data?.salary || 0 }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.cash_data?.total_amount }} &#2547;</div>
+                <div class="text-xs">{{ props.row.cash_data?.total_amount || 0 }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
@@ -65,24 +65,26 @@
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.expense_data?.total_amount }} &#2547;</div>
+                <div class="text-xs">{{ props.row.expense_data?.total_amount || 0 }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
-              <div>
+              <div v-if="props.row.user_data.user_type === 'EMPLOYEE'">
                 <div class="text-xs">{{ props.row.salary_request ? `Requested - ${props.row.salary_request.status}` : 'No'
                 }}</div>
               </div>
             </q-td>
             <q-td>
-              <div>
+              <div v-if="props.row.user_data.user_type === 'EMPLOYEE'">
                 <div class="text-xs">{{ props.row.salary_received ? `Requested - ${props.row.salary_received.status}` :
                   'No' }}</div>
               </div>
             </q-td>
             <q-td>
               <div>
-                <div class="text-xs">{{ props.row.payable_amount }}</div>
+                <div class="text-xs" v-if="props.row.user_data.user_type === 'EMPLOYEE'">{{ props.row.payable_amount || 0
+                }} &#2547;</div>
+                <div class="text-xs" v-else>{{ props.row.user_data.balance || 0 }} &#2547;</div>
               </div>
             </q-td>
             <q-td>
