@@ -27,6 +27,10 @@ export const useAuthStore = defineStore('auth', {
     getUserRoleName: (state) => state.userRole.role_name,
   },
   actions: {
+    updateUserInfo(payload: any) {
+      console.log("🚀 ~ file: auth.store.ts:31 ~ updateUserInfo ~ payload:", payload)
+      this.userInfo = payload;
+    },
     async UserLogin(payload: any): Promise<any> {
       const response = await $api.post('/users/login', payload);
 

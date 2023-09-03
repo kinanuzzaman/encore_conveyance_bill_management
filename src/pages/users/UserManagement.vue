@@ -285,6 +285,7 @@ export default {
     const rbacStore = useRbacStore();
     const authStore = useAuthStore();
     const $q = useQuasar();
+    let updateCandidateFormData = new FormData();
 
     const btnLoaders = ref({
       create_btn: false,
@@ -353,7 +354,7 @@ export default {
         btnLoaders.value.create_btn = false;
         tableRef.value.requestServerInteraction();
         Object.keys(userRegister).forEach((key) => {
-          userRegister[key] = null;
+          userRegister[ key ] = null;
         });
         $q.notify({
           message: "User created",
@@ -430,11 +431,10 @@ export default {
     async function updateUserInfo() {
       try {
         btnLoaders.value.update_btn = true;
-        let updateCandidateFormData = new FormData();
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
-            updateCandidateFormData.append(key, updateCandidate.value[key].value);
-          } else updateCandidateFormData.append(key, updateCandidate.value[key]);
+            updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
+          } else updateCandidateFormData.append(key, updateCandidate.value[ key ]);
         });
 
         await apiSerivce.put(`/users/${updateCandidate.value._id}`, updateCandidateFormData);

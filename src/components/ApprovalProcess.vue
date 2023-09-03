@@ -97,10 +97,10 @@
         <div class="flex md:flex-row flex-col w-full justify-center">
           <q-input class="md:w-1/2 md:pb-0 pb-3" dense outlined v-model="note" type="text" placeholder="Notes" />
           <div class="flex md:w-1/2 justify-center gap-3 items-center">
-            <q-btn unelevated no-caps label="Approve" color="green" v-if="showApproveBtn"
-              @click="updateStatus('APPROVED')" />
-            <q-btn unelevated no-caps label="Reject" color="negative" v-if="showRejectBtn"
-              @click="updateStatus('REJECTED')" />
+            <q-btn unelevated no-caps :label="authStore.canAccess('cash_write') ? 'Approve' : 'Received'" color="green"
+              v-if="showApproveBtn" @click="updateStatus('APPROVED')" />
+            <q-btn unelevated no-caps :label="authStore.canAccess('cash_write') ? 'Reject' : 'Cancel Request'"
+              color="negative" v-if="showRejectBtn" @click="updateStatus('REJECTED')" />
             <q-btn unelevated no-caps label="Close" color="gray-500" v-close-popup />
           </div>
         </div>
@@ -154,7 +154,7 @@ const columns = [
 const apiService = new ApiService();
 const authStore = useAuthStore();
 const $q = useQuasar();
-const emit = defineEmits(['close']);
+const emit = defineEmits([ 'close' ]);
 
 const showApproveBtn = ref(false);
 const showRejectBtn = ref(false);

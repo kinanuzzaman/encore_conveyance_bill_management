@@ -8,12 +8,12 @@
         <SearchAddCompo for="product" :data="product_category_data" @selected="e => formData.product.category = e"
           label="Choose product Category" createApi="product-control/category" />
 
-        <q-input outlined v-model="formData.product.quantity" placeholder="product quantity" :dense="true" />
+        <q-input outlined v-model="formData.product.quantity" label="product quantity" :dense="true" />
         <SearchAddCompo :data="vendor_data" @selected="e => formData.vendor = e" label="Vendor" api="users"
           userType="VENDOR" />
         <SearchAddCompo :data="project_data" for="project" @selected="e => formData.project = e" label="Project"
           api="project-control" />
-        <q-input outlined v-model="formData.location" placeholder="Location" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.location" label="Location" bg-color="white" :dense="true" />
         <div class="flex">
           <q-input outlined v-model="formData.amount_per" label="Amount per" bg-color="white" :dense="true"
             class="w-3/4" />
@@ -33,8 +33,10 @@
         <div></div>
         <div class="flex items-center gap-5 justify-end">
 
-          <q-btn v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'" label="Save" color="green"
+          <q-btn v-if="authStore.canAccess('expense_create') && !$route.query.id" label="Create" color="green"
             class="px-10 py-2.5" @click="registerUser" />
+          <q-btn v-if="authStore.canAccess('expense_write') && $route.query.id && formData.status !== 'APPROVED'"
+            label="Update" color="green" class="px-10 py-2.5" @click="registerUser" />
           <q-btn label="Back" color="red" class="px-10 py-2.5" @click="$router.back()" />
 
         </div>

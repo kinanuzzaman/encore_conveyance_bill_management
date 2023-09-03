@@ -38,17 +38,21 @@ export default route(function (/* { store, ssrContext } */) {
           localStorage.removeItem('user');
           next('/');
         } else {
-          next();
-          // const authStore = useAuthStore();
-          // console.log(authStore.hasAccess(to.meta.permission_required));
-          // console.log(to.meta);
+          // next();
+          const authStore = useAuthStore();
+          console.log(authStore.hasAccess(to.meta.permission_required));
+          console.log(to.meta);
 
+          //@ts-ignore
+          if (!to.meta.permission_required || !to.meta.permission_required.length) {
+            next()
+          }
 
-          // if (authStore.hasAccess(to.meta.permission_required)) {
-          //   next()
-          // } else {
-          //   next('/403')
-          // }
+          if (authStore.hasAccess(to.meta.permission_required)) {
+            next()
+          } else {
+            next('/403')
+          }
         }
       } else {
         if (to.path === '/') {

@@ -22,24 +22,40 @@
     <!-- grid md:grid-cols-3 grid-cols-1 -->
     <div class="">
       <section class="">
-        <div class="q-px-md gt-sm">
+        <div class="q-px-md">
           <!-- bordered  style="background-color: #f1f1f1" props.row[item].isAssigned-->
           <q-table v-if="togglePermMode" flat class="h-[80vh]" :rows="rows.general_perms" :loading="loading"
             :columns="columns" style="background: rgba(244, 244, 244, 0.8)" :rows-per-page-options="[15]">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td v-for="(item) in Object.keys(props.row)" :key="props.row[item]">
+
+                <!-- <q-td v-for="(item) in Object.keys(props.row)" :key="props.row[item]">
                   <q-toggle v-if="item != 'title'" :val="props.row[item]._id" v-model="assignedPerms" checked-icon="check"
                     color="red" unchecked-icon="clear" />
                   <span v-else>{{ props.row[item] }}</span>
+                </q-td> -->
+                <q-td key="title">
+                  <span>{{ props.row['title'] }}</span>
+                </q-td>
+                <q-td key="read" v-if="props.row['read']">
+                  <q-toggle :val="props.row['read']._id" v-model="assignedPerms" checked-icon="check" color="red"
+                    unchecked-icon="clear" />
+                </q-td>
+                <q-td key="create" v-if="props.row['create']">
+                  <q-toggle :val="props.row['create']._id" v-model="assignedPerms" checked-icon="check" color="red"
+                    unchecked-icon="clear" />
+                </q-td>
+                <q-td key="write" v-if="props.row['write']">
+                  <q-toggle :val="props.row['write']._id" v-model="assignedPerms" checked-icon="check" color="red"
+                    unchecked-icon="clear" />
                 </q-td>
               </q-tr>
             </template>
           </q-table>
-          <div v-else class="grid grid-cols-3 gap-3">
-            <q-card class="w-full h-full">
+          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <q-card v-for="(perm, i) in rows.system_perms" :key="i" class="w-full h-full">
               <q-card-section>
-                <div v-for="(perm, i) in rows.system_perms" :key="i" class="flex justify-between">
+                <div class="flex justify-between">
                   <div class="flex flex-col gap-2">
                     <span class="text-2xl">{{ perm.perm_name }}</span>
                     <span class="text-gray-600">{{ perm.perm_description }}</span>

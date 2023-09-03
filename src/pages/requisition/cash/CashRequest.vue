@@ -65,11 +65,13 @@
             :loading="loading" ref="tableRef" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
             :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
-              <q-tr class="" :props="props">
+              <q-tr
+                :class="authStore.canAccess('read_all_cash') && props.row.payer._id === authStore.getUserInfo._id ? 'bg-lime-100' : ''"
+                :props="props">
                 <q-td>
 
                   <div>
-                    <div class="text-xs">{{ props.row.type }}</div>
+                    <div class="text-xs font-bold">{{ props.row.type }}</div>
                   </div>
 
                 </q-td>
@@ -89,9 +91,8 @@
                   </div>
                 </q-td>
 
-                <q-td>
-                  <a v-if="authStore.getUserRoleName == 'super_admin' && props.row.creator_location" target="_blank"
-                    class="text-blue-500"
+                <q-td v-if="authStore.getUserRoleName == 'super_admin'" target="_blank">
+                  <a class="text-blue-500" v-if="props.row.creator_location"
                     :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
                     Map</a>
                   <span v-if="authStore.getUserRoleName == 'super_admin' && !props.row.creator_location">N/A</span>
@@ -305,7 +306,7 @@ const columns = ref([
     field: "action",
   },
 ])
-const cash_types = [{
+const cash_types = [ {
   label: "Product Purchase",
   value: "ProductPurchase",
   type: "PRODUCT_PURCHASE",
@@ -359,7 +360,7 @@ const cash_types = [{
   label: "Other",
   value: "OtherBill",
   type: "OTHERS",
-},]
+}, ]
 
 export default {
   components: { SearchAddCompo, ApprovalProcess },
@@ -389,13 +390,13 @@ export default {
 
     function doFilter() {
       if (data_filter.own_data) {
-        filter_values['payee'] = authStore.getUserInfo._id;
+        filter_values[ 'payee' ] = authStore.getUserInfo._id;
       }
       if (data_filter.employee) {
-        filter_values['payee'] = data_filter.employee;
+        filter_values[ 'payee' ] = data_filter.employee;
       }
       if (data_filter.type) {
-        filter_values['request_type'] = data_filter.type.type;
+        filter_values[ 'request_type' ] = data_filter.type.type;
       }
       tableRef.value.requestServerInteraction();
     }
@@ -501,7 +502,7 @@ export default {
       model: ref(null),
       name: ref(null),
       designation: ref(null),
-      options: ["Google", "Facebook", "Twitter", "Apple", "Oracle"],
+      options: [ "Google", "Facebook", "Twitter", "Apple", "Oracle" ],
       val: ref(true),
       getSelectedString() {
         return selected.value.length === 0 ? "" : `${selected.value.length} record${selected.value.length > 1 ? "s" : ""} selected of ${rows.value.length}`;

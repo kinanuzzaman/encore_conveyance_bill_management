@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="q-px-md">
-      <q-card flat class="h-[85vh] bg-transparent md:w-1/2">
+      <q-card flat class="h-[85vh] bg-transparent w-full md:w-[85%] lg:w-[75%] xl:w-[50%]">
         <!-- <div class="flex justify-center py-10">
             <q-avatar
               size="100px"
@@ -23,14 +23,14 @@
             <q-input outlined v-model="cashPayload.amount" placeholder="Amount" bg-color="white" :dense="true" />
           </q-card-section>
           <q-card-section>
-            <SearchAddCompo :data="payerData" label="Paid By" api="/users/?user_type=EMPLOYEE"
+            <SearchAddCompo :data="payerData" label="Request to" api="/users/?user_type=EMPLOYEE"
               @selected="e => cashPayload.payer = e" :v-model="cashPayload.payer" />
           </q-card-section>
         </div>
 
         <q-card-actions align="center" class="px-3 py-5 absolute bottom-0 w-full">
-          <q-btn v-if="authStore.canAccess('cash_write') && cashPayload.status !== 'APPROVED'" label="Save" color="green"
-            class="col" @click="saveCashRequest" />
+          <q-btn v-if="authStore.canAccess('cash_create') && !$route.query.id" label="Create" color="green" class="col"
+            @click="saveCashRequest" />
           <q-btn label="Back" color="negative" class="col" @click="$router.back()" />
         </q-card-actions>
       </q-card>
@@ -64,7 +64,7 @@ export default {
       payer: null,
       type: null,
     });
-    const options = [{
+    const options = [ {
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -118,7 +118,7 @@ export default {
       label: "Other",
       value: "OtherBill",
       type: "OTHERS",
-    },]
+    }, ]
 
     const saveCashRequest = async () => {
       if (!navigator.geolocation) {
@@ -166,15 +166,15 @@ export default {
         console.log("🚀 ~ file: NewCashRequest.vue:140 ~ onRequest ~ data:", details.data.data);
         if (details.data.data) {
           const type = options.find((item) => {
-            return item.type == details.data.data[0].type;
+            return item.type == details.data.data[ 0 ].type;
           });
 
           if (type) {
             cashPayload.type = type;
-            cashPayload.amount = details.data.data[0].amount;
-            cashPayload.payer = details.data.data[0].payer._id;
-            payerData.label = details.data.data[0].payer.first_name + " " + details.data.data[0].payer.last_name;
-            payerData.value = details.data.data[0].payer._id;
+            cashPayload.amount = details.data.data[ 0 ].amount;
+            cashPayload.payer = details.data.data[ 0 ].payer._id;
+            payerData.label = details.data.data[ 0 ].payer.first_name + " " + details.data.data[ 0 ].payer.last_name;
+            payerData.value = details.data.data[ 0 ].payer._id;
             // concat(" ", details.data.data[0].payer.last_name)
             console.log(details);
           }

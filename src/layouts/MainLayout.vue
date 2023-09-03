@@ -11,6 +11,7 @@
           dense
           icon="menu"
         /> -->
+
         <q-toolbar-title>
           <q-btn flat @click="drawer = !drawer" v-if="!drawer">
             <img src="../assets/images/login/encore1.png" class="md:h-[26px] md:w-[169px] w-[120px] h-[20px]" />
@@ -19,10 +20,11 @@
         <!--:size="$q.screen.lt.md ? 'sm' : 'md'"class="q-gutter-xs"  class="text-white" fingerprint-->
         <div class="flex justify-self-end">
           <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" dense />
-          <q-btn flat color="green" icon="notifications" class="" dense />
-          <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" />
-          <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense />
-          <q-btn flat color="green" icon="account_circle" dense />
+          <!-- <q-btn flat color="green" icon="notifications" class="" dense /> -->
+          <!-- <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" /> -->
+          <!-- <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense /> -->
+          <q-btn flat color="green" :disable="$router.currentRoute.value.path == '/user/profile'"
+            @click="$router.push({ path: 'user/profile' })" icon="account_circle" dense />
         </div>
         <div class="col-span-2">
           <q-input v-if="searchField" class="lt-md" rounded outlined v-model="text" label="Search" dense color="green" />
@@ -64,6 +66,7 @@
     </q-drawer>
 
     <q-page-container>
+
       <q-page class="bg-img">
         <!--    class="bg-[url('../../assets/images/home/bg2.jpg')] bg-no-repeat bg-cover" -->
         <router-view />
@@ -171,31 +174,31 @@ const menuList = [
   {
     icon: "analytics",
     label: "Analytics",
-    permissions: [ 'analytics_read' ],
+    permissions: [ 'user_analytics', 'attendance_analytics' ],
     separator: false,
     submenus: [
       // {
       //   icon: "request_quote",
       //   label: "Project Analytics",
-      //   permissions: [ 'analytics_read' ],
+      //   permissions: [ '<q-btn v-if="authStore.canAccess('expense_create') && !$route.query.id"' ],
       //   link: "",
       // },
       // {
       //   icon: "payments",
       //   label: "Store Analytics",
-      //   permissions: [ 'analytics_read' ],
+      //   permissions: [ '<q-btn v-if="authStore.canAccess('expense_create') && !$route.query.id"' ],
       //   link: "",
       // },
       {
         icon: "payments",
         label: "User Analytics",
-        permissions: [ 'analytics_read' ],
+        permissions: [ 'user_analytics' ],
         link: "/user-analytics",
       },
       {
         icon: "payments",
         label: "Attendance",
-        permissions: [ 'analytics_read' ],
+        permissions: [ 'attendance_analytics' ],
         link: "/attendance",
       },
     ],

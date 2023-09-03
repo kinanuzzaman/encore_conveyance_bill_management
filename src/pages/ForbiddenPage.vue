@@ -9,7 +9,7 @@
         Oops. You are not authorized!
       </div>
 
-      <q-btn class="q-mt-xl" color="white" text-color="blue" unelevated @click="$router.back()" no-caps />
+      <q-btn class="q-mt-xl" color="white" text-color="blue" label="Go Back" unelevated @click="$router.back()" no-caps />
     </div>
   </div>
 </template>

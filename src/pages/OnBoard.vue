@@ -59,7 +59,6 @@ export default {
       }
       apiSerivce.get(`/users/validate-invitation/${route.params.id.toString()}`).then((res) => {
         invitedUsersData.value = res.data.data
-        console.log("🚀 ~ file: OnBoard.vue:62 ~ apiSerivce.get ~ invitedUsersData.value:", invitedUsersData.value)
       }).catch((err) => {
         $q.notify({
           message: err.response ? err.response.data.message : 'Something went wrong',
@@ -72,18 +71,22 @@ export default {
 
     function onBoardUser() {
       if (userInfo.password !== confirmPassword.value) {
+        console.log(userInfo.password, confirmPassword.value)
         $q.notify({
           message: 'Password does not match',
           color: 'red',
           position: 'top'
         })
+        return
       }
       Object.keys(userInfo).forEach((key) => {
         formData.append(key, userInfo[ key ]);
+        console.log("🚀 ~ file: OnBoard.vue:83 ~ Object.keys ~ formData:", userInfo[ key ])
       });
       apiSerivce.post(`/users/accept-invitation/${route.params.id}`, formData).then(() => {
         router.push('/')
       }).catch((err) => {
+        formData = new FormData()
         $q.notify({
           message: err.response ? err.response.data.message : 'Something went wrong',
           color: 'red',
@@ -100,7 +103,8 @@ export default {
       userInfo,
       invitedUsersData,
       onBoardUser,
-      onImageUpload
+      onImageUpload,
+      confirmPassword
     }
   }
 }

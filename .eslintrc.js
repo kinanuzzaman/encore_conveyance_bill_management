@@ -72,6 +72,7 @@ module.exports = {
 
     'prefer-promise-reject-errors': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
     // quotes: ['warn', 'single', { avoidEscape: true }],
 
     // this rule, if on, would require explicit return type on the `render` function

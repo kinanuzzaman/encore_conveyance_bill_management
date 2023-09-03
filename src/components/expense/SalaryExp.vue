@@ -6,8 +6,8 @@
         <div></div>
         <div class="flex items-center gap-5 justify-end">
 
-          <q-btn label="Save" v-if="authStore.canAccess('expense_write')" color="green" class="px-10 py-2.5"
-            @click="registerUser" />
+          <q-btn label="Create" v-if="authStore.canAccess('expense_create') && !$route.query.id" color="green"
+            class="px-10 py-2.5" @click="registerUser" />
           <q-btn label="Back" color="red" class="px-10 py-2.5" @click="$router.back()" />
 
         </div>

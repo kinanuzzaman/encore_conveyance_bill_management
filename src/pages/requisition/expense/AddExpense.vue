@@ -40,7 +40,7 @@ export default {
     const $q = useQuasar();
     const router = useRouter();
     const route = useRoute();
-    const options = [{
+    const options = [ {
       label: "Product Purchase",
       value: "ProductPurchase",
       type: "PRODUCT_PURCHASE",
@@ -94,7 +94,7 @@ export default {
       label: "Other Bill",
       value: "OtherBill",
       type: "OTHERS",
-    },]
+    }, ]
     const expenseDetails = ref(null);
     async function createExpance(formData) {
       if (!navigator.geolocation) {
@@ -148,7 +148,6 @@ export default {
           })
         }
       });
-
     }
     onMounted(() => {
       if (route.query.type) {

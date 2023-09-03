@@ -70,7 +70,10 @@ export default {
         loginBtnLoading.value = true;
         await authStore.UserLogin(loginPayload);
         // socket.emit("USER_LOGIN", authStore.getUserInfo._id);
-        router.push("/user");
+        const userData = authStore.getUserInfo
+
+        if (userData.role.role_name !== 'super_admin') router.push("/user/profile");
+        else router.push("/user");
       } catch (error) {
         loginBtnLoading.value = false;
         $q.notify({

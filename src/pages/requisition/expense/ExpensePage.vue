@@ -68,12 +68,13 @@
             v-model:pagination="pagination" :loading="loading" style="background: rgba(244, 244, 244, 0.8)"
             :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
-              <q-tr class="" :props="props">
-
+              <q-tr
+                :class="authStore.canAccess('read_all_expense') && props.row.payer._id === authStore.getUserInfo._id ? 'bg-lime-100' : ''"
+                :props="props">
                 <q-td>
 
                   <div>
-                    <div class="text-xs">{{ props.row.request_type }}</div>
+                    <div class="text-xs font-bold">{{ props.row.request_type }}</div>
                   </div>
 
                 </q-td>
@@ -92,9 +93,8 @@
                     <div class="text-xs">{{ moment(props.row.createdAt).format("LL | h:mma") }}</div>
                   </div>
                 </q-td>
-                <q-td>
-                  <a v-if="authStore.getUserRoleName == 'super_admin' && props.row.creator_location" target="_blank"
-                    class="text-blue-500"
+                <q-td v-if="authStore.getUserRoleName == 'super_admin'">
+                  <a v-if="props.row.creator_location" target="_blank" class="text-blue-500"
                     :href="`https://www.google.com/maps/place/${props.row.creator_location.latitude + ',' + props.row.creator_location.longitude}`">Open
                     Map</a>
                   <span v-if="authStore.getUserRoleName == 'super_admin' && !props.row.creator_location">N/A</span>
@@ -294,7 +294,7 @@ const columns = ref([
     field: "action",
   },
 ])
-const expense_types = [{
+const expense_types = [ {
   label: "Product Purchase",
   value: "ProductPurchase",
   type: "PRODUCT_PURCHASE",
@@ -348,7 +348,7 @@ const expense_types = [{
   label: "Other Bill",
   value: "OtherBill",
   type: "OTHERS",
-},]
+}, ]
 export default {
   components: {
     SearchAddCompo,
@@ -379,13 +379,13 @@ export default {
 
     function doFilter() {
       if (data_filter.own_data) {
-        filter_values['payer'] = authStore.getUserInfo._id;
+        filter_values[ 'payer' ] = authStore.getUserInfo._id;
       }
       if (data_filter.employee) {
-        filter_values['payer'] = data_filter.employee;
+        filter_values[ 'payer' ] = data_filter.employee;
       }
       if (data_filter.type) {
-        filter_values['request_type'] = data_filter.type.type;
+        filter_values[ 'request_type' ] = data_filter.type.type;
       }
       tableRef.value.requestServerInteraction();
     }

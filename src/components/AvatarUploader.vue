@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineProps, onMounted } from 'vue';
+import { ref, defineEmits, defineProps, onMounted, watch } from 'vue';
 import { useQuasar } from "quasar";
 
 const props = defineProps({
@@ -30,6 +30,10 @@ const imageUrl = ref('https://cdn0.iconfinder.com/data/icons/communication-456/2
 
 onMounted(() => {
   if (props.image) imageUrl.value = props.image;
+});
+
+watch(() => props.image, (val) => {
+  if (val) imageUrl.value = val;
 });
 
 function handleImageChange(input) {
