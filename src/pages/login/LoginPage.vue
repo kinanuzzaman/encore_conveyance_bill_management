@@ -62,8 +62,8 @@ export default {
     const loginBtnLoading = ref(false);
 
     const loginPayload = reactive({
-      email: "admin@mail.com",
-      password: "123456",
+      email: "",
+      password: "",
     });
     const loginUser = async () => {
       try {
