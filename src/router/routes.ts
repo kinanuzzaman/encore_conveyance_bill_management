@@ -18,7 +18,7 @@ const routes = [
         path: 'forgotpass',
         component: () => import('pages/login/ForgotPass.vue'),
       },
-      { path: 'newpass', component: () => import('pages/login/NewPass.vue') },
+      { path: 'reset-password/:id', component: () => import('pages/login/NewPass.vue') },
       {
         path: 'accept-invitation/:id',
         component: () => import('pages/OnBoard.vue'),

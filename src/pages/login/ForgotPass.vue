@@ -12,22 +12,9 @@
           </div>
         </q-card-section>
 
-        <q-input
-          class="mb-2"
-          dense
-          filled
-          bottom-slots
-          v-model="text"
-          label="Email Address"
-        />
+        <q-input class="mb-2" dense filled type="email" bottom-slots v-model="email" label="Email Address" />
 
-        <q-btn
-          color="green full-width"
-          label="Submit"
-          @click="onClick"
-          size="md"
-          no-caps
-        />
+        <q-btn color="green full-width" label="Submit" @click="requestResetPassword" size="md" no-caps />
 
         <div class="row justify-center items-center my-2">
           <div class="col h-[1px] bg-black m-4"></div>
@@ -35,13 +22,7 @@
           <div class="col h-[1px] bg-black m-4"></div>
         </div>
 
-        <q-btn
-          color="green full-width"
-          label="login"
-          to="/"
-          size="md"
-          no-caps
-        />
+        <q-btn color="green full-width" label="login" to="/" size="md" no-caps />
       </q-card>
       <q-card v-if="change == false" class="w-[362px] p-10 m-5">
         <q-card-section class="text-center">
@@ -54,13 +35,7 @@
           </div>
         </q-card-section>
         <q-card-actions>
-          <q-btn
-            color="green full-width"
-            label="login"
-            to="/"
-            size="md"
-            no-caps
-          />
+          <q-btn color="green full-width" label="login" to="/" size="md" no-caps />
         </q-card-actions>
       </q-card>
       <div class="absolute bottom-0 right-0 w-[70%]">
@@ -72,17 +47,38 @@
 
 <script>
 import { ref } from "vue";
+import { ApiService } from 'src/service/api-service';
+import { useQuasar } from 'quasar';
 
 export default {
   setup() {
+    const apiSerivce = new ApiService()
+    const $q = useQuasar()
+    const email = ref('')
     let change = ref(true);
-    const onClick = () => {
-      change.value = false;
-    };
+
+    async function requestResetPassword() {
+      try {
+        const res = await apiSerivce.post('/users/forgot-password', { email: email.value })
+        $q.notify({
+          message: res.data.message,
+          color: 'green',
+          position: 'top'
+        })
+        change.value = false;
+      } catch (error) {
+        $q.notify({
+          message: err.response ? err.response.data.message : 'Something went wrong',
+          color: 'red',
+          position: 'top'
+        })
+      }
+    }
 
     return {
-      onClick,
       change,
+      email,
+      requestResetPassword
     };
   },
 };

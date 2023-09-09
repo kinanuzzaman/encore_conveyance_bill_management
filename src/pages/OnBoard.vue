@@ -12,10 +12,26 @@
       </div>
       <q-card-section class="flex flex-col gap-2">
         <q-input v-model="userInfo.dob" type="date" label="Date of Birth" outlined dense />
-        <q-input outlined v-model="userInfo.password" type="password" placeholder="New password" bg-color="white"
-          :dense="true" />
-        <q-input outlined v-model="confirmPassword" type="password" placeholder="Confirm password" bg-color="white"
-          :dense="true" />
+        <q-input outlined v-model="userInfo.password" :type="showPassword ? 'text' : 'password'"
+          placeholder="New password" bg-color="white" :dense="true">
+          <template v-slot:prepend>
+            <q-icon name="lock" />
+          </template>
+          <template v-slot:append>
+            <q-btn flat :icon="showPassword ? 'visibility_off' : 'visibility'" @click="showPassword = !showPassword"
+              class="cursor-pointer" />
+          </template>
+        </q-input>
+        <q-input outlined v-model="confirmPassword" placeholder="Confirm password" bg-color="white" :dense="true"
+          :type="showConfirmPassword ? 'text' : 'password'">
+          <template v-slot:prepend>
+            <q-icon name="lock" />
+          </template>
+          <template v-slot:append>
+            <q-btn flat :icon="showConfirmPassword ? 'visibility_off' : 'visibility'"
+              @click="showConfirmPassword = !showConfirmPassword" class="cursor-pointer" />
+          </template>
+        </q-input>
 
         <q-btn label="continue" color="green" class="col mt-3" @click="onBoardUser()" />
       </q-card-section>
@@ -51,6 +67,8 @@ export default {
       password: null
     })
 
+    const showPassword = ref(false)
+    const showConfirmPassword = ref(false)
     const invitedUsersData = ref([])
 
     onMounted(() => {
@@ -104,7 +122,9 @@ export default {
       invitedUsersData,
       onBoardUser,
       onImageUpload,
-      confirmPassword
+      confirmPassword,
+      showPassword,
+      showConfirmPassword
     }
   }
 }
