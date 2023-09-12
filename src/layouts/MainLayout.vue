@@ -23,8 +23,8 @@
           <!-- <q-btn flat color="green" icon="notifications" class="" dense /> -->
           <!-- <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" /> -->
           <!-- <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense /> -->
-          <q-btn flat color="green" :disable="$router.currentRoute.value.path == '/user/profile'"
-            @click="$router.push({ path: 'user/profile' })" icon="account_circle" dense />
+          <q-btn flat color="green" :disable="$router.currentRoute.value.path == '/user/profile'" @click="openProfile"
+            icon="account_circle" dense />
         </div>
         <div class="col-span-2">
           <q-input v-if="searchField" class="lt-md" rounded outlined v-model="text" label="Search" dense color="green" />
@@ -242,6 +242,7 @@ export default {
     const logout = () => {
       localStorage.clear();
       router.push({ path: "/" });
+      window.location.reload();
     };
 
     function changeActiveMenu(name) {
@@ -270,6 +271,11 @@ export default {
   async mounted() {
     this.attendenceStore.getAttendanceStatus();
   },
+  methods: {
+    openProfile() {
+      window.location.href = '/user/profile'
+    },
+  }
 };
 </script>
 

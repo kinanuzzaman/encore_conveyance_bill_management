@@ -29,8 +29,8 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token');
     if (to.meta.requiresAuth) {
-      const token = localStorage.getItem('token');
       if (token) {
         const decoded: any = JwtDecode(token);
         if (decoded.exp * 1000 < Date.now()) {
@@ -40,8 +40,8 @@ export default route(function (/* { store, ssrContext } */) {
         } else {
           // next();
           const authStore = useAuthStore();
-          console.log(authStore.hasAccess(to.meta.permission_required));
-          console.log(to.meta);
+          // console.log(authStore.hasAccess(to.meta.permission_required));
+          // console.log(to.meta);
 
           //@ts-ignore
           if (!to.meta.permission_required || !to.meta.permission_required.length) {
@@ -62,6 +62,11 @@ export default route(function (/* { store, ssrContext } */) {
         }
       }
     } else {
+      if (to.path === '/' && token) {
+        // back to previous page
+        const root = localStorage.getItem('root');
+        next(root ? root : '/user/profile');
+      }
       next();
     }
   });

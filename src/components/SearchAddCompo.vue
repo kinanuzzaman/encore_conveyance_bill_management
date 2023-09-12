@@ -47,7 +47,7 @@ export default {
     },
     userType: {
       type: String,
-      enum: [ "CLIENT", "VENDOR" ],
+      enum: [ "CLIENT", "VENDOR", "EMPLOYEE" ],
       required: false
     },
     searchOnly: {
@@ -102,8 +102,8 @@ export default {
 
         if (this.$props.userType) {
           params[ 'user_type' ] = this.$props.userType
-          params[ 'showAll' ] = true
         }
+        params[ 'showAll' ] = true
 
         const response = await this.apiService.get(api, {
           params: params
@@ -126,6 +126,15 @@ export default {
         let payload = {
           title: this.searchQuery,
           isRequested: true
+        }
+        if (this.$props.userType && this.$props.userType === 'EMPLOYEE') {
+          this.$q.notify({
+            color: 'negative',
+            message: 'Employee can not be created from here',
+            position: 'top',
+            icon: 'report_problem'
+          });
+          return
         }
         if (this.$props.userType) {
           payload = {

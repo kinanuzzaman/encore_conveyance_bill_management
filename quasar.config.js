@@ -93,6 +93,10 @@ module.exports = configure(function (/* ctx */) {
         notify: {
           /* look at QuasarConfOptions from the API card */
         },
+        cordova: {
+          iosStatusBarPadding: true, // add the dynamic top padding on iOS mobile devices
+          backButtonExit: false, // Quasar handles app exit on mobile phone back button
+        }
       },
     },
 

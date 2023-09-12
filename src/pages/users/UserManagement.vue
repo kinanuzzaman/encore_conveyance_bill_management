@@ -344,6 +344,13 @@ export default {
 
     const registerUser = async () => {
       try {
+        if (Object.values(userRegister).some(val => !val)) {
+          return $q.notify({
+            message: "Please fill all fields",
+            color: "negative",
+            position: "top",
+          });
+        }
         btnLoaders.value.create_btn = true;
         await userStore.userInvite({
           ...userRegister,

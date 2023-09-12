@@ -320,7 +320,7 @@ export default {
             self: true,
           }
         });
-        row.value = response.data.data[0];
+        row.value = response.data.data[ 0 ];
         loading.value = false;
       } catch (error) {
         console.log("🚀 ~ file: AttendancePage.vue:260 ~ fetchAnalytics ~ error:", error)
@@ -363,7 +363,7 @@ export default {
     async function fetchUserInfo() {
       try {
         const res = await apiSerivce.get(`/users/profile`);
-        authStore.updateUserInfo(res.data.data);
+        authStore.updateUserInfo(res.data.data[ 0 ]);
       } catch (error) {
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
@@ -382,8 +382,8 @@ export default {
         btnLoaders.value.update_btn = true;
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
-            updateCandidateFormData.append(key, updateCandidate.value[key].value);
-          } else updateCandidateFormData.append(key, updateCandidate.value[key]);
+            updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
+          } else updateCandidateFormData.append(key, updateCandidate.value[ key ]);
         });
 
         await apiSerivce.put(`/users/${updateCandidate.value._id}`, updateCandidateFormData);
