@@ -35,7 +35,7 @@
           <q-btn color="green full-width" label="login" @click="loginUser" :loading="loginBtnLoading" size="md" no-caps />
         </q-card-section>
       </q-card>
-      <div class="absolute bottom-0 right-0 w-[60%]">
+      <div class="absolute bottom-0 right-0 w-[60%] z-0">
         <img src="~assets/images/login/encore2.png" class="" />
       </div>
     </div>

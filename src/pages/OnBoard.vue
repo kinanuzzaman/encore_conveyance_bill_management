@@ -1,9 +1,9 @@
 <template>
   <div class="flex justify-center items-center h-screen bg-green">
-    <q-card class="my-card p-10" style="width: 500px; max-width: 80vw">
+    <q-card class="my-card p-5 z-10" style="width: 500px; max-width: 90vw">
       <div class="flex flex-col justify-center items-center gap-3">
         <p class="text-2xl ">Welcome</p>
-        <p class="text-sm text-gray-500">{{ invitedUsersData?.invited_by?.first_name + '' +
+        <p class="text-sm text-gray-500 text-center">{{ invitedUsersData?.invited_by?.first_name + '' +
           invitedUsersData?.invited_by?.last_name }} invited you as {{
     invitedUsersData?.designation }} in join Encore Ltd. </p>
       </div>
@@ -98,8 +98,8 @@ export default {
         return
       }
       Object.keys(userInfo).forEach((key) => {
-        formData.append(key, userInfo[ key ]);
-        console.log("🚀 ~ file: OnBoard.vue:83 ~ Object.keys ~ formData:", userInfo[ key ])
+        formData.append(key, userInfo[key]);
+        console.log("🚀 ~ file: OnBoard.vue:83 ~ Object.keys ~ formData:", userInfo[key])
       });
       apiSerivce.post(`/users/accept-invitation/${route.params.id}`, formData).then(() => {
         router.push('/')

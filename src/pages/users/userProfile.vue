@@ -1,121 +1,128 @@
 <template>
-  <section class="mx-4 my-6 flex md:flex-row flex-col justify-between">
-    <q-card flat class="my-card p-10" style="width: 1020px; max-width: 80vw">
-      <div class="flex justify-center py-10">
-        <AvatarUploader :image="updateCandidate.profile_img" @imageSelected="onImageUpload" />
-      </div>
-      <q-card-section class="grid grid-cols-2 gap-5">
-        <q-input outlined v-model="updateCandidate.first_name" label="First Name" bg-color="white" :dense="true" />
-        <q-input outlined v-model="updateCandidate.last_name" label="Last Name" bg-color="white" :dense="true" />
-        <q-input outlined v-model="updateCandidate.email" disable label="Email" :dense="true">
-          <template v-slot:prepend>
-            <q-icon name="mail" />
-          </template>
-        </q-input>
-        <q-input outlined v-model="updateCandidate.phone_number" label="Phone Number" :dense="true">
-          <template v-slot:prepend>
-            <q-icon name="phone" />
-          </template>
-        </q-input>
-        <q-input outlined v-model="updateCandidate.designation" disable label="Designation" bg-color="white"
-          :dense="true" />
-        <q-input outlined v-model="updateCandidate.salary" disable label="Salary" bg-color="white" :dense="true" />
-      </q-card-section>
-      <q-card-actions align="center" class="row mx-2 py-5">
-        <q-btn label="Update" :loading="btnLoaders.update_btn" color="green" class="col" @click="updateUserInfo()" />
-      </q-card-actions>
-    </q-card>
-  </section>
-  <section v-if="row" class="mx-4 my-6 flex md:flex-row flex-col justify-between">
-    <div class="text-2xl font-semibold">Analytics</div>
+  <div class="flex flex-col md:flex-row">
+    <section class="my-6 w-full lg:w-[40%]">
+      <q-card flat class="my-card md:p-5">
+        <div class="flex justify-center">
+          <AvatarUploader :image="updateCandidate.profile_img" @imageSelected="onImageUpload" />
+        </div>
+        <q-card-section class="grid md:grid-cols-2 gap-5">
+          <q-input outlined v-model="updateCandidate.first_name" label="First Name" bg-color="white" :dense="true" />
+          <q-input outlined v-model="updateCandidate.last_name" label="Last Name" bg-color="white" :dense="true" />
+          <q-input outlined v-model="updateCandidate.email" disable label="Email" :dense="true">
+            <template v-slot:prepend>
+              <q-icon name="mail" />
+            </template>
+          </q-input>
+          <q-input outlined v-model="updateCandidate.phone_number" label="Phone Number" :dense="true">
+            <template v-slot:prepend>
+              <q-icon name="phone" />
+            </template>
+          </q-input>
+          <q-input outlined v-model="updateCandidate.designation" disable label="Designation" bg-color="white"
+            :dense="true" />
+          <q-input outlined v-model="updateCandidate.salary" disable label="Salary" bg-color="white" :dense="true" />
+        </q-card-section>
+        <q-card-actions align="center" class="row mx-2 py-5">
+          <q-btn label="Update" :loading="btnLoaders.update_btn" color="green" class="col" @click="updateUserInfo()" />
+        </q-card-actions>
+      </q-card>
+    </section>
+    <div class="w-full lg:w-[50%]">
+      <section v-if="row" class="flex md:flex-row flex-col justify-between my-6">
+        <div class="text-2xl font-semibold">Analytics</div>
 
-    <div class="flex md:gap-x-5 gap-1 justify-center items-center md:mt-0 mt-3">
-      <!-- <div class="w-full">
+        <div class="flex md:gap-x-5 gap-1 justify-center items-center md:mt-0 mt-3">
+          <!-- <div class="w-full">
         </div>
         <div class="w-full">
         </div> -->
-      <div class="md:w-[150px]">
-        <q-select class="w-full" outlined dense v-model="year" :options="['2023', '2024', '2025']" label="Year" filled />
+          <div class="md:w-[150px]">
+            <q-select class="w-full" outlined dense v-model="year" :options="['2023', '2024', '2025']" label="Year"
+              filled />
 
-      </div>
-      <div class="md:w-[150px]">
-        <q-select class="w-full" outlined dense v-model="month" :options="months" label="Month" filled />
-      </div>
-      <div>
-        <q-btn color="green" unelevated no-caps label="Apply" @click="fetchAnalytics" />
-      </div>
+          </div>
+          <div class="md:w-[150px]">
+            <q-select class="w-full" outlined dense v-model="month" :options="months" label="Month" filled />
+          </div>
+          <div>
+            <q-btn color="green" unelevated no-caps label="Apply" @click="fetchAnalytics" />
+          </div>
+        </div>
+      </section>
+      <section v-if="row">
+        <q-card class="my-card">
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Available Balance</div>
+              <div class="text-lg font-bold">{{ row?.user_data?.balance }} &#2547;</div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Salary</div>
+              <div class="text-lg font-bold">{{ row?.user_data?.salary }} &#2547;</div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Total Cash Amount</div>
+              <div class="text-lg font-bold">{{ row?.cash_data?.total_amount }} &#2547;</div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Total cash request created</div>
+              <div class="text-lg font-bold">{{ row?.cash_data?.cashs?.length }} </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Totla Expense Amount</div>
+              <div class="text-lg font-bold">{{ row?.expense_data?.total_amount }} &#2547;</div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Total Expense Request created</div>
+              <div class="text-lg font-bold">{{ row.expense_data?.expenses?.length }} </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Salary request status</div>
+              <div class="text-lg font-bold">{{ row?.salary_request ? `Requested - ${row.salary_request.status}` :
+                'Notyet' }}
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Salary received status</div>
+              <div class="text-lg font-bold">{{ row?.salary_received ? `Requested - ${row.salary_received.status}` : 'No'
+              }}
+              </div>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <div class="flex justify-between">
+              <div class="text-lg">Receive Able amount</div>
+              <div class="text-lg font-bold">{{ row?.payable_amount }}</div>
+            </div>
+          </q-card-section>
+        </q-card>
+
+      </section>
+
     </div>
-  </section>
-  <section v-if="row">
-    <q-card class="my-card">
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Available Balance</div>
-          <div class="text-lg font-bold">{{ row?.user_data?.balance }} &#2547;</div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Salary</div>
-          <div class="text-lg font-bold">{{ row?.user_data?.salary }} &#2547;</div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Total Cash Amount</div>
-          <div class="text-lg font-bold">{{ row?.cash_data?.total_amount }} &#2547;</div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Total cash request created</div>
-          <div class="text-lg font-bold">{{ row?.cash_data?.cashs?.length }} </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Totla Expense Amount</div>
-          <div class="text-lg font-bold">{{ row?.expense_data?.total_amount }} &#2547;</div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Total Expense Request created</div>
-          <div class="text-lg font-bold">{{ row.expense_data?.expenses?.length }} </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Salary request status</div>
-          <div class="text-lg font-bold">{{ row?.salary_request ? `Requested - ${row.salary_request.status}` : 'Not yet'
-          }}
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Salary received status</div>
-          <div class="text-lg font-bold">{{ row?.salary_received ? `Requested - ${row.salary_received.status}` : 'No' }}
-          </div>
-        </div>
-      </q-card-section>
-      <q-separator />
-      <q-card-section>
-        <div class="flex justify-between">
-          <div class="text-lg">Receive Able amount</div>
-          <div class="text-lg font-bold">{{ row?.payable_amount }}</div>
-        </div>
-      </q-card-section>
-    </q-card>
-
-  </section>
+  </div>
 
 
 
@@ -313,7 +320,7 @@ export default {
             self: true,
           }
         });
-        row.value = response.data.data[ 0 ];
+        row.value = response.data.data[0];
         loading.value = false;
       } catch (error) {
         console.log("🚀 ~ file: AttendancePage.vue:260 ~ fetchAnalytics ~ error:", error)
@@ -375,8 +382,8 @@ export default {
         btnLoaders.value.update_btn = true;
         Object.keys(updateCandidate.value).forEach(key => {
           if (key === 'role') {
-            updateCandidateFormData.append(key, updateCandidate.value[ key ].value);
-          } else updateCandidateFormData.append(key, updateCandidate.value[ key ]);
+            updateCandidateFormData.append(key, updateCandidate.value[key].value);
+          } else updateCandidateFormData.append(key, updateCandidate.value[key]);
         });
 
         await apiSerivce.put(`/users/${updateCandidate.value._id}`, updateCandidateFormData);
