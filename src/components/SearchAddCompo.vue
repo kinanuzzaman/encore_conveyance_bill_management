@@ -74,6 +74,14 @@ export default {
         if (val && val.value) this.$emit('selected', val.value);
       },
       deep: true
+    },
+    // watch userTypes props changes
+    userType: {
+      handler: function (val) {
+        console.log("🚀 ~ file: SearchAddCompo.vue:81 ~ val:", val)
+        this.fetchSuggestions();
+      },
+      deep: true
     }
   },
   methods: {

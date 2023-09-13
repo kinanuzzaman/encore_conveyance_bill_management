@@ -133,11 +133,11 @@
         </template> -->
 
         <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
-            :style="props.selected ? 'transform: scale(0.95);' : ''">
-            <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
-              <q-card-section class="flex justify-between">
-                <q-checkbox dense v-model="props.selected" :label="props.row.name" />
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+            <q-card bordered flat class="bg-gray-100">
+              <q-card-section class="flex justify-between bg-green">
+                <!-- <q-checkbox dense v-model="props.selected" :label="props.row.name" /> -->
+                <div></div>
                 <div class="column items-end">
                   <q-btn flat icon="more_vert">
                     <q-menu anchor="top middle" self="top right">
@@ -158,10 +158,44 @@
               <q-list dense>
                 <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
                   <q-item-section>
-                    <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
+                    <q-item-label caption v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                   </q-item-section>
-                  <q-item-section side>
-                    <q-item-label caption>{{ col.value }}</q-item-label>
+                  <q-item-section side class="text-black">
+                    <q-item-label v-if="col.label == 'User'">{{ props.row.user_data.first_name + ' ' +
+                      props.row.user_data.last_name }}</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Email'">{{ props.row.user_data.email }}</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Balance'">{{ props.row.user_data.balance || 0 }}
+                      &#2547;</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Salary'">{{ props.row.user_data?.salary || 0 }}
+                      &#2547;</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Cash Amount'">{{ props.row.cash_data?.total_amount || 0 }}
+                      &#2547;</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Cash Requests'">{{ props.row.cash_data?.cashs?.length
+                    }}</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Expense Amount'">{{ props.row.expense_data?.total_amount || 0
+                    }} &#2547;</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Expense Requests'">{{ props.row.expense_data?.expenses?.length
+                    }}</q-item-label>
+                    <q-item-label v-else-if="col.label == 'Salary Requested'">
+                      <div v-if="props.row.user_data.user_type === 'EMPLOYEE'">
+                        <div class="text-xs">{{ props.row.salary_request ? `Requested -
+                          ${props.row.salary_request.status}` : 'No'
+                        }}</div>
+                      </div>
+                    </q-item-label>
+                    <q-item-label v-else-if="col.label == 'Salary Received Requested'">
+                      <div v-if="props.row.user_data.user_type === 'EMPLOYEE'">
+                        <div class="text-xs">{{ props.row.salary_received ? `Requested -
+                          ${props.row.salary_received.status}` :
+                          'No' }}</div>
+                      </div>
+                    </q-item-label>
+                    <q-item-label v-else-if="col.label == 'Payable Amount'">
+                      <div class="text-xs" v-if="props.row.user_data.user_type === 'EMPLOYEE'">{{ props.row.payable_amount
+                        || 0
+                      }} &#2547;</div>
+                      <div class="text-xs" v-else>{{ props.row.user_data.balance || 0 }} &#2547;</div>
+                    </q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>

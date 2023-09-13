@@ -102,11 +102,11 @@
         </template> -->
 
         <template v-slot:item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition"
-            :style="props.selected ? 'transform: scale(0.95);' : ''">
-            <q-card bordered flat :class="props.selected ? ($q.dark.isActive ? 'bg-grey-9' : 'bg-grey-2') : ''">
-              <q-card-section class="flex justify-between">
-                <q-checkbox dense v-model="props.selected" :label="props.row.name" />
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+            <q-card bordered flat class="bg-gray-2">
+              <q-card-section class="flex justify-between bg-green">
+                <!-- <q-checkbox dense v-model="props.selected" :label="props.row.name" /> -->
+                <div></div>
                 <div class="column items-end">
                   <q-btn flat icon="more_vert">
                     <q-menu anchor="top middle" self="top right">

@@ -6,7 +6,9 @@
         <q-input outlined v-model="formData.amount" label="Amount" :dense="true" />
 
         <!-- <q-input outlined v-model="formData.payeer" label="Paid to" bg-color="white" :dense="true" /> -->
-        <SearchAddCompo label="Paid to" :data="payer_data" api="users" @selected="e => formData.payer = e" />
+        <q-select v-model="userType" dense outlined :options="['EMPLOYEE', 'VENDOR', 'CLIENT']" label="User Type" />
+        <SearchAddCompo label="Paid to" :userType="userType" :data="payer_data" api="users"
+          @selected="e => formData.payer = e" />
 
 
         <q-input outlined v-model="formData.details" label="Details" bg-color="white" :dense="true" />
@@ -55,6 +57,7 @@ export default defineComponent({
     return {
       authStore: useAuthStore(),
       apiService: new ApiService(),
+      userType: 'EMPLOYEE',
       formData: {
         payer: null,
         reason: null,

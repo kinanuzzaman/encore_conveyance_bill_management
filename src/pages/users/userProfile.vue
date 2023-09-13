@@ -23,11 +23,12 @@
           <q-input outlined v-model="updateCandidate.salary" disable label="Salary" bg-color="white" :dense="true" />
         </q-card-section>
         <q-card-actions align="center" class="row mx-2 py-5">
+          <q-btn label="Change password" color="red" class="col" @click="showChangePassDialog = true" />
           <q-btn label="Update" :loading="btnLoaders.update_btn" color="green" class="col" @click="updateUserInfo()" />
         </q-card-actions>
       </q-card>
     </section>
-    <div class="w-full lg:w-[50%]">
+    <div class="w-full lg:w-[50%] p-5">
       <section v-if="row" class="flex md:flex-row flex-col justify-between my-6">
         <div class="text-2xl font-semibold">Analytics</div>
 
@@ -125,6 +126,51 @@
   </div>
 
 
+  <q-dialog v-model="showChangePassDialog" persistent>
+    <q-card class="w-[400px] p-5 m-5">
+      <q-card-section>
+        <div class="text-[24px] text-green text-center font-semibold">
+          Change password
+        </div>
+      </q-card-section>
+      <q-card-section>
+        <q-input dense filled bottom-slots v-model="passChangePayload.oldPassword" placeholder="Old Password"
+          :type="showOldPassword ? 'text' : 'password'">
+          <template v-slot:prepend>
+            <q-icon name="lock" />
+          </template>
+          <template v-slot:append>
+            <q-btn :icon="showOldPassword ? 'visibility_off' : 'visibility'" @click="showOldPassword = !showOldPassword"
+              class="cursor-pointer" flat />
+          </template>
+        </q-input>
+        <q-input dense filled bottom-slots v-model="passChangePayload.newPassword" placeholder="New Password"
+          :type="showNewPassword ? 'text' : 'password'">
+          <template v-slot:prepend>
+            <q-icon name="lock" />
+          </template>
+          <template v-slot:append>
+            <q-btn :icon="showNewPassword ? 'visibility_off' : 'visibility'" @click="showNewPassword = !showNewPassword"
+              class="cursor-pointer" flat />
+          </template>
+        </q-input>
+        <q-input dense filled bottom-slots v-model="passChangePayload.confirmPassword" placeholder="Retype Password"
+          :type="showConfirmPassword ? 'text' : 'password'">
+          <template v-slot:prepend>
+            <q-icon name="lock" />
+          </template>
+          <template v-slot:append>
+            <q-btn :icon="showConfirmPassword ? 'visibility_off' : 'visibility'"
+              @click="showConfirmPassword = !showConfirmPassword" class="cursor-pointer" flat />
+          </template>
+        </q-input>
+        <div class="flex items-center justify-between">
+          <q-btn color="red full-width" label="Cancel" @click="showChangePassDialog = false" size="md" no-caps />
+          <q-btn color="green full-width" class="mt-3" label="Set Password" @click="changePassword" size="md" no-caps />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 
   <q-dialog v-model="confirm" persistent>
     <emp-attendance />
@@ -294,6 +340,14 @@ export default {
     const updateCandidate = ref({});
     let updateCandidateFormData = new FormData();
 
+    const showChangePassDialog = ref(false);
+
+    const passChangePayload = ref({
+      oldPassword: null,
+      newPassword: null,
+      confirmPassword: null,
+    });
+
     const btnLoaders = ref({
       create_btn: false,
       update_btn: false,
@@ -301,7 +355,6 @@ export default {
     });
 
     onMounted(() => {
-      updateCandidate.value = authStore.getUserInfo;
       const currentDate = new Date();
       const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
       month.value = months.find(month => month.value === currentMonth);
@@ -364,6 +417,7 @@ export default {
       try {
         const res = await apiSerivce.get(`/users/profile`);
         authStore.updateUserInfo(res.data.data[ 0 ]);
+        updateCandidate.value = authStore.getUserInfo;
       } catch (error) {
         $q.notify({
           message: error.response ? error.response.data.message : error.message,
@@ -410,6 +464,38 @@ export default {
       updateCandidateFormData.append('avatar', file);
     }
 
+    async function changePassword() {
+      try {
+
+        if (passChangePayload.value.newPassword !== passChangePayload.value.confirmPassword) {
+          $q.notify({
+            message: 'Password does not match',
+            color: 'red',
+            position: 'top'
+          })
+          return
+        }
+        const res = await apiSerivce.post('/users/change-password', passChangePayload.value)
+        $q.notify({
+          message: res.data.message,
+          color: 'green',
+          position: 'top'
+        })
+        showChangePassDialog.value = false;
+        passChangePayload.value = {
+          oldPassword: null,
+          newPassword: null,
+          confirmPassword: null,
+        };
+      } catch (error) {
+        $q.notify({
+          message: err.response ? err.response.data.message : 'Something went wrong',
+          color: 'red',
+          position: 'top'
+        })
+      }
+    }
+
     return {
       columns,
       row,
@@ -429,6 +515,12 @@ export default {
       updateUserInfo,
       rbacStore,
       btnLoaders,
+      passChangePayload,
+      showChangePassDialog,
+      changePassword,
+      showNewPassword: ref(false),
+      showOldPassword: ref(false),
+      showConfirmPassword: ref(false),
     };
   },
 };
