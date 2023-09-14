@@ -12,13 +12,12 @@
   <section>
     <div class="q-px-md gt-sm">
       <q-table flat class="h-[85vh]" ref="tableRef" @request="onRequest" :rows="rows" :columns="columns"
-        style="background: rgba(244, 244, 244, 0.8)" :selected-rows-label="getSelectedString" selection="multiple"
-        v-model:selected="selected" row-key="name">
+        style="background: rgba(244, 244, 244, 0.8)" row-key="name">
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td>
+            <!-- <q-td>
               <q-checkbox v-model="props.selected" />
-            </q-td>
+            </q-td> -->
             <q-td class="">
               <div>
                 <div class="text-xs">{{ props.row.title }}</div>

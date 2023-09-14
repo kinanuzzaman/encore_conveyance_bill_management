@@ -68,6 +68,8 @@ export default {
     const loginUser = async () => {
       try {
         loginBtnLoading.value = true;
+        loginPayload.email = loginPayload.email.toLowerCase().trim();
+        loginPayload.password = loginPayload.password.trim();
         await authStore.UserLogin(loginPayload);
         // socket.emit("USER_LOGIN", authStore.getUserInfo._id);
         const userData = authStore.getUserInfo
