@@ -273,7 +273,7 @@ export default {
   },
   methods: {
     openProfile() {
-      window.location.href = '/user/profile'
+      this.$router.replace({ path: "/user/profile" });
     },
   }
 };

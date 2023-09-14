@@ -16,7 +16,7 @@
             @request="onRequest" :columns="columns" style="background: rgba(244, 244, 244, 0.8)">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
-                <q-td key="user" :props="props" @click="openDialog = true" class="">
+                <q-td key="user" :props="props" class="">
                   <div class="tw-py-1 tw-rounded-md">
                     <div class="flex gap-2">
                       <span class="text-xs">{{ props.row.first_name }} {{ props.row.last_name }}</span>
@@ -29,10 +29,10 @@
                     </div>
                   </div>
                 </q-td>
-                <q-td key="user_type" :props="props" @click="openDialog = true" class="">
+                <q-td key="user_type" :props="props" class="">
                   {{ props.row.user_type }}
                 </q-td>
-                <q-td key="createdAt" :props="props" @click="openDialog = true" class="">
+                <q-td key="createdAt" :props="props" class="">
                   <div class="bg-blue-200 inline p-2 text-blue-800">
                     {{ moment(props.row.createdAt).format("LL | h:mma") }}
                   </div>
@@ -90,11 +90,17 @@
                   <q-list dense>
                     <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
                       <q-item-section>
-                        <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
+                        <q-item-label caption v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
-                      <q-item-section side>
-                        <q-item-label caption v-if="col.label == 'Role'">{{ col.value?.role_name }}</q-item-label>
-                        <q-item-label caption v-else>{{ col.value }}</q-item-label>
+                      <q-item-section side class="text-black">
+                        <q-item-label v-if="col.label == 'User'">{{ props.row.first_name }} {{ props.row.last_name
+                        }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Creator'">{{ props.row.created_by.first_name + ' '
+                          + props.row.created_by.last_name }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'User Type'">{{ props.row.user_type
+                        }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Created At'"> {{
+                          moment(props.row.createdAt).format("LL | h:mma") }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>

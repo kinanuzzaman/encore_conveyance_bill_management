@@ -176,9 +176,9 @@
                   <q-list dense>
                     <q-item v-for="col in props.cols.filter(col => col.name !== 'desc')" :key="col.name">
                       <q-item-section>
-                        <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
+                        <q-item-label caption v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
-                      <q-item-section side>
+                      <q-item-section side class="text-black">
                         <q-item-label v-if="col.label == 'Request Type'">{{ props.row.type }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Amount'">{{ props.row.amount }}</q-item-label>
                         <q-item-label v-else-if="col.label == 'Paid By'">{{ props.row.payer?.first_name + ' ' +
