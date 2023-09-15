@@ -5,7 +5,7 @@
         <SearchAddCompo :data="project_data" for="project" @selected="e => formData.project = e" label="Project"
           api="project-control" /> <q-input outlined v-model="formData.labour_quantity" label="Labour quantity"
           :dense="true" />
-        <q-input outlined v-model="formData.amount" label="Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount" label="Amount" type="number" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" label="Notes" bg-color="white" :dense="true" />
         <div>
           <q-uploader v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'"

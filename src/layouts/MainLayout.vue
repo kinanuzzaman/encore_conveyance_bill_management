@@ -67,14 +67,11 @@
 
     <q-page-container>
 
-      <q-page class="bg-img">
-        <!--    class="bg-[url('../../assets/images/home/bg2.jpg')] bg-no-repeat bg-cover" -->
-        <router-view />
-        <!-- backdrop-opacity-10 backdrop-invert bg-white/10 -->
-        <!-- <div class="-z-10 absolute bottom-0 right-0 w-full h-full">
-          <img src="../assets/images/home/bg1.png" alt="" class="fixed bottom-0 right-0" />
-        </div> -->
-      </q-page>
+      <q-pull-to-refresh color="green" no-mouse @refresh="refresh">
+        <q-page class="bg-img">
+          <router-view />
+        </q-page>
+      </q-pull-to-refresh>
     </q-page-container>
     <q-dialog v-model="confirm" persistent>
       <EmpAttendance />
@@ -274,6 +271,12 @@ export default {
   methods: {
     openProfile() {
       this.$router.replace({ path: "/user/profile" });
+    },
+    refresh(done) {
+      setTimeout(() => {
+        window.location.reload();
+        done();
+      }, 900);
     },
   }
 };

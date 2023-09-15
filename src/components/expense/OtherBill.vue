@@ -3,7 +3,7 @@
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <q-input outlined v-model="data.reason" label="Reason" :dense="true" />
-        <q-input outlined v-model="data.amount" label="Total Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="data.amount" label="Total Amount" type="number" bg-color="white" :dense="true" />
         <q-input outlined v-model="data.notes" label="Notes" bg-color="white" :dense="true" />
         <div>
           <q-uploader v-if="authStore.canAccess('expense_write') && data.status !== 'APPROVED'" label="Individual upload"
@@ -75,6 +75,15 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      // check if all fields are filled
+      if (Object.values(this.data).some((val) => !val)) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
 
       Object.keys(this.data).forEach((key) => {

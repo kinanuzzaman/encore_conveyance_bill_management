@@ -16,14 +16,15 @@
             class="w-3/4" />
           <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true" />
         </div> -->
-        <q-input outlined v-model="formData.amount" label="Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount" label="Amount" type="number" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" label="Notes" bg-color="white" :dense="true" />
         <div class="col-span-2">
           <q-checkbox left-label v-model="labour" label="Labour" />
         </div>
         <div v-if="labour" class="col-span-2 grid md:grid-cols-2 grid-cols-1 gap-5">
           <q-input outlined v-model="formData.labour_quantity" label="Labour Quantity" bg-color="white" :dense="true" />
-          <q-input outlined v-model="formData.labour_amount" label="Amount" bg-color="white" :dense="true" />
+          <q-input outlined v-model="formData.labour_amount" label="Amount" type="number" bg-color="white"
+            :dense="true" />
         </div>
         <div>
           <q-uploader v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'"
@@ -119,6 +120,15 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      // check if all fields are filled
+      if (Object.values(this.formData).some((val) => !val)) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
       Object.keys(this.formData).forEach((key) => {
         if (key == 'transportation_location') {

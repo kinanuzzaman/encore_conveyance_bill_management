@@ -15,13 +15,14 @@
           api="project-control" />
         <q-input outlined v-model="formData.location" label="Location" bg-color="white" :dense="true" />
         <div class="flex">
-          <q-input outlined v-model="formData.amount_per" label="Amount per" bg-color="white" :dense="true"
+          <q-input outlined v-model="formData.amount_per" label="Amount per" type="number" bg-color="white" :dense="true"
             class="w-3/4" />
-          <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" :options="units" :dense="true"
-            label="Units" />
+          <q-select class="bg-white w-1/4" outlined v-model="formData.amount_per_unit" type="number" :options="units"
+            :dense="true" label="Units" />
         </div>
-        <q-input outlined v-model="formData.amount" label="Total Amount" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.amount_paid" label="Paid Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount" label="Total Amount" type="number" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount_paid" label="Paid Amount" type="number" bg-color="white"
+          :dense="true" />
         <div>
           <q-uploader v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'"
             label="Individual upload" color="green" multiple @added="onAdded" @removed="onRemoved" class="w-full" />
@@ -136,6 +137,15 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      // check if all fields are filled
+      if (Object.values(this.formData).some((val) => !val)) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
       Object.keys(this.formData).forEach((key) => {
         if (key == 'product') {

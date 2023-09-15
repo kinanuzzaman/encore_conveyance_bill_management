@@ -21,8 +21,8 @@
   </section>
   <section>
     <div class="q-px-md gt-sm">
-      <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-        row-key="name">
+      <q-table flat class="h-[85vh]" :rows="rows" :rows-per-page-options="[20, 40, 50]" :columns="columns"
+        style="background: rgba(244, 244, 244, 0.8)" row-key="name">
         <!-- <template v-slot:top-right>
             <q-btn color="primary" label="Action" :disable="selectedItems.length === 0" @click="performAction" />
         </template> -->

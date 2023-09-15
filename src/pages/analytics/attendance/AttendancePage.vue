@@ -25,8 +25,8 @@
       <section class="">
         <div class="q-px-md gt-sm">
           <!-- bordered  style="background-color: #f1f1f1" -->
-          <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" style="background: rgba(244, 244, 244, 0.8)"
-            row-key="name">
+          <q-table flat class="h-[85vh]" :rows="rows" :columns="columns" :rows-per-page-options="[20, 40, 50]"
+            style="background: rgba(244, 244, 244, 0.8)" row-key="name">
             <template v-slot:body="props">
               <q-tr class="" :props="props">
                 <q-td>

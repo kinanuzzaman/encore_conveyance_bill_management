@@ -64,9 +64,9 @@
       <section class="">
         <div class="q-px-md gt-sm">
           <!-- bordered  style="background-color: #f1f1f1" -->
-          <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" :columns="columns" ref="tableRef"
-            v-model:pagination="pagination" :loading="loading" style="background: rgba(244, 244, 244, 0.8)"
-            :selected-rows-label="getSelectedString" row-key="name">
+          <q-table flat class="h-[85vh]" :rows="rows" @request="onRequest" :rows-per-page-options="[20, 40, 50]"
+            :columns="columns" ref="tableRef" v-model:pagination="pagination" :loading="loading"
+            style="background: rgba(244, 244, 244, 0.8)" :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
               <q-tr
                 :class="authStore.canAccess('read_all_expense') && props.row.payer._id === authStore.getUserInfo._id ? 'bg-lime-100' : ''"

@@ -97,14 +97,6 @@ export default {
     }, ]
     const expenseDetails = ref(null);
     async function createExpance(formData) {
-      if (!navigator.geolocation) {
-        $q.notify({
-          message: "Allow Geolocation, or you can't continue",
-          color: "red",
-          position: "top",
-        })
-        return;
-      }
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           if (route.query.id) {
@@ -147,7 +139,22 @@ export default {
             position: "top",
           })
         }
-      });
+      },
+        function (error) {
+          console.log("🚀 ~ file: AddExpense.vue:143 ~ navigator.geolocation.getCurrentPosition ~ error:", error)
+          if (error.code === error.PERMISSION_DENIED) {
+            // User denied geolocation
+            $q.notify({
+              message: "Allow Geolocation, or you can't continue",
+              color: "red",
+              position: "top",
+            })
+          } else {
+            // Other geolocation error occurred
+            console.error("Geolocation error:", error);
+          }
+        }
+      );
     }
     onMounted(() => {
       if (route.query.type) {

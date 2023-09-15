@@ -3,12 +3,12 @@
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
         <q-input outlined v-model="formData.reason" label="Reason" :dense="true" />
-        <q-input outlined v-model="formData.amount" label="Amount" :dense="true" />
+        <q-input outlined v-model="formData.amount" type="number" label="Amount" :dense="true" />
 
         <!-- <q-input outlined v-model="formData.payeer" label="Paid to" bg-color="white" :dense="true" /> -->
         <q-select v-model="userType" dense outlined :options="['EMPLOYEE', 'VENDOR', 'CLIENT']" label="User Type" />
-        <SearchAddCompo label="Paid to" :userType="userType" :data="payer_data" api="users"
-          @selected="e => formData.payer = e" />
+        <SearchAddCompo label="Paid to" :userType="userType" :data="payee_data" api="users"
+          @selected="e => formData.payee = e" />
 
 
         <q-input outlined v-model="formData.details" label="Details" bg-color="white" :dense="true" />
@@ -45,6 +45,7 @@
   </div>
 </template>
 <script>
+import { useQuasar } from 'quasar';
 import { ApiService } from 'src/service/api-service';
 import { useAuthStore } from 'src/stores/auth.store';
 import { defineComponent } from 'vue';
@@ -55,11 +56,12 @@ export default defineComponent({
   },
   data() {
     return {
+      $q: useQuasar(),
       authStore: useAuthStore(),
       apiService: new ApiService(),
       userType: 'EMPLOYEE',
       formData: {
-        payer: null,
+        payee: null,
         reason: null,
         details: null,
         request_type: 'OFFICE',
@@ -69,7 +71,7 @@ export default defineComponent({
       imageViewDialog: false,
       imagesState: 0,
       images: [],
-      payer_data: {
+      payee_data: {
         label: '',
         value: ''
       }
@@ -80,14 +82,24 @@ export default defineComponent({
       this.apiService.get(`expense-control/${this.$route.query.id}`).then((res) => {
         Object.assign(this.formData, res.data.data);
 
-        if (!res.data.data.payer) return;
-        this.payer_data.label = res.data.data.payer.first_name + ' ' + res.data.data.payer.last_name;
-        this.payer_data.value = res.data.data.payer._id;
+        if (!res.data.data.payee) return;
+        this.payee_data.label = res.data.data.payee.first_name + ' ' + res.data.data.payee.last_name;
+        this.payee_data.value = res.data.data.payee._id;
+        this.userType = res.data.data.payee.user_type;
       })
     }
   },
   methods: {
     registerUser() {
+      // check if all fields are filled
+      if (Object.values(this.formData).some((val) => !val)) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
       Object.keys(this.formData).forEach((key) => {
         formData.append(key, this.formData[ key ]);

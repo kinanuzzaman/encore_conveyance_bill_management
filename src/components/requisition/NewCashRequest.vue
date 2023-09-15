@@ -158,7 +158,21 @@ export default {
             timeout: 2000,
           });
         }
-      })
+      },
+        function (error) {
+          if (error.code === error.PERMISSION_DENIED) {
+            // User denied geolocation
+            $q.notify({
+              message: "Allow Geolocation, or you can't continue",
+              color: "red",
+              position: "top",
+            })
+          } else {
+            // Other geolocation error occurred
+            console.error("Geolocation error:", error);
+          }
+        }
+      )
     }
     onMounted(async () => {
       if (route.query.id) {

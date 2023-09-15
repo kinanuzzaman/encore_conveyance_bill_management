@@ -6,7 +6,7 @@
           api="product-control" />
         <q-input outlined v-model="formData.reason" label="Reason" :dense="true" />
         <q-input outlined v-model="formData.details" label="Details" bg-color="white" :dense="true" />
-        <q-input outlined v-model="formData.amount" label="Amount" bg-color="white" :dense="true" />
+        <q-input outlined v-model="formData.amount" label="Amount" type="number" bg-color="white" :dense="true" />
         <q-input outlined v-model="formData.notes" label="Notes" bg-color="white" :dense="true" />
         <div>
           <q-uploader v-if="authStore.canAccess('expense_write') && formData.status !== 'APPROVED'"
@@ -89,6 +89,15 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      // check if all fields are filled
+      if (Object.values(this.formData).some((val) => !val)) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
       Object.keys(this.formData).forEach((key) => {
         if (key == 'product') {
