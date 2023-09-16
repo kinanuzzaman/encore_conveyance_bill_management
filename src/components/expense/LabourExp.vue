@@ -87,6 +87,14 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      if (Object.values(this.formData).some((val) => !val) && !this.$route.query.id) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Please fill all the fields',
+          icon: 'report_problem',
+        });
+        return;
+      }
       const formData = new FormData();
       Object.keys(this.formData).forEach((key) => {
         formData.append(key, this.formData[ key ]);

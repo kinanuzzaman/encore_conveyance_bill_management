@@ -66,7 +66,7 @@
             style="background: rgba(244, 244, 244, 0.8)" :selected-rows-label="getSelectedString" row-key="name">
             <template v-slot:body="props">
               <q-tr
-                :class="authStore.canAccess('read_all_cash') && props.row.payer._id === authStore.getUserInfo._id ? 'bg-lime-100' : ''"
+                :class="authStore.canAccess('read_all_cash') && props.row.payer?._id === authStore.getUserInfo._id ? 'bg-lime-100' : ''"
                 :props="props">
                 <q-td>
 
@@ -82,7 +82,8 @@
                 </q-td>
                 <q-td>
                   <div>
-                    <div class="text-xs">{{ props.row.payer?.first_name + ' ' + props.row.payer?.last_name }}</div>
+                    <div v-if="props.row.type === 'SALARY'">-</div>
+                    <div class="text-xs" v-else>{{ props.row.payer?.first_name + ' ' + props.row.payer?.last_name }}</div>
                   </div>
                 </q-td>
                 <q-td>

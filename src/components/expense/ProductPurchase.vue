@@ -137,8 +137,10 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
+      console.log("🚀 ~ file: ProductPurchase.vue:142 ~ registerUser ~ this.formData:", this.formData)
+
       // check if all fields are filled
-      if (Object.values(this.formData).some((val) => !val)) {
+      if (Object.values(this.formData).some((val) => !val) && !this.$route.query.id) {
         this.$q.notify({
           color: 'negative',
           message: 'Please fill all the fields',

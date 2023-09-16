@@ -167,7 +167,7 @@ const columns = [
   {
     name: "lateDuration",
     align: "left",
-    label: "Last work duration",
+    label: "Late work duration",
     field: "lateDuration",
     sortable: true,
   },

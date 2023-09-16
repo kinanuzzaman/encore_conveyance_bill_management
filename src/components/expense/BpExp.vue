@@ -81,7 +81,7 @@ export default defineComponent({
   },
   methods: {
     registerUser() {
-      if (Object.values(this.data).some((val) => !val)) {
+      if (Object.values(this.data).some((val) => !val) && !this.$route.query.id) {
         this.$q.notify({
           color: 'negative',
           message: 'Please fill all the fields',
