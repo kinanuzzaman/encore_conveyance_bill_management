@@ -25,7 +25,7 @@ const props = defineProps({
 
 const $q = useQuasar();
 
-const emit = defineEmits(["imageSelected"]);
+const emit = defineEmits([ "imageSelected" ]);
 const imageUrl = ref('https://cdn0.iconfinder.com/data/icons/communication-456/24/account_profile_user_contact_person_avatar_placeholder-512.png');
 
 onMounted(() => {
@@ -37,19 +37,19 @@ watch(() => props.image, (val) => {
 });
 
 function handleImageChange(input) {
-  if (input.target.files && input.target.files[0]) {
+  if (input.target.files && input.target.files[ 0 ]) {
     const reader = new FileReader();
     reader.onload = function (e) {
       imageUrl.value = e.target.result;
-      if (input.target.files[0].size > (3 * 1024 * 1024)) {
+      if (input.target.files[ 0 ].size > (3 * 1024 * 1024)) {
         $q.notify({
           color: 'negative',
           message: 'File size exceeded',
           icon: 'report_problem',
         });
-      } else emit('imageSelected', input.target.files[0]);
+      } else emit('imageSelected', input.target.files[ 0 ]);
     };
-    reader.readAsDataURL(input.target.files[0]);
+    reader.readAsDataURL(input.target.files[ 0 ]);
   }
 }
 </script>
@@ -62,9 +62,9 @@ function handleImageChange(input) {
 
   .avatar-edit {
     position: absolute;
-    right: 40px;
+    right: 10%;
     z-index: 1;
-    top: 40px;
+    top: 10%;
 
     input {
       display: none;
@@ -88,13 +88,15 @@ function handleImageChange(input) {
         }
 
         &:after {
-          content: "\f040";
-          font-family: 'FontAwesome';
-          color: #757575;
+          content: "\270E";
+          // font-family: 'FontAwesome';
+          color: #000;
           position: absolute;
-          top: 10px;
+          top: 5%;
           left: 0;
+          rotate: 90deg;
           right: 0;
+          font-size: 20px;
           text-align: center;
           margin: auto;
         }
