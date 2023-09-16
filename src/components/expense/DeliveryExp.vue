@@ -2,7 +2,7 @@
   <div>
     <q-card flat class="my-card">
       <q-card-section class="grid md:grid-cols-2 grid-cols-1 gap-5">
-        <SearchAddCompo :data="client_data" @selected="e => formData.client = e" label="Client" api="users"
+        <SearchAddCompo :data="client_data" @selected="e => formData.client = e" for="user" label="Client" api="users"
           userType="CLIENT" />
         <SearchAddCompo :data="project_data" for="project" @selected="e => formData.project = e" label="Project"
           api="project-control" />

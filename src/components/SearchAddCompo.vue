@@ -9,7 +9,8 @@
       <template v-slot:no-option>
         <q-item>
           <q-item-section>
-            <div v-if="!$props.searchOnly && searchQuery !== ''" class="flex items-center justify-between w-full">
+            <div v-if="!$props.searchOnly && searchQuery !== '' && $props.userType !== 'EMPLOYEE'"
+              class="flex items-center justify-between w-full">
               <span>{{ searchQuery }}</span>
               <q-btn color="primary" icon="add" label="Add" no-caps outline unelevated @click="requestNewData" />
             </div>
@@ -37,6 +38,10 @@ export default {
     };
   },
   props: {
+    for: {
+      type: String,
+      required: false
+    },
     api: {
       type: String,
       required: false
@@ -164,6 +169,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$props.for);
     if (this.$props.data) {
       this.selectedOption = this.$props.data
     }

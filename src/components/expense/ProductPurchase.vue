@@ -9,7 +9,7 @@
           label="Choose product Category" createApi="product-control/category" />
 
         <q-input outlined v-model="formData.product.quantity" label="product quantity" :dense="true" />
-        <SearchAddCompo :data="vendor_data" @selected="e => formData.vendor = e" label="Vendor" api="users"
+        <SearchAddCompo for="user" :data="vendor_data" @selected="e => formData.vendor = e" label="Vendor" api="users"
           userType="VENDOR" />
         <SearchAddCompo :data="project_data" for="project" @selected="e => formData.project = e" label="Project"
           api="project-control" />

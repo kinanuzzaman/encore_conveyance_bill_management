@@ -7,7 +7,7 @@
 
         <!-- <q-input outlined v-model="formData.payeer" label="Paid to" bg-color="white" :dense="true" /> -->
         <q-select v-model="userType" dense outlined :options="['EMPLOYEE', 'VENDOR', 'CLIENT']" label="User Type" />
-        <SearchAddCompo label="Paid to" :userType="userType" :data="payee_data" api="users"
+        <SearchAddCompo label="Paid to" :userType="userType" :data="payee_data" api="users" for="user"
           @selected="e => formData.payee = e" />
 
 
