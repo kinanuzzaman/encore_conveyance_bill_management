@@ -267,6 +267,9 @@ export default {
   },
   async mounted() {
     this.attendenceStore.getAttendanceStatus();
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log("🚀 ~ file: MainLayout.vue:271 ~ navigator.geolocation.getCurrentPosition ~ position:", position)
+    });
   },
   methods: {
     openProfile() {

@@ -121,14 +121,6 @@ export default {
     }, ]
 
     const saveCashRequest = async () => {
-      if (!navigator.geolocation) {
-        $q.notify({
-          message: "Allow Geolocation, or you can't continue",
-          color: "red",
-          position: "top",
-        })
-        return;
-      }
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const { latitude, longitude } = position.coords;
