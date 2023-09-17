@@ -8,8 +8,11 @@
         <div class="w-full">
         </div> -->
       <div class="md:w-[150px]">
+        <q-select class="w-full" outlined dense v-model="user_type" :options="['All', 'Employee', 'Vendor', 'Client']"
+          label="User Type" filled />
+      </div>
+      <div class="md:w-[150px]">
         <q-select class="w-full" outlined dense v-model="year" :options="['2023', '2024', '2025']" label="Year" filled />
-
       </div>
       <div class="md:w-[150px]">
         <q-select class="w-full" outlined dense v-model="month" :options="months" label="Month" filled />
@@ -379,6 +382,7 @@ export default {
     const approvalCash = ref(false)
     const approvalCandidate = ref(null);
     const loading = ref(false);
+    const user_type = ref('All');
     const year = ref('');
     const month = ref({});
 
@@ -399,6 +403,7 @@ export default {
           params: {
             year: year.value,
             month: month.value.value,
+            user_type: user_type.value && user_type.value !== 'All' ? user_type.value.toUpperCase() : null,
           }
         });
         rows.value = response.data.data;
@@ -469,7 +474,8 @@ export default {
       closeStatusWindow,
       approveSalaryRequest,
       approveExpenseRequest,
-      approvalCandidate
+      approvalCandidate,
+      user_type,
     };
   },
 };

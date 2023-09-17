@@ -18,13 +18,18 @@
           </q-btn>
         </q-toolbar-title>
         <!--:size="$q.screen.lt.md ? 'sm' : 'md'"class="q-gutter-xs"  class="text-white" fingerprint-->
-        <div class="flex justify-self-end">
+        <div class="flex justify-end w-full gap-3">
           <q-btn flat color="green" icon="fingerprint" @click="confirm = true" class="" dense />
           <!-- <q-btn flat color="green" icon="notifications" class="" dense /> -->
           <!-- <q-input v-if="searchField" class="gt-sm" rounded outlined v-model="text" label="Search" dense color="green" /> -->
           <!-- <q-btn flat color="green" icon="search" @click="searchField = !searchField" class="" dense /> -->
-          <q-btn flat color="green" :disable="$router.currentRoute.value.path == '/user/profile'" @click="openProfile"
-            icon="account_circle" dense />
+          <!-- <q-btn flat color="green" :disable="$router.currentRoute.value.path == '/user/profile'" @click="openProfile"
+            icon="account_circle" dense /> -->
+          <div class="w-[30px] h-[30px] object-cover overflow-hidden rounded-full">
+            <q-img class="w-full h-full cursor-pointer" :src="profile_img"
+              :disable="$router.currentRoute.value.path == '/user/profile'" @click="openProfile" spinner-color="primary"
+              spinner-size="82px" />
+          </div>
         </div>
         <div class="col-span-2">
           <q-input v-if="searchField" class="lt-md" rounded outlined v-model="text" label="Search" dense color="green" />
@@ -236,8 +241,11 @@ export default {
     // const route = useRoute();
     const activeMenu = ref("User Management");
     const confirm = ref(false);
+    const authStore = useAuthStore();
+
     const logout = () => {
       localStorage.clear();
+      authStore.logout();
       router.push({ path: "/" });
       window.location.reload();
     };
@@ -263,13 +271,19 @@ export default {
     return {
       attendenceStore: useAttendanceStore(),
       authStore: useAuthStore(),
+      profile_img: "",
     };
   },
   async mounted() {
     this.attendenceStore.getAttendanceStatus();
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log("🚀 ~ file: MainLayout.vue:271 ~ navigator.geolocation.getCurrentPosition ~ position:", position)
+    navigator.geolocation.getCurrentPosition(() => {
+      console.log("🚀")
     });
+    if (this.authStore.getUserInfo.profile_img) {
+      this.profile_img = this.authStore.getUserInfo.profile_img;
+    } else {
+      this.profile_img = "https://cdn0.iconfinder.com/data/icons/communication-456/24/account_profile_user_contact_person_avatar_placeholder-512.png";
+    }
   },
   methods: {
     openProfile() {

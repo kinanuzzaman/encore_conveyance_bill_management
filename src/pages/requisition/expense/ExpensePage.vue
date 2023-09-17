@@ -42,8 +42,9 @@
                   label="My Request" />
                 <q-select dense outlined v-model="data_filter.type" :options="expense_types" label="Type" filled />
 
-                <SearchAddCompo :disable="data_filter.own_data" @selected="e => data_filter.employee = e" label="Employee"
-                  api="users" userType="EMPLOYEE" class="w-full" />
+                <SearchAddCompo v-if="authStore.canAccess('read_all_expense')" :disable="data_filter.own_data"
+                  @selected="e => data_filter.employee = e" label="Employee" api="users" userType="EMPLOYEE"
+                  class="w-full" />
 
                 <q-separator class="mt-3" />
                 <q-btn color="green" label="Apply" no-caps @click="doFilter" />

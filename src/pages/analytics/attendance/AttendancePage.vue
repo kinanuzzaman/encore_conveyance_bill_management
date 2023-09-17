@@ -114,7 +114,14 @@
                         <q-item-label v-if="col.label != 'Action'">{{ col.label }}</q-item-label>
                       </q-item-section>
                       <q-item-section side>
-                        <q-item-label caption>{{ col.value }}</q-item-label>
+                        <q-item-label v-if="col.label == 'Name'">{{ props.row.user.first_name }} {{
+                          props.row.user.last_name }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Email'">{{ props.row.user.email }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Phone'">{{ props.row.phone_number }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Late work duration'">{{ props.row.lateDuration
+                        }}</q-item-label>
+                        <q-item-label v-else-if="col.label == 'Total work duration'">{{ props.row.totalDuration
+                        }}</q-item-label>
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -289,5 +296,4 @@ export default {
 <style lang="scss" scoped>
 .q-th {
   background-color: #00b4ff;
-}
-</style>
+}</style>

@@ -82,7 +82,7 @@
           <q-separator />
           <q-card-section>
             <div class="flex justify-between">
-              <div class="text-lg">Totla Expense Amount</div>
+              <div class="text-lg">Total Expense Amount</div>
               <div class="text-lg font-bold">{{ row?.expense_data?.total_amount }} &#2547;</div>
             </div>
           </q-card-section>
